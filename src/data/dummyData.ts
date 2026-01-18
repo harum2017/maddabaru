@@ -52,9 +52,24 @@ export interface Student {
   name: string;
   class: string;
   nis: string;
+  nisn?: string;
   gender: 'L' | 'P';
+  birth_place?: string;
+  birth_date?: string;
+  religion?: string;
+  address?: string;
   parent_name: string;
   parent_phone: string;
+  father_name?: string;
+  father_occupation?: string;
+  mother_name?: string;
+  mother_occupation?: string;
+  guardian_name?: string;
+  guardian_phone?: string;
+  previous_school?: string;
+  entry_year?: string;
+  entry_semester?: string;
+  status?: 'aktif' | 'pindah' | 'lulus' | 'keluar';
 }
 
 export interface Post {
