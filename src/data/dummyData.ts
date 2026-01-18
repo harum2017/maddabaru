@@ -161,11 +161,6 @@ export const getGradeLevelsByLevel = (level: SchoolLevel): string[] => {
   }
 };
 
-// Helper: Get students by school ID
-export const getStudentsBySchool = (schoolId: number): Student[] => {
-  return students.filter(student => student.school_id === schoolId);
-};
-
 // Helper: Get subjects by school level
 export const getSubjectsByLevel = (level: SchoolLevel): string[] => {
   switch (level) {
