@@ -43,7 +43,7 @@ const SchoolHero: React.FC = () => {
             <img
               src={image}
               alt={`${currentSchool.name} - Slide ${index + 1}`}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover object-center"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-foreground/80 via-foreground/40 to-foreground/20" />
           </div>
