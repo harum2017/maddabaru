@@ -32,19 +32,18 @@ const SchoolsSection: React.FC = () => {
 
   return (
     <>
-      <section id="schools" className="section-padding">
+      <section id="schools" className="py-12">
         <div className="container mx-auto">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Sekolah yang Sudah <span className="text-gradient">Bergabung</span>
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <h2 className="text-2xl md:text-3xl font-bold mb-3">
+              Sekolah yang <span className="text-gradient">Bergabung</span>
             </h2>
-            <p className="text-lg text-muted-foreground">
-              Bergabunglah dengan ratusan sekolah yang telah mempercayakan 
-              pengelolaan website mereka kepada platform kami.
+            <p className="text-base text-muted-foreground">
+              Bergabunglah dengan ratusan sekolah yang telah mempercayakan website mereka kepada kami.
             </p>
           </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
             {schools.map((school, index) => (
               <div 
                 key={school.id}

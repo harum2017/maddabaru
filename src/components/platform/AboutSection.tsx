@@ -26,23 +26,22 @@ const AboutSection: React.FC = () => {
   ];
 
   return (
-    <section id="about" className="section-padding bg-muted/50">
+    <section id="about" className="py-12 bg-muted/50">
       <div className="container mx-auto">
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Mengapa Memilih <span className="text-gradient">MaddaSoft</span>?
+        <div className="text-center max-w-2xl mx-auto mb-12">
+          <h2 className="text-2xl md:text-3xl font-bold mb-3">
+            Mengapa <span className="text-gradient">MaddaSoft</span>?
           </h2>
-          <p className="text-lg text-muted-foreground">
-            Kami menyediakan solusi lengkap untuk digitalisasi sekolah Indonesia. 
-            Satu platform untuk semua kebutuhan website sekolah Anda.
+          <p className="text-base text-muted-foreground">
+            Solusi lengkap untuk digitalisasi sekolah Indonesia dalam satu platform.
           </p>
         </div>
         
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
           {values.map((value, index) => (
             <div 
               key={index}
-              className="bg-card p-6 rounded-xl border border-border card-hover"
+              className="bg-card p-4 rounded-xl border border-border card-hover"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
               <div className="w-12 h-12 rounded-lg hero-gradient flex items-center justify-center mb-4">

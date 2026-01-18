@@ -20,9 +20,9 @@ const HeroSection: React.FC = () => {
   const { setSimulatedSchoolId } = useDomain();
 
   const features = [
-    'Website Profesional Instan',
-    'Panel Admin Lengkap',
-    'Tanpa Biaya Hosting',
+    'Website Instan',
+    'Admin Lengkap',
+    'Gratis Hosting',
   ];
 
   const handleRegisterSubmit = (e: React.FormEvent) => {
@@ -39,45 +39,45 @@ const HeroSection: React.FC = () => {
 
   return (
     <>
-      <section id="hero" className="relative min-h-screen flex items-center pt-16 overflow-hidden">
+      <section id="hero" className="relative min-h-[80vh] flex items-center pt-16 overflow-hidden">
         {/* Background Gradient */}
         <div className="absolute inset-0 hero-gradient opacity-5" />
-        <div className="absolute top-20 right-0 w-[600px] h-[600px] bg-primary/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-accent/10 rounded-full blur-3xl" />
+        <div className="absolute top-20 right-0 w-[400px] h-[400px] bg-primary/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-accent/10 rounded-full blur-3xl" />
         
         <div className="container mx-auto px-4 relative z-10">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className="grid lg:grid-cols-2 gap-8 items-center">
             {/* Content */}
-            <div className="space-y-8 animate-slide-up">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full text-primary text-sm font-medium">
+            <div className="space-y-6 animate-slide-up">
+              <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 rounded-full text-primary text-sm font-medium">
                 <Sparkles className="w-4 h-4" />
-                Platform Website Sekolah Terpadu
+                Platform Website Sekolah
               </div>
               
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight">
                 Buat Website Sekolah{' '}
                 <span className="text-gradient">Profesional Tanpa Ribet</span>
               </h1>
               
-              <p className="text-lg text-muted-foreground max-w-lg">
+              <p className="text-base text-muted-foreground max-w-md">
                 Platform all-in-one untuk mengelola website sekolah paling lengkap
               </p>
               
-              <div className="flex flex-wrap gap-4">
+              <div className="flex flex-wrap gap-3">
                 {features.map((feature, index) => (
                   <div key={index} className="flex items-center gap-2 text-sm">
-                    <CheckCircle2 className="w-5 h-5 text-accent" />
+                    <CheckCircle2 className="w-4 h-4 text-accent" />
                     <span className="text-foreground font-medium">{feature}</span>
                   </div>
                 ))}
               </div>
               
-              <div className="flex flex-wrap gap-4">
-                <Button size="lg" className="gap-2 text-base px-8" onClick={() => setIsRegisterDialogOpen(true)}>
+              <div className="flex flex-wrap gap-3">
+                <Button size="lg" className="gap-2 px-6" onClick={() => setIsRegisterDialogOpen(true)}>
                   Daftar Sekarang
-                  <ArrowRight className="w-5 h-5" />
+                  <ArrowRight className="w-4 h-4" />
                 </Button>
-                <Button size="lg" variant="outline" className="text-base px-8" onClick={() => setIsDemoDialogOpen(true)}>
+                <Button size="lg" variant="outline" className="px-6" onClick={() => setIsDemoDialogOpen(true)}>
                   Lihat Demo
                 </Button>
               </div>

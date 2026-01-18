@@ -43,23 +43,22 @@ const CTASection: React.FC = () => {
 
   return (
     <>
-      <section id="contact" className="section-padding">
+      <section id="contact" className="py-16">
         <div className="container mx-auto">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className="grid lg:grid-cols-2 gap-8 items-center">
             {/* CTA Content */}
-            <div className="space-y-6">
-              <h2 className="text-3xl md:text-4xl font-bold">
-                Siap Memulai <span className="text-gradient">Digitalisasi</span> Sekolah Anda?
+            <div className="space-y-4">
+              <h2 className="text-2xl md:text-3xl font-bold">
+                Siap <span className="text-gradient">Digitalisasi</span> Sekolah Anda?
               </h2>
-              <p className="text-lg text-muted-foreground">
-                Daftarkan sekolah Anda sekarang dan dapatkan akses ke semua fitur premium. 
-                Tim kami siap membantu proses setup hingga website Anda live!
+              <p className="text-base text-muted-foreground">
+                Daftarkan sekolah Anda sekarang dan dapatkan akses ke semua fitur premium.
               </p>
               
-              <div className="flex flex-wrap gap-4">
+              <div className="flex flex-wrap gap-3">
                 <Button size="lg" className="gap-2" onClick={() => setIsRegisterDialogOpen(true)}>
                   Daftar Sekarang
-                  <ArrowRight className="w-5 h-5" />
+                  <ArrowRight className="w-4 h-4" />
                 </Button>
                 <Button size="lg" variant="outline" onClick={() => setIsContactDialogOpen(true)}>
                   Hubungi Sales

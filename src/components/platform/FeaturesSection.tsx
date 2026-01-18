@@ -55,23 +55,22 @@ const FeaturesSection: React.FC = () => {
   ];
 
   return (
-    <section id="features" className="section-padding bg-muted/50">
+    <section id="features" className="py-12 bg-muted/50">
       <div className="container mx-auto">
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Fitur <span className="text-gradient">Lengkap</span> untuk Sekolah Anda
+        <div className="text-center max-w-2xl mx-auto mb-12">
+          <h2 className="text-2xl md:text-3xl font-bold mb-3">
+            Fitur <span className="text-gradient">Lengkap</span>
           </h2>
-          <p className="text-lg text-muted-foreground">
-            Semua yang Anda butuhkan untuk mengelola website sekolah modern, 
-            tersedia dalam satu platform terintegrasi.
+          <p className="text-base text-muted-foreground">
+            Semua yang Anda butuhkan untuk website sekolah modern dalam satu platform.
           </p>
         </div>
         
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {features.map((feature, index) => (
             <div 
               key={index}
-              className="bg-card p-6 rounded-xl border border-border hover:border-primary/30 transition-all group"
+              className="bg-card p-4 rounded-xl border border-border hover:border-primary/30 transition-all group"
             >
               <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary group-hover:scale-110 transition-all">
                 <feature.icon className="w-5 h-5 text-primary group-hover:text-primary-foreground transition-colors" />
