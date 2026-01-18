@@ -58,7 +58,7 @@ const CTASection: React.FC = () => {
               
               <div className="flex flex-wrap gap-4">
                 <Button size="lg" className="gap-2" onClick={() => setIsRegisterDialogOpen(true)}>
-                  Daftar Gratis
+                  Daftar Sekarang
                   <ArrowRight className="w-5 h-5" />
                 </Button>
                 <Button size="lg" variant="outline" onClick={() => setIsContactDialogOpen(true)}>

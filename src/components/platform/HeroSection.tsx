@@ -56,13 +56,11 @@ const HeroSection: React.FC = () => {
               
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
                 Buat Website Sekolah{' '}
-                <span className="text-gradient">Profesional</span>{' '}
-                dalam Hitungan Menit
+                <span className="text-gradient">Profesional Tanpa Ribet</span>
               </h1>
               
               <p className="text-lg text-muted-foreground max-w-lg">
-                Platform all-in-one untuk mengelola website sekolah. 
-                Tanpa coding, tanpa hosting terpisah. Cukup fokus pada konten.
+                Platform all-in-one untuk mengelola website sekolah paling lengkap
               </p>
               
               <div className="flex flex-wrap gap-4">
@@ -76,7 +74,7 @@ const HeroSection: React.FC = () => {
               
               <div className="flex flex-wrap gap-4">
                 <Button size="lg" className="gap-2 text-base px-8" onClick={() => setIsRegisterDialogOpen(true)}>
-                  Mulai Gratis
+                  Daftar Sekarang
                   <ArrowRight className="w-5 h-5" />
                 </Button>
                 <Button size="lg" variant="outline" className="text-base px-8" onClick={() => setIsDemoDialogOpen(true)}>
