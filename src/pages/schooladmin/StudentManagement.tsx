@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import { useDomain } from '@/contexts/DomainContext';
 import { getClassesByLevel, getStudentsBySchool } from '@/data/dummyData';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
@@ -50,8 +50,8 @@ const StudentManagement: React.FC = () => {
     return getClassesByLevel(currentSchool.level);
   }, [currentSchool]);
 
-  // Get initial students from dummy data
-  const initialStudents = useMemo(() => {
+  // Get students from dummy data
+  const getSchoolStudents = useCallback(() => {
     if (!currentSchool) return [];
     return getStudentsBySchool(currentSchool.id).map(s => ({
       id: s.id,
@@ -63,7 +63,7 @@ const StudentManagement: React.FC = () => {
     }));
   }, [currentSchool]);
 
-  const [students, setStudents] = useState<Student[]>(initialStudents);
+  const [students, setStudents] = useState<Student[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterClass, setFilterClass] = useState<string>('all');
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -75,6 +75,13 @@ const StudentManagement: React.FC = () => {
     gender: 'L' as 'L' | 'P',
     status: 'active' as 'active' | 'inactive',
   });
+
+  // Update students when school changes
+  useEffect(() => {
+    setStudents(getSchoolStudents());
+    setFilterClass('all');
+    setSearchTerm('');
+  }, [getSchoolStudents]);
 
   const filteredStudents = students.filter(s => {
     const matchSearch = s.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
