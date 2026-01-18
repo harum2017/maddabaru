@@ -13,6 +13,7 @@ export interface School {
   email: string;
   theme_color: string;
   hero_images: string[];
+  profile_image?: string;
   vision: string;
   mission: string[];
   about: string;

@@ -34,6 +34,7 @@ const SchoolSettings: React.FC = () => {
     logo: school?.logo || '',
     theme_color: school?.theme_color || '#2563eb',
     hero_images: school?.hero_images?.join('\n') || '',
+    profile_image: school?.profile_image || '',
   });
 
   const handleSaveGeneral = () => {
@@ -211,6 +212,19 @@ const SchoolSettings: React.FC = () => {
                   rows={4}
                   placeholder="https://example.com/hero1.jpg&#10;https://example.com/hero2.jpg"
                 />
+              </div>
+              <div>
+                <Label>URL Gambar Profil Sekolah (Tentang Kami)</Label>
+                <Input
+                  value={brandingForm.profile_image}
+                  onChange={(e) => setBrandingForm({ ...brandingForm, profile_image: e.target.value })}
+                  placeholder="https://example.com/profile.jpg"
+                />
+                {brandingForm.profile_image && (
+                  <div className="mt-2 aspect-[3/2] w-48 rounded-lg border overflow-hidden">
+                    <img src={brandingForm.profile_image} alt="Profile Preview" className="w-full h-full object-cover" />
+                  </div>
+                )}
               </div>
               <div className="flex justify-end">
                 <Button onClick={handleSaveBranding}>
