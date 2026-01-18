@@ -376,39 +376,101 @@ export const staff: Staff[] = [
   { id: 36, school_id: 4, name: "Wati Lestari", position: "Operator Website", class_or_subject: "-", nip: "199508152018012011", phone: "08200112233", address: "Kota Pintar", is_public: false },
 ];
 
-// Dummy Students
+// Dummy Students - Lebih lengkap per jenjang
 export const students: Student[] = [
-  // Siswa Sekolah 1 - SMA
+  // =====================================================
+  // Siswa Sekolah 1 - SMA Negeri 1 Nusantara
+  // Kelas: X IPA 1-3, X IPS 1-2, XI IPA 1-3, XI IPS 1-2, XII IPA 1-3, XII IPS 1-2
+  // =====================================================
   { id: 1, school_id: 1, name: "Andi Pratama", class: "XII IPA 1", nis: "2021001", gender: "L", parent_name: "Bapak Pratama", parent_phone: "08123456789" },
-  { id: 2, school_id: 1, name: "Putri Ayu", class: "XII IPA 1", nis: "2021002", gender: "P", parent_name: "Ibu Ayu", parent_phone: "08234567890" },
+  { id: 2, school_id: 1, name: "Putri Ayu Lestari", class: "XII IPA 1", nis: "2021002", gender: "P", parent_name: "Ibu Ayu", parent_phone: "08234567890" },
   { id: 3, school_id: 1, name: "Budi Setiawan", class: "XII IPA 2", nis: "2021003", gender: "L", parent_name: "Bapak Setiawan", parent_phone: "08345678901" },
-  { id: 4, school_id: 1, name: "Sari Indah", class: "XI IPA 1", nis: "2022001", gender: "P", parent_name: "Ibu Indah", parent_phone: "08456789012" },
-  { id: 5, school_id: 1, name: "Deni Kurniawan", class: "XI IPS 1", nis: "2022002", gender: "L", parent_name: "Bapak Kurniawan", parent_phone: "08567890123" },
-  { id: 6, school_id: 1, name: "Maya Sari", class: "X IPA 1", nis: "2023001", gender: "P", parent_name: "Ibu Sari", parent_phone: "08678901234" },
+  { id: 4, school_id: 1, name: "Citra Dewi", class: "XII IPA 2", nis: "2021004", gender: "P", parent_name: "Ibu Dewi", parent_phone: "08345678902" },
+  { id: 5, school_id: 1, name: "Dimas Arya", class: "XII IPA 3", nis: "2021005", gender: "L", parent_name: "Bapak Arya", parent_phone: "08345678903" },
+  { id: 6, school_id: 1, name: "Eka Putri", class: "XII IPS 1", nis: "2021006", gender: "P", parent_name: "Ibu Eka", parent_phone: "08345678904" },
+  { id: 7, school_id: 1, name: "Fajar Ramadhan", class: "XII IPS 2", nis: "2021007", gender: "L", parent_name: "Bapak Fajar", parent_phone: "08345678905" },
+  { id: 8, school_id: 1, name: "Sari Indah Permata", class: "XI IPA 1", nis: "2022001", gender: "P", parent_name: "Ibu Indah", parent_phone: "08456789012" },
+  { id: 9, school_id: 1, name: "Galih Pratama", class: "XI IPA 1", nis: "2022002", gender: "L", parent_name: "Bapak Galih", parent_phone: "08456789013" },
+  { id: 10, school_id: 1, name: "Hana Safira", class: "XI IPA 2", nis: "2022003", gender: "P", parent_name: "Ibu Hana", parent_phone: "08456789014" },
+  { id: 11, school_id: 1, name: "Ilham Wijaya", class: "XI IPA 3", nis: "2022004", gender: "L", parent_name: "Bapak Ilham", parent_phone: "08456789015" },
+  { id: 12, school_id: 1, name: "Deni Kurniawan", class: "XI IPS 1", nis: "2022005", gender: "L", parent_name: "Bapak Kurniawan", parent_phone: "08567890123" },
+  { id: 13, school_id: 1, name: "Julia Ningsih", class: "XI IPS 2", nis: "2022006", gender: "P", parent_name: "Ibu Julia", parent_phone: "08567890124" },
+  { id: 14, school_id: 1, name: "Maya Sari Indah", class: "X IPA 1", nis: "2023001", gender: "P", parent_name: "Ibu Sari", parent_phone: "08678901234" },
+  { id: 15, school_id: 1, name: "Krisna Putra", class: "X IPA 1", nis: "2023002", gender: "L", parent_name: "Bapak Krisna", parent_phone: "08678901235" },
+  { id: 16, school_id: 1, name: "Lina Marlina", class: "X IPA 2", nis: "2023003", gender: "P", parent_name: "Ibu Lina", parent_phone: "08678901236" },
+  { id: 17, school_id: 1, name: "Muhamad Rizki", class: "X IPA 3", nis: "2023004", gender: "L", parent_name: "Bapak Rizki", parent_phone: "08678901237" },
+  { id: 18, school_id: 1, name: "Nadia Putri", class: "X IPS 1", nis: "2023005", gender: "P", parent_name: "Ibu Nadia", parent_phone: "08678901238" },
+  { id: 19, school_id: 1, name: "Oscar Pratama", class: "X IPS 2", nis: "2023006", gender: "L", parent_name: "Bapak Oscar", parent_phone: "08678901239" },
   
-  // Siswa Sekolah 2 - SMK
-  { id: 7, school_id: 2, name: "Rizky Pratama", class: "XII TKJ 1", nis: "2021101", gender: "L", parent_name: "Bapak Rizky", parent_phone: "08111222333" },
-  { id: 8, school_id: 2, name: "Dewi Anggraini", class: "XII TKJ 1", nis: "2021102", gender: "P", parent_name: "Ibu Anggraini", parent_phone: "08222333444" },
-  { id: 9, school_id: 2, name: "Fajar Nugroho", class: "XI TSM 1", nis: "2022101", gender: "L", parent_name: "Bapak Nugroho", parent_phone: "08333444555" },
-  { id: 10, school_id: 2, name: "Nadia Putri", class: "X RPL 1", nis: "2023101", gender: "P", parent_name: "Ibu Putri", parent_phone: "08444555666" },
+  // =====================================================
+  // Siswa Sekolah 2 - SMK Teknologi Merdeka
+  // Kelas: X-XII TKJ, RPL, TSM, TBSM
+  // =====================================================
+  { id: 20, school_id: 2, name: "Rizky Pratama", class: "XII TKJ 1", nis: "2021101", gender: "L", parent_name: "Bapak Rizky", parent_phone: "08111222333" },
+  { id: 21, school_id: 2, name: "Dewi Anggraini", class: "XII TKJ 1", nis: "2021102", gender: "P", parent_name: "Ibu Anggraini", parent_phone: "08222333444" },
+  { id: 22, school_id: 2, name: "Adi Nugroho", class: "XII TKJ 2", nis: "2021103", gender: "L", parent_name: "Bapak Adi", parent_phone: "08222333445" },
+  { id: 23, school_id: 2, name: "Bella Safitri", class: "XII RPL 1", nis: "2021104", gender: "P", parent_name: "Ibu Bella", parent_phone: "08222333446" },
+  { id: 24, school_id: 2, name: "Cahyo Wibowo", class: "XII RPL 2", nis: "2021105", gender: "L", parent_name: "Bapak Cahyo", parent_phone: "08222333447" },
+  { id: 25, school_id: 2, name: "Diana Permata", class: "XII TSM 1", nis: "2021106", gender: "P", parent_name: "Ibu Diana", parent_phone: "08222333448" },
+  { id: 26, school_id: 2, name: "Fajar Nugroho", class: "XI TSM 1", nis: "2022101", gender: "L", parent_name: "Bapak Nugroho", parent_phone: "08333444555" },
+  { id: 27, school_id: 2, name: "Gina Rahayu", class: "XI TKJ 1", nis: "2022102", gender: "P", parent_name: "Ibu Gina", parent_phone: "08333444556" },
+  { id: 28, school_id: 2, name: "Hendra Putra", class: "XI TKJ 2", nis: "2022103", gender: "L", parent_name: "Bapak Hendra", parent_phone: "08333444557" },
+  { id: 29, school_id: 2, name: "Intan Permata", class: "XI RPL 1", nis: "2022104", gender: "P", parent_name: "Ibu Intan", parent_phone: "08333444558" },
+  { id: 30, school_id: 2, name: "Joko Susanto", class: "XI TBSM 1", nis: "2022105", gender: "L", parent_name: "Bapak Joko", parent_phone: "08333444559" },
+  { id: 31, school_id: 2, name: "Nadia Putri", class: "X RPL 1", nis: "2023101", gender: "P", parent_name: "Ibu Putri", parent_phone: "08444555666" },
+  { id: 32, school_id: 2, name: "Kevin Pratama", class: "X RPL 2", nis: "2023102", gender: "L", parent_name: "Bapak Kevin", parent_phone: "08444555667" },
+  { id: 33, school_id: 2, name: "Lisa Anggraini", class: "X TKJ 1", nis: "2023103", gender: "P", parent_name: "Ibu Lisa", parent_phone: "08444555668" },
+  { id: 34, school_id: 2, name: "Mahendra Putra", class: "X TKJ 2", nis: "2023104", gender: "L", parent_name: "Bapak Mahendra", parent_phone: "08444555669" },
+  { id: 35, school_id: 2, name: "Nina Safitri", class: "X TSM 1", nis: "2023105", gender: "P", parent_name: "Ibu Nina", parent_phone: "08444555670" },
   
-  // Siswa Sekolah 3 - SMP
-  { id: 11, school_id: 3, name: "Ahmad Zaki", class: "9-A", nis: "2021201", gender: "L", parent_name: "Bapak Zaki", parent_phone: "08555666777" },
-  { id: 12, school_id: 3, name: "Siti Nurhaliza", class: "9-B", nis: "2021202", gender: "P", parent_name: "Ibu Nurhaliza", parent_phone: "08666777888" },
-  { id: 13, school_id: 3, name: "Raka Aditya", class: "8-A", nis: "2022201", gender: "L", parent_name: "Bapak Aditya", parent_phone: "08777888999" },
-  { id: 14, school_id: 3, name: "Aulia Rahmawati", class: "7-A", nis: "2023201", gender: "P", parent_name: "Ibu Rahmawati", parent_phone: "08888999000" },
-  { id: 15, school_id: 3, name: "Dimas Prasetyo", class: "7-C", nis: "2023202", gender: "L", parent_name: "Bapak Prasetyo", parent_phone: "08999000111" },
-  { id: 16, school_id: 3, name: "Putri Wulandari", class: "8-D", nis: "2022202", gender: "P", parent_name: "Ibu Wulandari", parent_phone: "08100111222" },
+  // =====================================================
+  // Siswa Sekolah 3 - SMP Harapan Bangsa
+  // Kelas: 7A-7G, 8A-8G, 9A-9G
+  // =====================================================
+  { id: 36, school_id: 3, name: "Ahmad Zaki", class: "9-A", nis: "2021201", gender: "L", parent_name: "Bapak Zaki", parent_phone: "08555666777" },
+  { id: 37, school_id: 3, name: "Siti Nurhaliza", class: "9-B", nis: "2021202", gender: "P", parent_name: "Ibu Nurhaliza", parent_phone: "08666777888" },
+  { id: 38, school_id: 3, name: "Bagus Pratama", class: "9-C", nis: "2021203", gender: "L", parent_name: "Bapak Bagus", parent_phone: "08666777889" },
+  { id: 39, school_id: 3, name: "Cinta Amalia", class: "9-D", nis: "2021204", gender: "P", parent_name: "Ibu Cinta", parent_phone: "08666777890" },
+  { id: 40, school_id: 3, name: "Doni Saputra", class: "9-E", nis: "2021205", gender: "L", parent_name: "Bapak Doni", parent_phone: "08666777891" },
+  { id: 41, school_id: 3, name: "Evi Susanti", class: "9-F", nis: "2021206", gender: "P", parent_name: "Ibu Evi", parent_phone: "08666777892" },
+  { id: 42, school_id: 3, name: "Fandi Ahmad", class: "9-G", nis: "2021207", gender: "L", parent_name: "Bapak Fandi", parent_phone: "08666777893" },
+  { id: 43, school_id: 3, name: "Raka Aditya", class: "8-A", nis: "2022201", gender: "L", parent_name: "Bapak Aditya", parent_phone: "08777888999" },
+  { id: 44, school_id: 3, name: "Gita Nirmala", class: "8-B", nis: "2022202", gender: "P", parent_name: "Ibu Gita", parent_phone: "08777889000" },
+  { id: 45, school_id: 3, name: "Hari Prasetyo", class: "8-C", nis: "2022203", gender: "L", parent_name: "Bapak Hari", parent_phone: "08777889001" },
+  { id: 46, school_id: 3, name: "Putri Wulandari", class: "8-D", nis: "2022204", gender: "P", parent_name: "Ibu Wulandari", parent_phone: "08100111222" },
+  { id: 47, school_id: 3, name: "Ivan Ramadhan", class: "8-E", nis: "2022205", gender: "L", parent_name: "Bapak Ivan", parent_phone: "08777889003" },
+  { id: 48, school_id: 3, name: "Aulia Rahmawati", class: "7-A", nis: "2023201", gender: "P", parent_name: "Ibu Rahmawati", parent_phone: "08888999000" },
+  { id: 49, school_id: 3, name: "Kiki Fatimah", class: "7-B", nis: "2023202", gender: "P", parent_name: "Ibu Kiki", parent_phone: "08888999001" },
+  { id: 50, school_id: 3, name: "Dimas Prasetyo", class: "7-C", nis: "2023203", gender: "L", parent_name: "Bapak Prasetyo", parent_phone: "08999000111" },
+  { id: 51, school_id: 3, name: "Luki Hermawan", class: "7-D", nis: "2023204", gender: "L", parent_name: "Bapak Luki", parent_phone: "08888999003" },
+  { id: 52, school_id: 3, name: "Mira Anggraini", class: "7-E", nis: "2023205", gender: "P", parent_name: "Ibu Mira", parent_phone: "08888999004" },
+  { id: 53, school_id: 3, name: "Nanda Putra", class: "7-F", nis: "2023206", gender: "L", parent_name: "Bapak Nanda", parent_phone: "08888999005" },
+  { id: 54, school_id: 3, name: "Ovi Ramadhani", class: "7-G", nis: "2023207", gender: "P", parent_name: "Ibu Ovi", parent_phone: "08888999006" },
 
-  // Siswa Sekolah 4 - SD
-  { id: 17, school_id: 4, name: "Aisya Putri", class: "VI-A", nis: "2018301", gender: "P", parent_name: "Ibu Aisya", parent_phone: "08211223344" },
-  { id: 18, school_id: 4, name: "Bima Sakti", class: "VI-B", nis: "2018302", gender: "L", parent_name: "Bapak Bima", parent_phone: "08322334455" },
-  { id: 19, school_id: 4, name: "Cantika Sari", class: "V-A", nis: "2019301", gender: "P", parent_name: "Ibu Cantika", parent_phone: "08433445566" },
-  { id: 20, school_id: 4, name: "Dafa Pratama", class: "IV-A", nis: "2020301", gender: "L", parent_name: "Bapak Dafa", parent_phone: "08544556677" },
-  { id: 21, school_id: 4, name: "Elsa Maharani", class: "III-A", nis: "2021301", gender: "P", parent_name: "Ibu Elsa", parent_phone: "08655667788" },
-  { id: 22, school_id: 4, name: "Farhan Rizky", class: "II-A", nis: "2022301", gender: "L", parent_name: "Bapak Farhan", parent_phone: "08766778899" },
-  { id: 23, school_id: 4, name: "Gita Anjani", class: "I-A", nis: "2023301", gender: "P", parent_name: "Ibu Gita", parent_phone: "08877889900" },
-  { id: 24, school_id: 4, name: "Hadi Wijaya", class: "I-B", nis: "2023302", gender: "L", parent_name: "Bapak Hadi", parent_phone: "08988990011" },
+  // =====================================================
+  // Siswa Sekolah 4 - SD Negeri Cendekia
+  // Kelas: I-A, I-B, II-A, II-B, III-A, III-B, IV-A, IV-B, V-A, V-B, VI-A, VI-B
+  // =====================================================
+  { id: 55, school_id: 4, name: "Aisya Putri", class: "VI-A", nis: "2018301", gender: "P", parent_name: "Ibu Aisya", parent_phone: "08211223344" },
+  { id: 56, school_id: 4, name: "Bima Sakti", class: "VI-A", nis: "2018302", gender: "L", parent_name: "Bapak Bima", parent_phone: "08322334455" },
+  { id: 57, school_id: 4, name: "Citra Ayu", class: "VI-B", nis: "2018303", gender: "P", parent_name: "Ibu Citra", parent_phone: "08322334456" },
+  { id: 58, school_id: 4, name: "Danu Pratama", class: "VI-B", nis: "2018304", gender: "L", parent_name: "Bapak Danu", parent_phone: "08322334457" },
+  { id: 59, school_id: 4, name: "Cantika Sari", class: "V-A", nis: "2019301", gender: "P", parent_name: "Ibu Cantika", parent_phone: "08433445566" },
+  { id: 60, school_id: 4, name: "Eko Saputra", class: "V-A", nis: "2019302", gender: "L", parent_name: "Bapak Eko", parent_phone: "08433445567" },
+  { id: 61, school_id: 4, name: "Fika Amelia", class: "V-B", nis: "2019303", gender: "P", parent_name: "Ibu Fika", parent_phone: "08433445568" },
+  { id: 62, school_id: 4, name: "Dafa Pratama", class: "IV-A", nis: "2020301", gender: "L", parent_name: "Bapak Dafa", parent_phone: "08544556677" },
+  { id: 63, school_id: 4, name: "Gina Putri", class: "IV-A", nis: "2020302", gender: "P", parent_name: "Ibu Gina", parent_phone: "08544556678" },
+  { id: 64, school_id: 4, name: "Hani Rahayu", class: "IV-B", nis: "2020303", gender: "P", parent_name: "Ibu Hani", parent_phone: "08544556679" },
+  { id: 65, school_id: 4, name: "Elsa Maharani", class: "III-A", nis: "2021301", gender: "P", parent_name: "Ibu Elsa", parent_phone: "08655667788" },
+  { id: 66, school_id: 4, name: "Ilham Maulana", class: "III-A", nis: "2021302", gender: "L", parent_name: "Bapak Ilham", parent_phone: "08655667789" },
+  { id: 67, school_id: 4, name: "Jasmine Putri", class: "III-B", nis: "2021303", gender: "P", parent_name: "Ibu Jasmine", parent_phone: "08655667790" },
+  { id: 68, school_id: 4, name: "Farhan Rizky", class: "II-A", nis: "2022301", gender: "L", parent_name: "Bapak Farhan", parent_phone: "08766778899" },
+  { id: 69, school_id: 4, name: "Keyla Sari", class: "II-A", nis: "2022302", gender: "P", parent_name: "Ibu Keyla", parent_phone: "08766778900" },
+  { id: 70, school_id: 4, name: "Luthfi Ahmad", class: "II-B", nis: "2022303", gender: "L", parent_name: "Bapak Luthfi", parent_phone: "08766778901" },
+  { id: 71, school_id: 4, name: "Gita Anjani", class: "I-A", nis: "2023301", gender: "P", parent_name: "Ibu Gita", parent_phone: "08877889900" },
+  { id: 72, school_id: 4, name: "Hadi Wijaya", class: "I-A", nis: "2023302", gender: "L", parent_name: "Bapak Hadi", parent_phone: "08988990011" },
+  { id: 73, school_id: 4, name: "Mira Salsabila", class: "I-B", nis: "2023303", gender: "P", parent_name: "Ibu Mira", parent_phone: "08877889902" },
+  { id: 74, school_id: 4, name: "Nabil Pratama", class: "I-B", nis: "2023304", gender: "L", parent_name: "Bapak Nabil", parent_phone: "08877889903" },
 ];
 
 // Dummy Posts
