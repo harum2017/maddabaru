@@ -17,6 +17,7 @@ import SchoolAccountsManagement from "./pages/superadmin/SchoolAccountsManagemen
 import DomainManagement from "./pages/superadmin/DomainManagement";
 import StatisticsPage from "./pages/superadmin/StatisticsPage";
 import SettingsPage from "./pages/superadmin/SettingsPage";
+import SchoolRegistrationsPage from "./pages/superadmin/SchoolRegistrationsPage";
 
 // School Admin
 import SchoolAdminLayout from "./components/schooladmin/SchoolAdminLayout";
@@ -59,6 +60,7 @@ const App = () => (
               <Route path="/superadmin" element={<SuperAdminLayout />}>
                 <Route index element={<SuperAdminDashboard />} />
                 <Route path="schools" element={<SchoolManagement />} />
+                <Route path="registrations" element={<SchoolRegistrationsPage />} />
                 <Route path="accounts" element={<SchoolAccountsManagement />} />
                 <Route path="domains" element={<DomainManagement />} />
                 <Route path="statistics" element={<StatisticsPage />} />

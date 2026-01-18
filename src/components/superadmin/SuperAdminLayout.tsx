@@ -36,8 +36,7 @@ import {
   FileText,
   Shield
 } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { toast } from 'sonner';
+import { getPendingSchoolRegistrations } from '@/data/dummyData';
 
 const SuperAdminLayout: React.FC = () => {
   const { user, isAuthenticated, logout } = useAuth();
@@ -67,17 +66,23 @@ const SuperAdminLayout: React.FC = () => {
   const navigation = [
     { name: 'Dashboard', href: '/superadmin', icon: LayoutDashboard },
     { name: 'Kelola Sekolah', href: '/superadmin/schools', icon: Building2 },
+    { name: 'Pendaftaran Sekolah', href: '/superadmin/registrations', icon: FileText },
     { name: 'Kelola Akun', href: '/superadmin/accounts', icon: Shield },
     { name: 'Kelola Domain', href: '/superadmin/domains', icon: Globe },
     { name: 'Statistik', href: '/superadmin/statistics', icon: BarChart3 },
     { name: 'Pengaturan', href: '/superadmin/settings', icon: Settings },
   ];
 
-  const notifications = [
-    { id: 1, title: 'Sekolah baru terdaftar', message: 'SMK Mandiri Jaya telah mendaftar', time: '5 menit lalu', unread: true },
-    { id: 2, title: 'Domain diverifikasi', message: 'sman1nusantara.sch.id berhasil diverifikasi', time: '1 jam lalu', unread: true },
-    { id: 3, title: 'Laporan mingguan', message: 'Laporan statistik minggu ini tersedia', time: '2 jam lalu', unread: false },
-  ];
+  const pendingRegistrations = getPendingSchoolRegistrations();
+  const unreadCount = pendingRegistrations.length;
+
+  const notifications = pendingRegistrations.slice(0, 3).map((reg, index) => ({
+    id: reg.id,
+    title: 'Sekolah baru mendaftar',
+    message: `${reg.school_name} (${reg.level}) mengajukan pendaftaran`,
+    time: `${index + 1} jam lalu`,
+    unread: true
+  }));
 
   const helpItems = [
     { icon: BookOpen, title: 'Dokumentasi', description: 'Panduan lengkap penggunaan platform' },
@@ -115,8 +120,6 @@ const SuperAdminLayout: React.FC = () => {
     toast.info(`${title} akan tersedia segera`);
     setIsHelpDialogOpen(false);
   };
-
-  const unreadCount = notifications.filter(n => n.unread).length;
 
   return (
     <div className="min-h-screen bg-muted/30">

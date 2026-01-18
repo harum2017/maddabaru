@@ -10,23 +10,15 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
 
 const CTASection: React.FC = () => {
   const [isRegisterDialogOpen, setIsRegisterDialogOpen] = useState(false);
-  const [isContactDialogOpen, setIsContactDialogOpen] = useState(false);
 
   const handleRegisterSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     toast.success('Pendaftaran berhasil! Tim kami akan menghubungi Anda dalam 1x24 jam.');
     setIsRegisterDialogOpen(false);
-  };
-
-  const handleContactSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    toast.success('Pesan terkirim! Tim sales kami akan menghubungi Anda segera.');
-    setIsContactDialogOpen(false);
   };
 
   const handlePhoneClick = () => {
@@ -59,9 +51,6 @@ const CTASection: React.FC = () => {
                 <Button size="lg" className="gap-2" onClick={() => setIsRegisterDialogOpen(true)}>
                   Daftar Sekarang
                   <ArrowRight className="w-4 h-4" />
-                </Button>
-                <Button size="lg" variant="outline" onClick={() => setIsContactDialogOpen(true)}>
-                  Hubungi Sales
                 </Button>
               </div>
             </div>
@@ -150,49 +139,6 @@ const CTASection: React.FC = () => {
               </Button>
               <Button type="submit" className="flex-1">
                 Daftar Sekarang
-              </Button>
-            </div>
-          </form>
-        </DialogContent>
-      </Dialog>
-
-      {/* Contact Sales Dialog */}
-      <Dialog open={isContactDialogOpen} onOpenChange={setIsContactDialogOpen}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle>Hubungi Tim Sales</DialogTitle>
-            <DialogDescription>
-              Punya pertanyaan atau butuh penjelasan lebih lanjut? Tim kami siap membantu Anda.
-            </DialogDescription>
-          </DialogHeader>
-          <form onSubmit={handleContactSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="sales-name">Nama Lengkap</Label>
-              <Input id="sales-name" placeholder="Nama Anda" required />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="sales-email">Email</Label>
-              <Input id="sales-email" type="email" placeholder="email@anda.com" required />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="sales-phone">Nomor Telepon</Label>
-              <Input id="sales-phone" placeholder="08123456789" required />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="sales-message">Pesan</Label>
-              <Textarea 
-                id="sales-message" 
-                placeholder="Jelaskan kebutuhan atau pertanyaan Anda..." 
-                rows={4}
-                required 
-              />
-            </div>
-            <div className="flex gap-3 pt-2">
-              <Button type="button" variant="outline" className="flex-1" onClick={() => setIsContactDialogOpen(false)}>
-                Batal
-              </Button>
-              <Button type="submit" className="flex-1">
-                Kirim Pesan
               </Button>
             </div>
           </form>

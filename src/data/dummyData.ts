@@ -72,6 +72,21 @@ export interface Student {
   status?: 'aktif' | 'pindah' | 'lulus' | 'keluar';
 }
 
+export interface SchoolRegistration {
+  id: number;
+  school_name: string;
+  domain: string;
+  level: SchoolLevel;
+  address: string;
+  phone: string;
+  email: string;
+  contact_person: string;
+  contact_phone: string;
+  status: 'pending' | 'approved' | 'rejected';
+  registration_date: string;
+  notes?: string;
+}
+
 export interface Post {
   id: number;
   school_id: number;
@@ -679,6 +694,80 @@ export const gallery: GalleryItem[] = [
   { id: 24, school_id: 4, title: "Taman Bermain", image: "https://images.unsplash.com/photo-1576495169475-6731aec5e3c2?w=600&h=400&fit=crop", category: "Fasilitas", created_at: "2024-03-10" },
 ];
 
+// Dummy School Registrations
+export const schoolRegistrations: SchoolRegistration[] = [
+  {
+    id: 1,
+    school_name: "SMA Negeri 5 Jakarta",
+    domain: "sman5jakarta.sch.id",
+    level: 'SMA',
+    address: "Jl. Sudirman No. 45, Jakarta Pusat",
+    phone: "(021) 555-0123",
+    email: "info@sman5jakarta.sch.id",
+    contact_person: "Drs. Ahmad Santoso",
+    contact_phone: "081234567890",
+    status: 'pending',
+    registration_date: "2024-01-15",
+    notes: "Sekolah negeri dengan akreditasi A"
+  },
+  {
+    id: 2,
+    school_name: "SMK Teknologi Informasi Bandung",
+    domain: "smktibandung.sch.id",
+    level: 'SMK',
+    address: "Jl. Teknologi No. 12, Bandung",
+    phone: "(022) 555-0456",
+    email: "admin@smktibandung.sch.id",
+    contact_person: "Ir. Siti Nurhaliza",
+    contact_phone: "081345678901",
+    status: 'pending',
+    registration_date: "2024-01-14",
+    notes: "Fokus pada jurusan IT dan programming"
+  },
+  {
+    id: 3,
+    school_name: "SD Islam Terpadu Surabaya",
+    domain: "sditsurabaya.sch.id",
+    level: 'SD',
+    address: "Jl. Pahlawan No. 78, Surabaya",
+    phone: "(031) 555-0789",
+    email: "contact@sditsurabaya.sch.id",
+    contact_person: "Hj. Fatimah Azzahra",
+    contact_phone: "081456789012",
+    status: 'approved',
+    registration_date: "2024-01-10",
+    notes: "Sekolah Islam dengan kurikulum terpadu"
+  },
+  {
+    id: 4,
+    school_name: "SMP Plus Medan",
+    domain: "smpplusmedan.sch.id",
+    level: 'SMP',
+    address: "Jl. Thamrin No. 33, Medan",
+    phone: "(061) 555-0321",
+    email: "info@smpplusmedan.sch.id",
+    contact_person: "Dr. Budi Santoso, M.Pd.",
+    contact_phone: "081567890123",
+    status: 'pending',
+    registration_date: "2024-01-13",
+    notes: "Sekolah unggulan dengan program akselerasi"
+  },
+  {
+    id: 5,
+    school_name: "SMA Swasta Cendekia Yogyakarta",
+    domain: "smacendekiayogya.sch.id",
+    level: 'SMA',
+    address: "Jl. Malioboro No. 56, Yogyakarta",
+    phone: "(0274) 555-0654",
+    email: "admin@smacendekiayogya.sch.id",
+    contact_person: "Dra. Maya Sari, M.Pd.",
+    contact_phone: "081678901234",
+    status: 'rejected',
+    registration_date: "2024-01-08",
+    notes: "Domain sudah digunakan sekolah lain"
+  }
+];
+
 // Dummy users untuk hint di dev mode
 export interface DummyUser {
   email: string;
@@ -735,6 +824,14 @@ export const getStudentsBySchool = (schoolId: number): Student[] => {
 
 export const getDummyUsersBySchool = (schoolId: number): DummyUser[] => {
   return dummyUsers.filter(u => u.schoolId === schoolId);
+};
+
+export const getSchoolRegistrations = (): SchoolRegistration[] => {
+  return schoolRegistrations;
+};
+
+export const getPendingSchoolRegistrations = (): SchoolRegistration[] => {
+  return schoolRegistrations.filter(reg => reg.status === 'pending');
 };
 
 // Helper: Get school level label in Indonesian
