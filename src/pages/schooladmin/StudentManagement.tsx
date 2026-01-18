@@ -74,7 +74,7 @@ const StudentManagement: React.FC = () => {
     if (!currentSchool) return [];
     return getStudentsBySchool(currentSchool.id).map(s => ({
       ...s,
-      status: (s.status as any) || 'aktif',
+      status: s.status || 'aktif',
     })) as Student[];
   }, [currentSchool]);
 
@@ -487,7 +487,7 @@ const StudentManagement: React.FC = () => {
                   <Label>Status Siswa</Label>
                   <Select 
                     value={formData.status} 
-                    onValueChange={(val: any) => setFormData({ ...formData, status: val })}
+                    onValueChange={(val: 'aktif' | 'pindah' | 'lulus' | 'keluar') => setFormData({ ...formData, status: val })}
                   >
                     <SelectTrigger>
                       <SelectValue />

@@ -36,6 +36,24 @@ npm i
 npm run dev
 ```
 
+## Environment Variables
+
+Copy `.env.example` to `.env` and configure as needed:
+
+```sh
+cp .env.example .env
+```
+
+### Development Mode
+- **VITE_DEV_SCHOOL_ID** (optional): Simulasi sekolah untuk development
+  - Jika diset, akan override query parameter `?school_id=1`
+  - Contoh: `VITE_DEV_SCHOOL_ID=1`
+
+### Production Mode
+- **VITE_PLATFORM_DOMAIN**: Domain platform untuk production
+  - Default: `maddasoft.id`
+  - Contoh: `VITE_PLATFORM_DOMAIN=sekolahku.com`
+
 **Edit a file directly in GitHub**
 
 - Navigate to the desired file(s).

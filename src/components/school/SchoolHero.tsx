@@ -6,16 +6,18 @@ const SchoolHero: React.FC = () => {
   const { currentSchool } = useDomain();
   const [currentSlide, setCurrentSlide] = useState(0);
 
-  if (!currentSchool) return null;
-
-  const heroImages = currentSchool.hero_images;
+  const heroImages = currentSchool?.hero_images || [];
 
   useEffect(() => {
+    if (!currentSchool || heroImages.length === 0) return;
+    
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % heroImages.length);
     }, 5000);
     return () => clearInterval(timer);
-  }, [heroImages.length]);
+  }, [currentSchool, heroImages.length]);
+
+  if (!currentSchool) return null;
 
   const goToSlide = (index: number) => {
     setCurrentSlide(index);

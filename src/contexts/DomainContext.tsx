@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 import { School, getSchoolById, getSchoolByDomain } from '@/data/dummyData';
 
 // Platform domain (saat production, ganti dengan domain sebenarnya)
-const PLATFORM_DOMAIN = 'maddasoft.id';
+const PLATFORM_DOMAIN = import.meta.env.VITE_PLATFORM_DOMAIN || 'maddasoft.id';
 
 interface DomainContextType {
   // Mode saat ini
@@ -64,16 +64,27 @@ export const DomainProvider: React.FC<DomainProviderProps> = ({ children }) => {
     }
   };
 
-  // Cek query parameter untuk simulasi (dev only) - hanya saat pertama load
+  // Cek simulasi sekolah (dev only) - prioritas: ENV > localStorage > query parameter
   useEffect(() => {
     if (isDevMode) {
+      // Prioritas 1: ENV variable
+      const envSchoolId = import.meta.env.VITE_DEV_SCHOOL_ID;
+      const envId = envSchoolId ? parseInt(envSchoolId, 10) : null;
+      
+      // Prioritas 2: localStorage (persistent)
+      const savedSchoolId = localStorage.getItem('dev_simulated_school_id');
+      const savedId = savedSchoolId ? parseInt(savedSchoolId, 10) : null;
+      
+      // Prioritas 3: query parameter
       const params = new URLSearchParams(window.location.search);
-      const schoolIdParam = params.get('school_id');
-      if (schoolIdParam) {
-        const id = parseInt(schoolIdParam, 10);
-        if (!isNaN(id)) {
-          setSimulatedSchoolId(id);
-        }
+      const querySchoolId = params.get('school_id');
+      const queryId = querySchoolId ? parseInt(querySchoolId, 10) : null;
+      
+      // Gunakan yang pertama yang valid
+      const schoolId = envId || savedId || queryId;
+      
+      if (schoolId && !isNaN(schoolId)) {
+        setSimulatedSchoolId(schoolId);
       }
     }
   }, [isDevMode]);
