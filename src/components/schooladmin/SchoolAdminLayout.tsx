@@ -5,7 +5,7 @@ import { useDomain } from '@/contexts/DomainContext';
 import { 
   LayoutDashboard, Users, GraduationCap, FileText, 
   Image, Settings, LogOut, Menu, X, Bell, 
-  HelpCircle, ChevronDown, UserCog, School
+  HelpCircle, ChevronDown, UserCog, School, BookOpen
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
@@ -29,6 +29,7 @@ const menuItems = [
   { icon: LayoutDashboard, label: 'Dashboard', path: '/admin' },
   { icon: Users, label: 'Manajemen Pegawai', path: '/admin/staff' },
   { icon: GraduationCap, label: 'Manajemen Siswa', path: '/admin/students' },
+  { icon: BookOpen, label: 'Manajemen Kelas', path: '/admin/classes' },
   { icon: UserCog, label: 'Manajemen Operator', path: '/admin/operators' },
   { icon: FileText, label: 'Konten Publik', path: '/admin/content' },
   { icon: Image, label: 'Galeri', path: '/admin/gallery' },
@@ -248,7 +249,11 @@ const SchoolAdminLayout: React.FC = () => {
             </div>
             <div className="p-3 bg-muted rounded-lg">
               <h4 className="font-medium mb-1">Manajemen Siswa</h4>
-              <p className="text-muted-foreground">Kelola data siswa dan kelas.</p>
+              <p className="text-muted-foreground">Kelola data siswa.</p>
+            </div>
+            <div className="p-3 bg-muted rounded-lg">
+              <h4 className="font-medium mb-1">Manajemen Kelas</h4>
+              <p className="text-muted-foreground">Kelola rombongan belajar (rombel) per tingkat kelas.</p>
             </div>
             <div className="p-3 bg-muted rounded-lg">
               <h4 className="font-medium mb-1">Manajemen Operator</h4>

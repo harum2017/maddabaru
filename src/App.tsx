@@ -23,6 +23,7 @@ import SchoolAdminLayout from "./components/schooladmin/SchoolAdminLayout";
 import SchoolAdminDashboard from "./pages/schooladmin/SchoolAdminDashboard";
 import StaffManagement from "./pages/schooladmin/StaffManagement";
 import StudentManagement from "./pages/schooladmin/StudentManagement";
+import ClassManagement from "./pages/schooladmin/ClassManagement";
 import OperatorManagement from "./pages/schooladmin/OperatorManagement";
 import ContentManagement from "./pages/schooladmin/ContentManagement";
 import GalleryManagement from "./pages/schooladmin/GalleryManagement";
@@ -69,6 +70,7 @@ const App = () => (
                 <Route index element={<SchoolAdminDashboard />} />
                 <Route path="staff" element={<StaffManagement />} />
                 <Route path="students" element={<StudentManagement />} />
+                <Route path="classes" element={<ClassManagement />} />
                 <Route path="operators" element={<OperatorManagement />} />
                 <Route path="content" element={<ContentManagement />} />
                 <Route path="gallery" element={<GalleryManagement />} />
