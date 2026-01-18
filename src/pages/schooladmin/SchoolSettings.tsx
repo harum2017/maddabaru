@@ -8,8 +8,16 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Save, Image, Palette, FileText } from 'lucide-react';
+import { Save, Image, Palette, FileText, HelpCircle, Info } from 'lucide-react';
 import { toast } from 'sonner';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 const SchoolSettings: React.FC = () => {
   const { currentSchool, simulatedSchoolId } = useDomain();
@@ -205,13 +213,64 @@ const SchoolSettings: React.FC = () => {
                 </div>
               </div>
               <div>
-                <Label>URL Hero Images (satu per baris)</Label>
+                <div className="flex items-center gap-2 mb-2">
+                  <Label>URL Hero Images (satu per baris)</Label>
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button variant="ghost" size="icon" className="h-5 w-5 rounded-full p-0">
+                        <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Panduan Hero Images</DialogTitle>
+                        <DialogDescription>
+                          Hero images adalah gambar besar yang muncul di bagian paling atas website sekolah.
+                        </DialogDescription>
+                      </DialogHeader>
+                      <div className="space-y-4 py-4">
+                        <div className="flex gap-3">
+                          <Info className="h-5 w-5 text-blue-500 shrink-0" />
+                          <p className="text-sm">
+                            Masukkan satu URL gambar per baris. Sistem akan otomatis memotong (crop) gambar agar sesuai dengan area banner yang responsif.
+                          </p>
+                        </div>
+                        <ul className="text-sm space-y-2 list-disc pl-5 text-muted-foreground">
+                          <li>Rekomendasi rasio: 16:9 atau lebih lebar (panoramic).</li>
+                          <li>Minimal resolusi: 1920x600 pixel untuk hasil terbaik.</li>
+                          <li>Pastikan subjek utama gambar berada di tengah agar tidak terpotong saat tampilan mobile.</li>
+                        </ul>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
+                </div>
                 <Textarea
                   value={brandingForm.hero_images}
                   onChange={(e) => setBrandingForm({ ...brandingForm, hero_images: e.target.value })}
                   rows={4}
                   placeholder="https://example.com/hero1.jpg&#10;https://example.com/hero2.jpg"
                 />
+                {brandingForm.hero_images && (
+                  <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {brandingForm.hero_images.split('\n').filter(url => url.trim()).map((url, idx) => (
+                      <div key={idx} className="relative group rounded-lg overflow-hidden border bg-muted">
+                        <div className="aspect-[16/5] w-full">
+                          <img 
+                            src={url.trim()} 
+                            alt={`Preview ${idx + 1}`} 
+                            className="w-full h-full object-cover transition-transform group-hover:scale-105" 
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).src = '/placeholder.svg';
+                            }}
+                          />
+                        </div>
+                        <div className="absolute top-1 left-1 bg-black/50 text-white text-[10px] px-1.5 py-0.5 rounded">
+                          Preview Responsif {idx + 1}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
               <div>
                 <Label>URL Gambar Profil Sekolah (Tentang Kami)</Label>
