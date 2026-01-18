@@ -3,6 +3,8 @@ import { Navigate, Outlet, useLocation, Link, useNavigate } from 'react-router-d
 import { useAuth } from '@/contexts/AuthContext';
 import { useDomain } from '@/contexts/DomainContext';
 import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+import { toast } from 'sonner';
 import {
   DropdownMenu,
   DropdownMenuContent,

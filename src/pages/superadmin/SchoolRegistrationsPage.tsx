@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { getSchoolRegistrations, getPendingSchoolRegistrations } from '@/data/dummyData';
+import { getSchoolRegistrations, getPendingSchoolRegistrations, SchoolRegistration } from '@/data/dummyData';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -33,7 +33,7 @@ import { toast } from 'sonner';
 
 const SchoolRegistrationsPage: React.FC = () => {
   const [registrations, setRegistrations] = useState(getSchoolRegistrations());
-  const [selectedRegistration, setSelectedRegistration] = useState<any>(null);
+  const [selectedRegistration, setSelectedRegistration] = useState<SchoolRegistration | null>(null);
   const [isDetailDialogOpen, setIsDetailDialogOpen] = useState(false);
   const [filterStatus, setFilterStatus] = useState<string>('all');
 
@@ -69,7 +69,7 @@ const SchoolRegistrationsPage: React.FC = () => {
     toast.success('Pendaftaran sekolah telah ditolak');
   };
 
-  const handleViewDetails = (registration: any) => {
+  const handleViewDetails = (registration: SchoolRegistration) => {
     setSelectedRegistration(registration);
     setIsDetailDialogOpen(true);
   };
