@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useDomain } from '@/contexts/DomainContext';
-import { SchoolLevel } from '@/data/dummyData';
+import { getDefaultGradeLevels, GradeLevel, ClassSection, SchoolLevel } from '@/data/dummyData';
 import { Plus, Trash2, Edit2, Save, X, HelpCircle, GraduationCap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -25,75 +25,6 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { toast } from 'sonner';
-
-// Interface untuk struktur kelas
-interface ClassSection {
-  id: string;
-  name: string; // e.g., "A", "B", "IPA 1", "TKJ 1"
-}
-
-interface GradeLevel {
-  id: string;
-  name: string; // e.g., "Kelas I", "Kelas VII", "Kelas X"
-  romanNumeral: string; // e.g., "I", "VII", "X"
-  sections: ClassSection[];
-}
-
-// Default grade levels berdasarkan jenjang
-const getDefaultGradeLevels = (level: SchoolLevel): GradeLevel[] => {
-  switch (level) {
-    case 'SD':
-      return [
-        { id: '1', name: 'Kelas I', romanNumeral: 'I', sections: [{ id: '1a', name: 'A' }, { id: '1b', name: 'B' }] },
-        { id: '2', name: 'Kelas II', romanNumeral: 'II', sections: [{ id: '2a', name: 'A' }, { id: '2b', name: 'B' }] },
-        { id: '3', name: 'Kelas III', romanNumeral: 'III', sections: [{ id: '3a', name: 'A' }, { id: '3b', name: 'B' }] },
-        { id: '4', name: 'Kelas IV', romanNumeral: 'IV', sections: [{ id: '4a', name: 'A' }, { id: '4b', name: 'B' }] },
-        { id: '5', name: 'Kelas V', romanNumeral: 'V', sections: [{ id: '5a', name: 'A' }, { id: '5b', name: 'B' }] },
-        { id: '6', name: 'Kelas VI', romanNumeral: 'VI', sections: [{ id: '6a', name: 'A' }, { id: '6b', name: 'B' }] },
-      ];
-    case 'SMP':
-      return [
-        { id: '7', name: 'Kelas VII', romanNumeral: 'VII', sections: Array.from({ length: 7 }, (_, i) => ({ id: `7${String.fromCharCode(97 + i)}`, name: String.fromCharCode(65 + i) })) },
-        { id: '8', name: 'Kelas VIII', romanNumeral: 'VIII', sections: Array.from({ length: 7 }, (_, i) => ({ id: `8${String.fromCharCode(97 + i)}`, name: String.fromCharCode(65 + i) })) },
-        { id: '9', name: 'Kelas IX', romanNumeral: 'IX', sections: Array.from({ length: 7 }, (_, i) => ({ id: `9${String.fromCharCode(97 + i)}`, name: String.fromCharCode(65 + i) })) },
-      ];
-    case 'SMA':
-      return [
-        { id: 'x', name: 'Kelas X', romanNumeral: 'X', sections: [
-          { id: 'x-ipa1', name: 'IPA 1' }, { id: 'x-ipa2', name: 'IPA 2' }, { id: 'x-ipa3', name: 'IPA 3' },
-          { id: 'x-ips1', name: 'IPS 1' }, { id: 'x-ips2', name: 'IPS 2' },
-        ]},
-        { id: 'xi', name: 'Kelas XI', romanNumeral: 'XI', sections: [
-          { id: 'xi-ipa1', name: 'IPA 1' }, { id: 'xi-ipa2', name: 'IPA 2' }, { id: 'xi-ipa3', name: 'IPA 3' },
-          { id: 'xi-ips1', name: 'IPS 1' }, { id: 'xi-ips2', name: 'IPS 2' },
-        ]},
-        { id: 'xii', name: 'Kelas XII', romanNumeral: 'XII', sections: [
-          { id: 'xii-ipa1', name: 'IPA 1' }, { id: 'xii-ipa2', name: 'IPA 2' }, { id: 'xii-ipa3', name: 'IPA 3' },
-          { id: 'xii-ips1', name: 'IPS 1' }, { id: 'xii-ips2', name: 'IPS 2' },
-        ]},
-      ];
-    case 'SMK':
-      return [
-        { id: 'x', name: 'Kelas X', romanNumeral: 'X', sections: [
-          { id: 'x-tkj1', name: 'TKJ 1' }, { id: 'x-tkj2', name: 'TKJ 2' },
-          { id: 'x-rpl1', name: 'RPL 1' }, { id: 'x-rpl2', name: 'RPL 2' },
-          { id: 'x-tsm1', name: 'TSM 1' }, { id: 'x-tbsm1', name: 'TBSM 1' },
-        ]},
-        { id: 'xi', name: 'Kelas XI', romanNumeral: 'XI', sections: [
-          { id: 'xi-tkj1', name: 'TKJ 1' }, { id: 'xi-tkj2', name: 'TKJ 2' },
-          { id: 'xi-rpl1', name: 'RPL 1' }, { id: 'xi-rpl2', name: 'RPL 2' },
-          { id: 'xi-tsm1', name: 'TSM 1' }, { id: 'xi-tbsm1', name: 'TBSM 1' },
-        ]},
-        { id: 'xii', name: 'Kelas XII', romanNumeral: 'XII', sections: [
-          { id: 'xii-tkj1', name: 'TKJ 1' }, { id: 'xii-tkj2', name: 'TKJ 2' },
-          { id: 'xii-rpl1', name: 'RPL 1' }, { id: 'xii-rpl2', name: 'RPL 2' },
-          { id: 'xii-tsm1', name: 'TSM 1' }, { id: 'xii-tbsm1', name: 'TBSM 1' },
-        ]},
-      ];
-    default:
-      return [];
-  }
-};
 
 const ClassManagement: React.FC = () => {
   const { currentSchool } = useDomain();
