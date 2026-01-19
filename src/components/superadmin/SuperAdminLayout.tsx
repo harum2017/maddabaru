@@ -62,6 +62,12 @@ const SuperAdminLayout: React.FC = () => {
     if (!isSchoolDomain) {
       if (!isAuthenticated) {
         navigate('/domain-pusat/login', { replace: true });
+      } else if (user?.role === 'ADMIN_SEKOLAH') {
+        toast.error('Akses ditolak. Admin sekolah tidak dapat mengakses panel super admin.');
+        navigate('/admin', { replace: true });
+      } else if (user?.role === 'OPERATOR') {
+        toast.error('Akses ditolak. Operator tidak dapat mengakses panel super admin.');
+        navigate('/operator', { replace: true });
       } else if (user?.role !== 'SUPER_ADMIN') {
         toast.error('Akses ditolak. Anda bukan Super Admin.');
         navigate('/', { replace: true });

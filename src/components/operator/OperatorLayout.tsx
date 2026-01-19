@@ -49,6 +49,10 @@ const OperatorLayout: React.FC = () => {
     
     if (!isAuthenticated) {
       navigate('/school-login', { replace: true });
+    } else if (user?.role === 'SUPER_ADMIN') {
+      // SUPER_ADMIN tidak boleh akses operator panel
+      toast.error('Akses ditolak. Super admin tidak dapat mengakses panel operator.');
+      navigate('/domain-pusat/admin', { replace: true });
     } else if (user?.role === 'ADMIN_SEKOLAH') {
       // ADMIN_SEKOLAH tidak boleh akses operator panel
       toast.error('Akses ditolak. Admin sekolah tidak dapat mengakses panel operator.');
