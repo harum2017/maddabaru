@@ -184,15 +184,53 @@ const SchoolSettings: React.FC = () => {
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <Label>URL Logo</Label>
+                <div className="flex items-center gap-2 mb-2">
+                  <Label>URL Logo</Label>
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button variant="ghost" size="icon" className="h-5 w-5 rounded-full p-0">
+                        <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Panduan Logo Sekolah</DialogTitle>
+                        <DialogDescription>
+                          Logo sekolah akan muncul di navbar dan footer website.
+                        </DialogDescription>
+                      </DialogHeader>
+                      <div className="space-y-4 py-4">
+                        <div className="flex gap-3">
+                          <Info className="h-5 w-5 text-blue-500 shrink-0" />
+                          <p className="text-sm">
+                            Gunakan URL gambar dengan latar belakang transparan (PNG) untuk hasil terbaik di berbagai warna tema.
+                          </p>
+                        </div>
+                        <ul className="text-sm space-y-2 list-disc pl-5 text-muted-foreground">
+                          <li>Format yang disarankan: PNG atau SVG.</li>
+                          <li>Rasio: 1:1 (persegi) atau horizontal.</li>
+                          <li>Pastikan URL dapat diakses secara publik.</li>
+                        </ul>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
+                </div>
                 <Input
                   value={brandingForm.logo}
                   onChange={(e) => setBrandingForm({ ...brandingForm, logo: e.target.value })}
                   placeholder="https://example.com/logo.png"
                 />
                 {brandingForm.logo && brandingForm.logo !== '/placeholder.svg' && (
-                  <div className="mt-2 w-20 h-20 rounded-lg border flex items-center justify-center overflow-hidden">
-                    <img src={brandingForm.logo} alt="Logo Preview" className="max-w-full max-h-full object-contain" />
+                  <div className="mt-2 w-24 h-24 rounded-lg border-2 border-dashed flex flex-col items-center justify-center overflow-hidden bg-muted/30 p-2">
+                    <img 
+                      src={brandingForm.logo} 
+                      alt="Logo Preview" 
+                      className="max-w-full max-h-full object-contain"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = '/placeholder.svg';
+                      }}
+                    />
+                    <span className="text-[10px] font-bold text-muted-foreground mt-1 uppercase">Preview Logo</span>
                   </div>
                 )}
               </div>
@@ -273,15 +311,55 @@ const SchoolSettings: React.FC = () => {
                 )}
               </div>
               <div>
-                <Label>URL Gambar Profil Sekolah (Tentang Kami)</Label>
+                <div className="flex items-center gap-2 mb-2">
+                  <Label>URL Gambar Profil Sekolah (Tentang Kami)</Label>
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button variant="ghost" size="icon" className="h-5 w-5 rounded-full p-0">
+                        <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Panduan Gambar Profil</DialogTitle>
+                        <DialogDescription>
+                          Gambar ini akan muncul di halaman "Tentang Kami" atau profil sekolah.
+                        </DialogDescription>
+                      </DialogHeader>
+                      <div className="space-y-4 py-4">
+                        <div className="flex gap-3">
+                          <Info className="h-5 w-5 text-blue-500 shrink-0" />
+                          <p className="text-sm">
+                            Pilih gambar yang merepresentasikan identitas sekolah, seperti gedung utama atau aktivitas siswa.
+                          </p>
+                        </div>
+                        <ul className="text-sm space-y-2 list-disc pl-5 text-muted-foreground">
+                          <li>Rasio ideal: 3:2 atau 4:3.</li>
+                          <li>Resolusi minimal: 1200x800 pixel.</li>
+                          <li>Gunakan gambar berkualitas tinggi namun dengan ukuran file yang optimal.</li>
+                        </ul>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
+                </div>
                 <Input
                   value={brandingForm.profile_image}
                   onChange={(e) => setBrandingForm({ ...brandingForm, profile_image: e.target.value })}
                   placeholder="https://example.com/profile.jpg"
                 />
                 {brandingForm.profile_image && (
-                  <div className="mt-2 aspect-[3/2] w-48 rounded-lg border overflow-hidden">
-                    <img src={brandingForm.profile_image} alt="Profile Preview" className="w-full h-full object-cover" />
+                  <div className="mt-2 relative w-64 aspect-[3/2] rounded-lg border overflow-hidden bg-muted group">
+                    <img 
+                      src={brandingForm.profile_image} 
+                      alt="Profile Preview" 
+                      className="w-full h-full object-cover transition-transform group-hover:scale-105"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = '/placeholder.svg';
+                      }}
+                    />
+                    <div className="absolute top-1 left-1 bg-black/50 text-white text-[10px] px-1.5 py-0.5 rounded font-bold uppercase">
+                      Preview Profil
+                    </div>
                   </div>
                 )}
               </div>
