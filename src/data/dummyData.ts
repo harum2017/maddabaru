@@ -30,11 +30,28 @@ export interface Staff {
   name: string;
   position: string;
   class_or_subject: string;
-  nip: string;
+  nip: string; // NIP / NIY
+  nik?: string;
   phone: string;
+  email_personal?: string;
   address: string;
   is_public: boolean;
   photo?: string;
+  
+  // Data Kepegawaian (Simpeg Standard)
+  employment_status?: 'PNS' | 'PPPK' | 'Honorer' | 'Tetap Yayasan' | 'Tidak Tetap Yayasan';
+  rank_grade?: string; // Pangkat/Golongan
+  tmt_employment?: string; // Terhitung Mulai Tanggal
+  nuptk?: string;
+  sk_number?: string;
+  
+  // Data Pribadi Lengkap
+  gender?: 'L' | 'P';
+  birth_place?: string;
+  birth_date?: string;
+  education_level?: 'SMA' | 'D3' | 'S1' | 'S2' | 'S3';
+  major?: string;
+  marriage_status?: 'Menikah' | 'Belum Menikah' | 'Cerai Hidup' | 'Cerai Mati';
 }
 
 export interface User {
