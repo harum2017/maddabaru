@@ -28,7 +28,7 @@ const SuperAdminLogin: React.FC = () => {
   // Redirect jika sudah login sebagai super admin
   useEffect(() => {
     if (isAuthenticated && user?.role === 'SUPER_ADMIN') {
-      navigate('/superadmin');
+      navigate('/domain-pusat/admin');
     }
   }, [isAuthenticated, user, navigate]);
 
@@ -41,7 +41,7 @@ const SuperAdminLogin: React.FC = () => {
       const result = await login(email, password, 'SUPER_ADMIN');
       if (result.success) {
         toast.success('Login berhasil!');
-        navigate('/superadmin');
+        navigate('/domain-pusat/admin');
       } else {
         setError(result.message || 'Email atau password salah');
       }

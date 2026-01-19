@@ -32,7 +32,8 @@ Preferred communication style: Simple, everyday language.
 ### Routing Architecture
 The application uses a multi-layout routing structure:
 - `/` - Dynamic index that renders either PlatformLanding or SchoolWebsite based on domain
-- `/superadmin/*` - Super admin dashboard with `SuperAdminLayout`
+- `/domain-pusat/admin/*` - Super admin dashboard with `SuperAdminLayout`
+- `/domain-pusat/login` - Super admin authentication
 - `/admin/*` - School admin dashboard with `SchoolAdminLayout`
 - `/operator/*` - Operator dashboard with `OperatorLayout`
 - `/school-login` - School-specific authentication

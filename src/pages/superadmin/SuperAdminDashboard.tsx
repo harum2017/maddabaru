@@ -74,11 +74,11 @@ const SuperAdminDashboard: React.FC = () => {
   ];
 
   const handleAddSchool = () => {
-    navigate('/superadmin/schools');
+    navigate('/domain-pusat/admin/schools');
   };
 
   const handleViewAllSchools = () => {
-    navigate('/superadmin/schools');
+    navigate('/domain-pusat/admin/schools');
   };
 
   const handleViewSchoolWebsite = (schoolId: number) => {

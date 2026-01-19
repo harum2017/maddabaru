@@ -35,7 +35,7 @@ const PlatformHeader: React.FC = () => {
   };
 
   const handleLogin = () => {
-    navigate('/login');
+    navigate('/domain-pusat/login');
   };
 
   const handleRegisterSubmit = (e: React.FormEvent) => {
