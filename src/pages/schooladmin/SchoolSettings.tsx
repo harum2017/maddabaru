@@ -27,27 +27,26 @@ const SchoolSettings: React.FC = () => {
 
   // Helper to get valid dummy URLs based on school level
   const getDummyUrls = (id: number) => {
-    const level = schools.find(s => s.id === id)?.level || 'SMA';
-    switch (level) {
-      case 'SD':
+    switch (id) {
+      case 4: // SD
         return {
-          logo: 'https://images.unsplash.com/photo-1594608661623-aa0bd3a69d98?auto=format&fit=crop&q=80&w=200&h=200',
-          profile: 'https://images.unsplash.com/photo-1503945438517-f65904a5adc0?auto=format&fit=crop&q=80&w=1200&h=800'
+          logo: 'https://i.pinimg.com/236x/67/e9/b1/67e9b15075e83cfa3235b1f76b7cb890.jpg',
+          profile: 'https://static.promediateknologi.id/crop/0x0:0x0/0x0/webp/photo/p2/227/2024/07/17/sd-di-kudus-digabung-1882173063.jpg'
         };
-      case 'SMP':
+      case 3: // SMP
         return {
-          logo: 'https://images.unsplash.com/photo-1546410531-bb4caa1b424d?auto=format&fit=crop&q=80&w=200&h=200',
-          profile: 'https://images.unsplash.com/photo-1523050335392-938511794244?auto=format&fit=crop&q=80&w=1200&h=800'
+          logo: 'https://smpn6purwokerto.sch.id/wp-content/uploads/2021/12/LOGO-SPENSIX-BARU-NO-BACKGROUND-1024x1024.png',
+          profile: 'https://smpn2.bimakota.sch.id/upload/kontent/1679795348_225ee7f5d9752c51854f.jpeg'
         };
-      case 'SMA':
+      case 2: // SMK
         return {
-          logo: 'https://images.unsplash.com/photo-1525921429624-479b6a26d84d?auto=format&fit=crop&q=80&w=200&h=200',
-          profile: 'https://images.unsplash.com/photo-1541339907198-e08756ebafe3?auto=format&fit=crop&q=80&w=1200&h=800'
+          logo: 'https://png.pngtree.com/png-vector/20220611/ourmid/pngtree-smk-hebat-siap-kerja-santun-mandiri-kreatif-png-image_4936786.png',
+          profile: 'https://live.staticflickr.com/7547/16210761646_879af6a36a_b.jpg'
         };
-      case 'SMK':
+      case 1: // SMA
         return {
-          logo: 'https://images.unsplash.com/photo-1581092921461-7d15cb013665?auto=format&fit=crop&q=80&w=200&h=200',
-          profile: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&q=80&w=1200&h=800'
+          logo: 'https://e7.pngegg.com/pngimages/185/601/png-clipart-sma-negeri-67-jakarta-logo-brand-symbol-school-sma-negeri-76-jakarta-others-miscellaneous-logo.png',
+          profile: 'https://i.pinimg.com/564x/34/37/96/343796afec1e1c464b8949f8a1953301.jpg'
         };
       default:
         return {
