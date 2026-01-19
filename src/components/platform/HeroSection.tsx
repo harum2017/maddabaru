@@ -39,83 +39,77 @@ const HeroSection: React.FC = () => {
 
   return (
     <>
-      <section id="hero" className="relative min-h-[80vh] flex items-center pt-16 overflow-hidden">
-        {/* Background Gradient */}
-        <div className="absolute inset-0 hero-gradient opacity-5" />
-        <div className="absolute top-20 right-0 w-[400px] h-[400px] bg-primary/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-accent/10 rounded-full blur-3xl" />
+      <section id="hero" className="relative min-h-[70vh] flex items-center pt-20 pb-12 overflow-hidden">
+        {/* Background Decorative Elements */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary/5 via-transparent to-transparent opacity-40" />
         
         <div className="container mx-auto px-4 relative z-10">
-          <div className="grid lg:grid-cols-2 gap-8 items-center">
+          <div className="grid lg:grid-cols-2 gap-10 items-center">
             {/* Content */}
-            <div className="space-y-6 animate-slide-up">
-              <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 rounded-full text-primary text-sm font-medium">
-                <Sparkles className="w-4 h-4" />
-                Platform Website Sekolah
+            <div className="space-y-5 animate-slide-up">
+              <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 border border-primary/20 rounded-full text-primary text-xs font-bold tracking-tight uppercase">
+                <Sparkles className="w-3.5 h-3.5" />
+                Platform Website Sekolah Modern
               </div>
               
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight">
-                Buat Website Sekolah{' '}
-                <span className="text-gradient">Profesional Tanpa Ribet</span>
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-black leading-[1.1] tracking-tighter">
+                Website Sekolah{' '}
+                <span className="text-gradient">Profesional</span> Berstandar Nasional
               </h1>
               
-              <p className="text-base text-muted-foreground max-w-md">
-                Platform all-in-one untuk mengelola website sekolah paling lengkap
+              <p className="text-base md:text-lg text-muted-foreground max-w-md leading-relaxed">
+                Solusi cerdas digitalisasi sekolah. Manajemen data siswa & pegawai dalam satu sistem terpadu yang elegan.
               </p>
               
-              <div className="flex flex-wrap gap-3">
+              <div className="flex flex-wrap gap-4">
                 {features.map((feature, index) => (
-                  <div key={index} className="flex items-center gap-2 text-sm">
-                    <CheckCircle2 className="w-4 h-4 text-accent" />
-                    <span className="text-foreground font-medium">{feature}</span>
+                  <div key={index} className="flex items-center gap-1.5 text-sm bg-background/50 px-3 py-1 rounded-md border border-border shadow-sm">
+                    <CheckCircle2 className="w-4 h-4 text-primary" />
+                    <span className="text-foreground font-semibold">{feature}</span>
                   </div>
                 ))}
               </div>
               
-              <div className="flex flex-wrap gap-3">
-                <Button size="lg" className="gap-2 px-6" onClick={() => setIsRegisterDialogOpen(true)}>
+              <div className="flex flex-wrap gap-4 pt-2">
+                <Button size="lg" className="gap-2 px-8 rounded-xl font-bold border-2 border-primary shadow-lg shadow-primary/20" onClick={() => setIsRegisterDialogOpen(true)}>
                   Daftar Sekarang
                   <ArrowRight className="w-4 h-4" />
                 </Button>
-                <Button size="lg" variant="outline" className="px-6" onClick={() => setIsDemoDialogOpen(true)}>
+                <Button size="lg" variant="outline" className="px-8 rounded-xl font-bold border-2 hover:bg-accent/10" onClick={() => setIsDemoDialogOpen(true)}>
                   Lihat Demo
                 </Button>
               </div>
-              
-              <p className="text-sm text-muted-foreground">
-                ✨ Sudah digunakan oleh <span className="text-primary font-semibold">500+</span> sekolah di Indonesia
-              </p>
             </div>
             
             {/* Hero Image */}
             <div className="relative animate-fade-in" style={{ animationDelay: '0.2s' }}>
-              <div className="relative z-10">
-                <div className="bg-card rounded-2xl shadow-xl border border-border overflow-hidden">
-                  <div className="bg-muted p-3 flex items-center gap-2">
+              <div className="relative z-10 group">
+                <div className="bg-card rounded-2xl shadow-2xl border-2 border-border/80 overflow-hidden transform group-hover:scale-[1.01] transition-transform duration-500">
+                  <div className="bg-muted p-2.5 flex items-center gap-2 border-b-2 border-border/50">
                     <div className="flex gap-1.5">
-                      <div className="w-3 h-3 rounded-full bg-destructive/60" />
-                      <div className="w-3 h-3 rounded-full bg-warning/60" />
-                      <div className="w-3 h-3 rounded-full bg-accent/60" />
+                      <div className="w-3 h-3 rounded-full bg-red-400" />
+                      <div className="w-3 h-3 rounded-full bg-yellow-400" />
+                      <div className="w-3 h-3 rounded-full bg-green-400" />
                     </div>
-                    <div className="flex-1 text-center">
-                      <span className="text-xs text-muted-foreground">sekolahanda.sch.id</span>
+                    <div className="flex-1 text-center pr-10">
+                      <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">sekolahanda.sch.id</span>
                     </div>
                   </div>
                   <img 
-                    src="https://images.unsplash.com/photo-1562774053-701939374585?w=800&h=500&fit=crop"
+                    src="https://images.unsplash.com/photo-1562774053-701939374585?w=1200&h=750&fit=crop"
                     alt="Website Sekolah Preview"
-                    className="w-full"
+                    className="w-full object-cover aspect-[16/10]"
                   />
                 </div>
               </div>
               
-              {/* Floating Elements */}
-              <div className="absolute -top-4 -right-4 bg-accent text-accent-foreground px-4 py-2 rounded-lg shadow-lg animate-float">
-                <p className="text-sm font-semibold">🎓 100% Online</p>
+              {/* Floating Elements - Sharpened */}
+              <div className="absolute -top-4 -right-4 bg-primary text-primary-foreground px-4 py-2 rounded-xl shadow-xl border-2 border-white/20 animate-float z-20">
+                <p className="text-sm font-black italic tracking-tighter">100% ONLINE</p>
               </div>
-              <div className="absolute -bottom-4 -left-4 bg-card px-4 py-3 rounded-lg shadow-lg border border-border" style={{ animationDelay: '1s' }}>
-                <p className="text-xs text-muted-foreground">Siswa Terdaftar</p>
-                <p className="text-xl font-bold text-primary">12,450+</p>
+              <div className="absolute -bottom-4 -left-4 bg-card px-5 py-3 rounded-xl shadow-2xl border-2 border-border z-20" style={{ animationDelay: '1s' }}>
+                <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-1">Total Siswa</p>
+                <p className="text-2xl font-black text-primary tracking-tighter leading-none">12,450+</p>
               </div>
             </div>
           </div>

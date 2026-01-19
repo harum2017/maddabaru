@@ -52,41 +52,36 @@ const FeaturesSection: React.FC = () => {
   ];
 
   return (
-    <section id="features" className="py-24 bg-background relative overflow-hidden">
-      {/* Decorative Background Elements */}
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl -z-10" />
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl -z-10" />
-
-      <div className="container mx-auto px-4">
-        <div className="text-center max-w-3xl mx-auto mb-20">
-          <h2 className="text-sm font-bold tracking-widest uppercase text-primary mb-3">Solusi Terpadu</h2>
-          <h3 className="text-3xl md:text-5xl font-extrabold mb-6 tracking-tight">
-            Lebih Dari Sekadar <span className="text-gradient">Website Sekolah</span>
+    <section id="features" className="py-16 relative overflow-hidden">
+      <div className="container mx-auto px-4 relative z-10">
+        <div className="text-center max-w-3xl mx-auto mb-12">
+          <h2 className="text-xs font-black tracking-[0.2em] uppercase text-primary mb-3">Sistem Terintegrasi</h2>
+          <h3 className="text-3xl md:text-5xl font-black mb-4 tracking-tighter leading-none">
+            Ecosystem <span className="text-gradient">Digital Sekolah</span>
           </h3>
-          <p className="text-lg text-muted-foreground leading-relaxed">
-            MaddaSoft menggabungkan kekuatan sistem informasi manajemen (SIM) dengan profil publik yang elegan. 
-            Solusi digitalisasi sekolah paling lengkap di Indonesia.
+          <p className="text-base text-muted-foreground leading-relaxed font-medium">
+            MaddaSoft menghadirkan harmoni antara manajemen data internal (SIM) dan eksistensi publik yang prestisius.
           </p>
         </div>
         
         {/* Main Features Grid */}
-        <div className="grid md:grid-cols-2 gap-8 mb-16">
+        <div className="grid md:grid-cols-2 gap-6 mb-12">
           {mainFeatures.map((feature, index) => (
             <div 
               key={index}
-              className="group relative bg-card hover:bg-accent/50 p-8 rounded-3xl border border-border transition-all duration-500 hover:shadow-2xl hover:shadow-primary/10 flex flex-col items-start"
+              className="group relative bg-card/80 backdrop-blur-sm hover:bg-accent/10 p-6 rounded-2xl border-2 border-border/80 transition-all duration-300 hover:border-primary/50 hover:shadow-xl hover:shadow-primary/5 flex flex-col items-start"
             >
-              <div className="absolute top-6 right-8 opacity-10 group-hover:opacity-20 transition-opacity">
-                <feature.icon className="w-24 h-24" />
+              <div className="absolute top-4 right-6 opacity-5 group-hover:opacity-10 transition-opacity">
+                <feature.icon className="w-20 h-20" />
               </div>
-              <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:bg-primary group-hover:rotate-6 transition-all duration-300">
-                <feature.icon className="w-7 h-7 text-primary group-hover:text-primary-foreground" />
+              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-5 group-hover:bg-primary group-hover:rotate-3 transition-all">
+                <feature.icon className="w-6 h-6 text-primary group-hover:text-primary-foreground" />
               </div>
-              <div className="inline-block px-3 py-1 rounded-full bg-primary/5 text-primary text-[10px] font-bold uppercase tracking-wider mb-4 border border-primary/10">
+              <div className="inline-block px-2.5 py-0.5 rounded-md bg-primary/10 text-primary text-[10px] font-black uppercase tracking-wider mb-3 border border-primary/20">
                 {feature.tag}
               </div>
-              <h4 className="text-xl font-bold mb-3">{feature.title}</h4>
-              <p className="text-muted-foreground leading-relaxed">
+              <h4 className="text-lg font-black mb-2 tracking-tight">{feature.title}</h4>
+              <p className="text-sm text-muted-foreground leading-relaxed font-medium">
                 {feature.description}
               </p>
             </div>
@@ -94,16 +89,16 @@ const FeaturesSection: React.FC = () => {
         </div>
 
         {/* Secondary Features List */}
-        <div className="bg-muted/30 rounded-[2.5rem] p-12 border border-border/50">
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-10">
+        <div className="bg-card/40 backdrop-blur-sm rounded-3xl p-8 border-2 border-border/60">
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-6">
             {secondaryFeatures.map((feature, index) => (
-              <div key={index} className="flex gap-4 items-start group">
-                <div className="mt-1 w-8 h-8 rounded-lg bg-background border border-border flex items-center justify-center group-hover:border-primary transition-colors">
+              <div key={index} className="flex gap-3 items-center group">
+                <div className="shrink-0 w-8 h-8 rounded-lg bg-background border-2 border-border flex items-center justify-center group-hover:border-primary/50 transition-colors">
                   <feature.icon className="w-4 h-4 text-muted-foreground group-hover:text-primary" />
                 </div>
                 <div>
-                  <h5 className="font-bold text-sm mb-1 group-hover:text-primary transition-colors">{feature.title}</h5>
-                  <p className="text-xs text-muted-foreground leading-snug">{feature.description}</p>
+                  <h5 className="font-black text-xs group-hover:text-primary transition-colors tracking-tight">{feature.title}</h5>
+                  <p className="text-[10px] text-muted-foreground font-semibold uppercase tracking-tighter opacity-80">{feature.description}</p>
                 </div>
               </div>
             ))}

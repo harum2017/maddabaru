@@ -34,80 +34,37 @@ const CTASection: React.FC = () => {
   };
 
   return (
-    <>
-      <section id="contact" className="py-16">
-        <div className="container mx-auto">
-          <div className="grid lg:grid-cols-2 gap-8 items-center">
-            {/* CTA Content */}
-            <div className="space-y-4">
-              <h2 className="text-2xl md:text-3xl font-bold">
-                Siap <span className="text-gradient">Digitalisasi</span> Sekolah Anda?
-              </h2>
-              <p className="text-base text-muted-foreground">
-                Daftarkan sekolah Anda sekarang dan dapatkan akses ke semua fitur premium.
-              </p>
-              
-              <div className="flex flex-wrap gap-3">
-                <Button size="lg" className="gap-2" onClick={() => setIsRegisterDialogOpen(true)}>
-                  Daftar Sekarang
-                  <ArrowRight className="w-4 h-4" />
-                </Button>
-              </div>
-            </div>
-            
-            {/* Contact Info */}
-            <div className="bg-card rounded-2xl border border-border p-8 space-y-6">
-              <h3 className="text-xl font-semibold">Hubungi Kami</h3>
-              
-              <div className="space-y-4">
-                <button 
-                  onClick={handlePhoneClick}
-                  className="flex items-start gap-4 w-full text-left hover:bg-muted/50 p-2 -m-2 rounded-lg transition-colors"
-                >
-                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                    <Phone className="w-5 h-5 text-primary" />
-                  </div>
-                  <div>
-                    <p className="font-medium">Telepon</p>
-                    <p className="text-muted-foreground">(021) 1234-5678</p>
-                  </div>
-                </button>
-                
-                <button 
-                  onClick={handleEmailClick}
-                  className="flex items-start gap-4 w-full text-left hover:bg-muted/50 p-2 -m-2 rounded-lg transition-colors"
-                >
-                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                    <Mail className="w-5 h-5 text-primary" />
-                  </div>
-                  <div>
-                    <p className="font-medium">Email</p>
-                    <p className="text-muted-foreground">info@maddasoft.id</p>
-                  </div>
-                </button>
-                
-                <button 
-                  onClick={handleMapsClick}
-                  className="flex items-start gap-4 w-full text-left hover:bg-muted/50 p-2 -m-2 rounded-lg transition-colors"
-                >
-                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                    <MapPin className="w-5 h-5 text-primary" />
-                  </div>
-                  <div>
-                    <p className="font-medium">Alamat</p>
-                    <p className="text-muted-foreground">
-                      Jl. Teknologi No. 123<br />
-                      Jakarta Selatan 12345
-                    </p>
-                  </div>
-                </button>
-              </div>
+    <section id="contact" className="py-12 relative overflow-hidden">
+      <div className="container mx-auto px-4 relative z-10">
+        <div className="bg-primary rounded-[2rem] p-8 md:p-12 text-center relative overflow-hidden border-4 border-white/10 shadow-2xl">
+          <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white/10 via-transparent to-transparent opacity-30" />
+          
+          <div className="relative z-10 max-w-2xl mx-auto space-y-6">
+            <h2 className="text-3xl md:text-5xl font-black text-white tracking-tighter leading-none">
+              Siap Melangkah Ke Masa Depan Digital?
+            </h2>
+            <p className="text-lg text-primary-foreground/90 font-medium leading-relaxed">
+              Bergabunglah dengan ratusan sekolah yang telah bertransformasi bersama MaddaSoft. 
+              Website sekolah Anda hanya berjarak beberapa klik.
+            </p>
+            <div className="flex flex-wrap justify-center gap-4 pt-4">
+              <button 
+                onClick={() => setIsRegisterDialogOpen(true)}
+                className="inline-flex items-center justify-center min-h-10 px-8 rounded-xl bg-secondary text-primary font-black shadow-xl hover:scale-105 active:scale-95 transition-all"
+              >
+                Mulai Sekarang
+              </button>
+              <button 
+                onClick={handlePhoneClick}
+                className="inline-flex items-center justify-center min-h-10 px-8 rounded-xl border-2 border-white/20 bg-transparent text-white font-black hover:bg-white/10 active:scale-95 transition-all"
+              >
+                Konsultasi Gratis
+              </button>
             </div>
           </div>
         </div>
-      </section>
+      </div>
 
-      {/* Register Dialog */}
       <Dialog open={isRegisterDialogOpen} onOpenChange={setIsRegisterDialogOpen}>
         <DialogContent className="max-w-md">
           <DialogHeader>
@@ -144,7 +101,7 @@ const CTASection: React.FC = () => {
           </form>
         </DialogContent>
       </Dialog>
-    </>
+    </section>
   );
 };
 
