@@ -52,6 +52,19 @@ export interface Staff {
   education_level?: 'SMA' | 'D3' | 'S1' | 'S2' | 'S3';
   major?: string;
   marriage_status?: 'Menikah' | 'Belum Menikah' | 'Cerai Hidup' | 'Cerai Mati';
+  
+  // Data Tambahan (Extended Simpeg)
+  email?: string;
+  npwp?: string;
+  taspen?: string;
+  bpjs_ketenagakerjaan?: string;
+  bpjs_kesehatan?: string;
+  
+  // Data Keluarga
+  spouse_name?: string;
+  children_count?: number;
+  father_name?: string;
+  mother_name?: string;
 }
 
 export interface User {
