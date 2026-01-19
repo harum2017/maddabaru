@@ -59,9 +59,11 @@ const SchoolSettings: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold">Pengaturan Sekolah</h1>
-        <p className="text-muted-foreground">Kelola informasi dan tampilan website sekolah</p>
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold">Pengaturan Sekolah</h1>
+          <p className="text-muted-foreground">Kelola informasi dan tampilan website sekolah</p>
+        </div>
       </div>
 
       <Tabs defaultValue="general">
@@ -71,7 +73,6 @@ const SchoolSettings: React.FC = () => {
           <TabsTrigger value="branding">Branding</TabsTrigger>
         </TabsList>
 
-        {/* General Settings */}
         <TabsContent value="general" className="mt-6">
           <Card>
             <CardHeader>
@@ -124,7 +125,6 @@ const SchoolSettings: React.FC = () => {
           </Card>
         </TabsContent>
 
-        {/* Content Settings */}
         <TabsContent value="content" className="mt-6">
           <Card>
             <CardHeader>
@@ -172,7 +172,6 @@ const SchoolSettings: React.FC = () => {
           </Card>
         </TabsContent>
 
-        {/* Branding Settings */}
         <TabsContent value="branding" className="mt-6">
           <Card>
             <CardHeader>
@@ -220,20 +219,21 @@ const SchoolSettings: React.FC = () => {
                   onChange={(e) => setBrandingForm({ ...brandingForm, logo: e.target.value })}
                   placeholder="https://example.com/logo.png"
                 />
-                {brandingForm.logo && brandingForm.logo !== '/placeholder.svg' && (
+                {brandingForm.logo && (
                   <div className="mt-2 w-24 h-24 rounded-lg border-2 border-dashed flex flex-col items-center justify-center overflow-hidden bg-muted/30 p-2">
                     <img 
                       src={brandingForm.logo} 
                       alt="Logo Preview" 
                       className="max-w-full max-h-full object-contain"
                       onError={(e) => {
-                        (e.target as HTMLImageElement).src = '/placeholder.svg';
+                        (e.target as HTMLImageElement).src = 'https://placehold.co/400x400?text=Format+Salah';
                       }}
                     />
-                    <span className="text-[10px] font-bold text-muted-foreground mt-1 uppercase">Preview Logo</span>
+                    <span className="text-[10px] font-bold text-muted-foreground mt-1 uppercase text-center">Preview Logo</span>
                   </div>
                 )}
               </div>
+              
               <div>
                 <Label>Warna Tema</Label>
                 <div className="flex gap-2">
@@ -250,6 +250,7 @@ const SchoolSettings: React.FC = () => {
                   />
                 </div>
               </div>
+
               <div>
                 <div className="flex items-center gap-2 mb-2">
                   <Label>URL Hero Images (satu per baris)</Label>
@@ -276,7 +277,6 @@ const SchoolSettings: React.FC = () => {
                         <ul className="text-sm space-y-2 list-disc pl-5 text-muted-foreground">
                           <li>Rekomendasi rasio: 16:9 atau lebih lebar (panoramic).</li>
                           <li>Minimal resolusi: 1920x600 pixel untuk hasil terbaik.</li>
-                          <li>Pastikan subjek utama gambar berada di tengah agar tidak terpotong saat tampilan mobile.</li>
                         </ul>
                       </div>
                     </DialogContent>
@@ -298,18 +298,19 @@ const SchoolSettings: React.FC = () => {
                             alt={`Preview ${idx + 1}`} 
                             className="w-full h-full object-cover transition-transform group-hover:scale-105" 
                             onError={(e) => {
-                              (e.target as HTMLImageElement).src = '/placeholder.svg';
+                              (e.target as HTMLImageElement).src = 'https://placehold.co/800x250?text=URL+Tidak+Valid';
                             }}
                           />
                         </div>
-                        <div className="absolute top-1 left-1 bg-black/50 text-white text-[10px] px-1.5 py-0.5 rounded">
-                          Preview Responsif {idx + 1}
+                        <div className="absolute top-1 left-1 bg-black/50 text-white text-[10px] px-1.5 py-0.5 rounded font-bold uppercase">
+                          Banner {idx + 1}
                         </div>
                       </div>
                     ))}
                   </div>
                 )}
               </div>
+
               <div>
                 <div className="flex items-center gap-2 mb-2">
                   <Label>URL Gambar Profil Sekolah (Tentang Kami)</Label>
@@ -336,7 +337,6 @@ const SchoolSettings: React.FC = () => {
                         <ul className="text-sm space-y-2 list-disc pl-5 text-muted-foreground">
                           <li>Rasio ideal: 3:2 atau 4:3.</li>
                           <li>Resolusi minimal: 1200x800 pixel.</li>
-                          <li>Gunakan gambar berkualitas tinggi namun dengan ukuran file yang optimal.</li>
                         </ul>
                       </div>
                     </DialogContent>
@@ -348,25 +348,26 @@ const SchoolSettings: React.FC = () => {
                   placeholder="https://example.com/profile.jpg"
                 />
                 {brandingForm.profile_image && (
-                  <div className="mt-2 relative w-64 aspect-[3/2] rounded-lg border overflow-hidden bg-muted group">
+                  <div className="mt-2 relative w-full max-w-md aspect-[3/2] rounded-lg border overflow-hidden bg-muted group">
                     <img 
                       src={brandingForm.profile_image} 
                       alt="Profile Preview" 
                       className="w-full h-full object-cover transition-transform group-hover:scale-105"
                       onError={(e) => {
-                        (e.target as HTMLImageElement).src = '/placeholder.svg';
+                        (e.target as HTMLImageElement).src = 'https://placehold.co/600x400?text=URL+Tidak+Valid';
                       }}
                     />
-                    <div className="absolute top-1 left-1 bg-black/50 text-white text-[10px] px-1.5 py-0.5 rounded font-bold uppercase">
+                    <div className="absolute top-2 left-2 bg-black/50 text-white text-[10px] px-2 py-1 rounded font-bold uppercase">
                       Preview Profil
                     </div>
                   </div>
                 )}
               </div>
+
               <div className="flex justify-end">
                 <Button onClick={handleSaveBranding}>
                   <Save className="w-4 h-4 mr-2" />
-                  Simpan
+                  Simpan Branding
                 </Button>
               </div>
             </CardContent>
