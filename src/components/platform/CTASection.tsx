@@ -34,23 +34,22 @@ const CTASection: React.FC = () => {
   };
 
   return (
-    <section id="contact" className="py-12 relative overflow-hidden">
+    <section id="contact" className="py-8 relative overflow-hidden">
       <div className="container mx-auto px-4 relative z-10">
-        <div className="bg-primary rounded-[2rem] p-8 md:p-12 text-center relative overflow-hidden border-4 border-white/10 shadow-2xl">
-          <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white/10 via-transparent to-transparent opacity-30" />
+        <div className="bg-black p-8 md:p-12 text-center relative overflow-hidden border-[6px] border-black shadow-[20px_20px_0px_0px_rgba(var(--primary),0.2)]">
+          <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_center,_rgba(255,255,255,0.1)_0%,transparent_70%)] opacity-50" />
           
-          <div className="relative z-10 max-w-2xl mx-auto space-y-6">
-            <h2 className="text-3xl md:text-5xl font-black text-white tracking-tighter leading-none">
-              Siap Melangkah Ke Masa Depan Digital?
+          <div className="relative z-10 max-w-xl mx-auto space-y-5">
+            <h2 className="text-4xl md:text-6xl font-black text-white tracking-tighter leading-none uppercase">
+              SEGERA <br/> BERGABUNG
             </h2>
-            <p className="text-lg text-primary-foreground/90 font-medium leading-relaxed">
-              Bergabunglah dengan ratusan sekolah yang telah bertransformasi bersama MaddaSoft. 
-              Website sekolah Anda hanya berjarak beberapa klik.
+            <p className="text-sm text-white/70 font-black uppercase tracking-tighter leading-tight">
+              Website sekolah Anda hanya berjarak beberapa klik. Partner transformasi digital paling tajam.
             </p>
-            <div className="flex flex-wrap justify-center gap-4 pt-4">
+            <div className="flex justify-center pt-2">
               <button 
                 onClick={() => setIsRegisterDialogOpen(true)}
-                className="inline-flex items-center justify-center min-h-10 px-10 rounded-xl bg-secondary text-primary font-black shadow-xl hover:scale-105 active:scale-95 transition-all uppercase tracking-tight"
+                className="inline-flex items-center justify-center h-14 px-12 bg-primary text-white font-black text-lg shadow-[8px_8px_0px_0px_rgba(255,255,255,1)] hover:translate-x-1 hover:translate-y-1 hover:shadow-none active:scale-95 transition-all uppercase tracking-widest"
               >
                 Daftar Sekarang
               </button>

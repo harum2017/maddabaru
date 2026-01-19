@@ -39,43 +39,44 @@ const HeroSection: React.FC = () => {
 
   return (
     <>
-      <section id="hero" className="relative min-h-[70vh] flex items-center pt-20 pb-12 overflow-hidden">
+      <section id="hero" className="relative min-h-[60vh] flex items-center pt-16 pb-8 overflow-hidden">
         {/* Background Decorative Elements */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary/5 via-transparent to-transparent opacity-40" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary/10 via-transparent to-transparent opacity-50" />
         
         <div className="container mx-auto px-4 relative z-10">
-          <div className="grid lg:grid-cols-2 gap-10 items-center">
+          <div className="grid lg:grid-cols-2 gap-8 items-center">
             {/* Content */}
-            <div className="space-y-5 animate-slide-up">
-              <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 border border-primary/20 rounded-full text-primary text-xs font-bold tracking-tight uppercase">
+            <div className="space-y-4 animate-slide-up">
+              <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary border-2 border-white/20 rounded-lg text-primary-foreground text-[10px] font-black tracking-[0.2em] uppercase shadow-lg shadow-primary/20">
                 <Sparkles className="w-3.5 h-3.5" />
-                Platform Website Sekolah Modern
+                MaddaSoft Platform
               </div>
               
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-black leading-[1.1] tracking-tighter">
-                Website Sekolah{' '}
-                <span className="text-gradient">Profesional</span> Berstandar Nasional
+              <h1 className="text-4xl md:text-5xl lg:text-7xl font-black leading-[0.95] tracking-[-0.05em]">
+                REVOLUSI <br/>
+                <span className="text-gradient">WEBSITE</span> <br/>
+                SEKOLAH
               </h1>
               
-              <p className="text-base md:text-lg text-muted-foreground max-w-md leading-relaxed">
-                Solusi cerdas digitalisasi sekolah. Manajemen data siswa & pegawai dalam satu sistem terpadu yang elegan.
+              <p className="text-base md:text-lg text-muted-foreground max-w-sm leading-tight font-bold tracking-tight">
+                Manajemen data siswa & SIMPEG dalam satu sistem terpadu yang sangat presisi.
               </p>
               
-              <div className="flex flex-wrap gap-4">
+              <div className="flex flex-wrap gap-2">
                 {features.map((feature, index) => (
-                  <div key={index} className="flex items-center gap-1.5 text-sm bg-background/50 px-3 py-1 rounded-md border border-border shadow-sm">
-                    <CheckCircle2 className="w-4 h-4 text-primary" />
-                    <span className="text-foreground font-semibold">{feature}</span>
+                  <div key={index} className="flex items-center gap-1 text-[11px] bg-card px-2 py-0.5 rounded-sm border-2 border-border font-black uppercase tracking-tighter">
+                    <CheckCircle2 className="w-3 h-3 text-primary" />
+                    <span>{feature}</span>
                   </div>
                 ))}
               </div>
               
-              <div className="flex flex-wrap gap-4 pt-2">
-                <Button size="lg" className="gap-2 px-8 rounded-xl font-bold border-2 border-primary shadow-lg shadow-primary/20" onClick={() => setIsRegisterDialogOpen(true)}>
+              <div className="flex flex-wrap gap-3 pt-2">
+                <Button size="lg" className="h-12 gap-2 px-8 rounded-none font-black border-b-4 border-r-4 border-black/20 active:translate-y-1 active:border-b-0 transition-all uppercase tracking-tight" onClick={() => setIsRegisterDialogOpen(true)}>
                   Daftar Sekarang
                   <ArrowRight className="w-4 h-4" />
                 </Button>
-                <Button size="lg" variant="outline" className="px-8 rounded-xl font-bold border-2 hover:bg-accent/10" onClick={() => setIsDemoDialogOpen(true)}>
+                <Button size="lg" variant="outline" className="h-12 px-8 rounded-none font-black border-2 border-black hover:bg-black hover:text-white transition-all uppercase tracking-tight" onClick={() => setIsDemoDialogOpen(true)}>
                   Lihat Demo
                 </Button>
               </div>
@@ -84,29 +85,29 @@ const HeroSection: React.FC = () => {
             {/* Hero Image */}
             <div className="relative animate-fade-in" style={{ animationDelay: '0.2s' }}>
               <div className="relative z-10 group">
-                <div className="bg-card rounded-2xl shadow-2xl border-2 border-border/80 overflow-hidden transform group-hover:scale-[1.01] transition-transform duration-500">
-                  <div className="bg-muted p-2.5 flex items-center gap-2 border-b-2 border-border/50">
-                    <div className="flex gap-1.5">
-                      <div className="w-3 h-3 rounded-full bg-red-400" />
-                      <div className="w-3 h-3 rounded-full bg-yellow-400" />
-                      <div className="w-3 h-3 rounded-full bg-green-400" />
+                <div className="bg-card rounded-none shadow-[20px_20px_0px_0px_rgba(var(--primary),0.1)] border-4 border-black overflow-hidden">
+                  <div className="bg-black p-2 flex items-center gap-2 border-b-4 border-black">
+                    <div className="flex gap-1">
+                      <div className="w-2.5 h-2.5 rounded-full bg-red-500" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-yellow-500" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-green-500" />
                     </div>
-                    <div className="flex-1 text-center pr-10">
-                      <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">sekolahanda.sch.id</span>
+                    <div className="flex-1 text-center pr-8">
+                      <span className="text-[9px] font-black text-white uppercase tracking-[0.3em]">SYSTEM_DASHBOARD</span>
                     </div>
                   </div>
                   <img 
                     src="https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&q=80&w=1200&h=750"
                     alt="Website Sekolah Preview"
-                    className="w-full object-cover aspect-[16/10]"
+                    className="w-full object-cover aspect-[16/10] grayscale-[0.2] group-hover:grayscale-0 transition-all duration-500"
                   />
                 </div>
               </div>
               
-              {/* Floating Elements - Sharpened */}
-              <div className="absolute -bottom-4 -left-4 bg-card px-5 py-3 rounded-xl shadow-2xl border-2 border-border z-20" style={{ animationDelay: '1s' }}>
-                <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-1">Total Siswa</p>
-                <p className="text-2xl font-black text-primary tracking-tighter leading-none">12,450+</p>
+              {/* Floating Element - Sharpened */}
+              <div className="absolute -bottom-6 -left-6 bg-primary text-white p-4 shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] border-4 border-black z-20">
+                <p className="text-[10px] font-black uppercase tracking-widest leading-none mb-1 opacity-80">Database Terintegrasi</p>
+                <p className="text-3xl font-black tracking-tighter leading-none">12,450+</p>
               </div>
             </div>
           </div>

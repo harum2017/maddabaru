@@ -26,76 +26,71 @@ const AboutSection: React.FC = () => {
   ];
 
   return (
-    <section id="about" className="py-16 relative overflow-hidden">
+    <section id="about" className="py-12 relative overflow-hidden">
       <div className="container mx-auto px-4 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-12 items-center mb-16">
+        <div className="grid lg:grid-cols-2 gap-8 items-center mb-8">
           <div className="relative group">
-            <div className="absolute -inset-4 bg-gradient-to-tr from-primary/20 to-accent/20 rounded-[2rem] blur-2xl opacity-50 group-hover:opacity-75 transition-opacity" />
-            <div className="relative bg-card rounded-2xl border-2 border-border/80 overflow-hidden shadow-2xl h-[300px]">
+            <div className="absolute -inset-2 bg-primary/20 rounded-lg blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
+            <div className="relative bg-black rounded-none border-4 border-black overflow-hidden shadow-[15px_15px_0px_0px_rgba(0,0,0,0.1)] h-[280px]">
               <img 
                 src="https://images.unsplash.com/photo-1523050338692-7b835a07973f?auto=format&fit=crop&q=80&w=1200&h=800" 
                 alt="School Environment" 
-                className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
+                className="w-full h-full object-cover transform scale-105 group-hover:scale-110 transition-transform duration-1000 grayscale-[0.4] group-hover:grayscale-0"
                 onError={(e) => {
                   e.currentTarget.src = "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80&w=1200&h=800";
                 }}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent pointer-events-none" />
-              <div className="absolute bottom-6 left-6 right-6 z-10 pointer-events-none">
-                <p className="text-white font-black tracking-tight text-xl leading-none mb-1 shadow-sm">Digitalisasi Pendidikan Masa Depan</p>
-                <p className="text-primary font-bold text-xs uppercase tracking-[0.2em] shadow-sm">MaddaSoft Platform</p>
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent pointer-events-none" />
+              <div className="absolute bottom-4 left-6 right-6 z-10 pointer-events-none">
+                <p className="text-white font-black tracking-tighter text-2xl leading-none mb-1">DATA TANPA BATAS</p>
+                <p className="text-primary font-black text-[10px] uppercase tracking-[0.4em]">MaddaSoft Ecosystem</p>
               </div>
             </div>
           </div>
           
-          <div className="space-y-6">
-            <div className="inline-block px-3 py-1 bg-primary/10 border-2 border-primary/20 rounded-lg text-primary text-[10px] font-black uppercase tracking-[0.2em]">
-              Tentang Kami
+          <div className="space-y-4">
+            <div className="inline-block px-2 py-0.5 bg-black text-white text-[9px] font-black uppercase tracking-[0.3em]">
+              THE_MISSION
             </div>
-            <h2 className="text-3xl md:text-4xl font-black tracking-tighter leading-none">
-              Membangun Standar Baru <br/>
-              <span className="text-gradient">Website Sekolah Indonesia</span>
+            <h2 className="text-4xl md:text-5xl font-black tracking-tighter leading-none uppercase">
+              STANDAR <span className="text-gradient">PRESTISIUS</span> <br/>
+              DIGITALISASI
             </h2>
-            <p className="text-base text-muted-foreground leading-relaxed font-medium">
-              Kami percaya setiap sekolah layak memiliki identitas digital yang prestisius. 
-              MaddaSoft hadir bukan hanya sebagai pembuat website, tapi sebagai partner 
-              transformasi digital pendidikan Anda.
+            <p className="text-sm text-muted-foreground leading-tight font-bold tracking-tight">
+              Kami menciptakan harmoni antara data internal yang kompleks dengan profil publik yang elegan. Partner transformasi digital paling tajam.
             </p>
             
-            <div className="grid sm:grid-cols-2 gap-4 pt-4">
+            <div className="grid grid-cols-2 gap-3 pt-2">
               {[
-                { title: 'Inovasi Berkelanjutan', desc: 'Update fitur rutin sesuai regulasi.' },
-                { title: 'Dukungan Prioritas', desc: 'Tim teknis siap membantu 24/7.' }
+                { title: 'UPDATE_REGULASI', desc: 'Selalu relevan.' },
+                { title: 'SUPPORT_24_JAM', desc: 'Respon instan.' }
               ].map((item, i) => (
-                <div key={i} className="p-4 bg-background/50 rounded-xl border-2 border-border/60 hover:border-primary/40 transition-colors">
-                  <h4 className="font-black text-sm mb-1 tracking-tight">{item.title}</h4>
-                  <p className="text-xs text-muted-foreground font-medium">{item.desc}</p>
+                <div key={i} className="p-3 bg-white border-2 border-black rounded-none shadow-[5px_5px_0px_0px_rgba(0,0,0,1)]">
+                  <h4 className="font-black text-[11px] mb-0.5 tracking-tight uppercase">{item.title}</h4>
+                  <p className="text-[10px] text-muted-foreground font-black uppercase tracking-tighter leading-none">{item.desc}</p>
                 </div>
               ))}
             </div>
           </div>
         </div>
 
-        <div className="text-center max-w-2xl mx-auto mb-10">
-          <h2 className="text-xs font-black tracking-[0.2em] uppercase text-primary mb-3">
-            Filosofi Kami
-          </h2>
-          <h3 className="text-2xl md:text-4xl font-black tracking-tighter leading-none">
-            Mengapa Memilih <span className="text-gradient">MaddaSoft</span>?
+        <div className="text-center max-w-xl mx-auto mb-6">
+          <h3 className="text-2xl font-black tracking-tighter uppercase leading-none">
+            MENGAPA <span className="text-gradient">MADDASOFT</span>?
           </h3>
         </div>
         
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {values.map((value, index) => (
             <div 
               key={index}
-              className="bg-card/60 backdrop-blur-sm p-5 rounded-2xl border-2 border-border/80 hover:border-primary/40 transition-all group"
+              className="bg-white p-4 rounded-none border-4 border-black shadow-[8px_8px_0px_0px_rgba(var(--primary),0.1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all group"
             >
-              <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                <value.icon className="w-5 h-5 text-primary" />
+              <div className="w-8 h-8 rounded-none bg-black flex items-center justify-center mb-3">
+                <value.icon className="w-4 h-4 text-white" />
               </div>
-              <h3 className="text-base font-black mb-2 tracking-tight">{value.title}</h3>
-              <p className="text-muted-foreground text-xs font-medium leading-relaxed">{value.description}</p>
+              <h3 className="text-xs font-black mb-1 tracking-tight uppercase leading-none">{value.title}</h3>
+              <p className="text-[10px] text-muted-foreground font-bold leading-tight tracking-tight uppercase">{value.description}</p>
             </div>
           ))}
         </div>
