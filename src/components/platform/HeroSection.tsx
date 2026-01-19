@@ -96,7 +96,7 @@ const HeroSection: React.FC = () => {
                     </div>
                   </div>
                   <img 
-                    src="https://images.unsplash.com/photo-1562774053-701939374585?w=1200&h=750&fit=crop"
+                    src="https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&q=80&w=1200&h=750"
                     alt="Website Sekolah Preview"
                     className="w-full object-cover aspect-[16/10]"
                   />
@@ -104,9 +104,6 @@ const HeroSection: React.FC = () => {
               </div>
               
               {/* Floating Elements - Sharpened */}
-              <div className="absolute -top-4 -right-4 bg-primary text-primary-foreground px-4 py-2 rounded-xl shadow-xl border-2 border-white/20 animate-float z-20">
-                <p className="text-sm font-black italic tracking-tighter">100% ONLINE</p>
-              </div>
               <div className="absolute -bottom-4 -left-4 bg-card px-5 py-3 rounded-xl shadow-2xl border-2 border-border z-20" style={{ animationDelay: '1s' }}>
                 <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-1">Total Siswa</p>
                 <p className="text-2xl font-black text-primary tracking-tighter leading-none">12,450+</p>

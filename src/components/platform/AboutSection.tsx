@@ -33,14 +33,17 @@ const AboutSection: React.FC = () => {
             <div className="absolute -inset-4 bg-gradient-to-tr from-primary/20 to-accent/20 rounded-[2rem] blur-2xl opacity-50 group-hover:opacity-75 transition-opacity" />
             <div className="relative bg-card rounded-2xl border-2 border-border/80 overflow-hidden shadow-2xl h-[300px]">
               <img 
-                src="https://images.unsplash.com/photo-1523050338692-7b835a07973f?w=1200&h=800&fit=crop" 
+                src="https://images.unsplash.com/photo-1523050338692-7b835a07973f?auto=format&fit=crop&q=80&w=1200&h=800" 
                 alt="School Environment" 
                 className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
+                onError={(e) => {
+                  e.currentTarget.src = "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80&w=1200&h=800";
+                }}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-              <div className="absolute bottom-6 left-6 right-6 z-10">
-                <p className="text-white font-black tracking-tight text-xl leading-none mb-1">Digitalisasi Pendidikan Masa Depan</p>
-                <p className="text-primary font-bold text-xs uppercase tracking-[0.2em]">MaddaSoft Platform</p>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent pointer-events-none" />
+              <div className="absolute bottom-6 left-6 right-6 z-10 pointer-events-none">
+                <p className="text-white font-black tracking-tight text-xl leading-none mb-1 shadow-sm">Digitalisasi Pendidikan Masa Depan</p>
+                <p className="text-primary font-bold text-xs uppercase tracking-[0.2em] shadow-sm">MaddaSoft Platform</p>
               </div>
             </div>
           </div>
