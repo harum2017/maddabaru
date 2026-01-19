@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Save, Image, Palette, FileText, HelpCircle, Info } from 'lucide-react';
+import { Save, Palette, FileText, HelpCircle, Info, ImageIcon } from 'lucide-react';
 import { toast } from 'sonner';
 import {
   Dialog,
@@ -39,7 +39,7 @@ const SchoolSettings: React.FC = () => {
   });
 
   const [brandingForm, setBrandingForm] = useState({
-    logo: school?.logo || 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Twitter_Verified_Badge.svg/512px-Twitter_Verified_Badge.svg.png',
+    logo: school?.logo || 'https://raw.githubusercontent.com/lucide-react/lucide/main/icons/graduation-cap.svg',
     theme_color: school?.theme_color || '#2563eb',
     hero_images: school?.hero_images?.join('\n') || 'https://images.unsplash.com/photo-1523050335392-938511794244?auto=format&fit=crop&q=80&w=1920&h=600\nhttps://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80&w=1920&h=600',
     profile_image: school?.profile_image || 'https://images.unsplash.com/photo-1541339907198-e08756ebafe3?auto=format&fit=crop&q=80&w=1200&h=800',
@@ -61,23 +61,23 @@ const SchoolSettings: React.FC = () => {
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold">Pengaturan Sekolah</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Pengaturan Sekolah</h1>
           <p className="text-muted-foreground">Kelola informasi dan tampilan website sekolah</p>
         </div>
       </div>
 
-      <Tabs defaultValue="general">
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="general">Umum</TabsTrigger>
-          <TabsTrigger value="content">Konten</TabsTrigger>
-          <TabsTrigger value="branding">Branding</TabsTrigger>
+      <Tabs defaultValue="general" className="w-full">
+        <TabsList className="grid w-full grid-cols-3 bg-muted/50 p-1">
+          <TabsTrigger value="general" className="data-[state=active]:bg-white dark:data-[state=active]:bg-gray-800 shadow-sm">Umum</TabsTrigger>
+          <TabsTrigger value="content" className="data-[state=active]:bg-white dark:data-[state=active]:bg-gray-800 shadow-sm">Konten</TabsTrigger>
+          <TabsTrigger value="branding" className="data-[state=active]:bg-white dark:data-[state=active]:bg-gray-800 shadow-sm">Branding</TabsTrigger>
         </TabsList>
 
         <TabsContent value="general" className="mt-6">
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <FileText className="w-5 h-5" />
+                <FileText className="w-5 h-5 text-primary" />
                 Informasi Umum
               </CardTitle>
               <CardDescription>Informasi dasar sekolah yang ditampilkan di website</CardDescription>
@@ -115,10 +115,10 @@ const SchoolSettings: React.FC = () => {
                   rows={2}
                 />
               </div>
-              <div className="flex justify-end">
+              <div className="flex justify-end pt-4">
                 <Button onClick={handleSaveGeneral}>
                   <Save className="w-4 h-4 mr-2" />
-                  Simpan
+                  Simpan Perubahan
                 </Button>
               </div>
             </CardContent>
@@ -129,7 +129,7 @@ const SchoolSettings: React.FC = () => {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <FileText className="w-5 h-5" />
+                <FileText className="w-5 h-5 text-primary" />
                 Konten Profil
               </CardTitle>
               <CardDescription>Tentang, visi, dan misi sekolah</CardDescription>
@@ -144,28 +144,30 @@ const SchoolSettings: React.FC = () => {
                   placeholder="Deskripsi tentang sekolah..."
                 />
               </div>
-              <div>
-                <Label>Visi</Label>
-                <Textarea
-                  value={contentForm.vision}
-                  onChange={(e) => setContentForm({ ...contentForm, vision: e.target.value })}
-                  rows={2}
-                  placeholder="Visi sekolah..."
-                />
+              <div className="grid grid-cols-1 gap-4">
+                <div>
+                  <Label>Visi</Label>
+                  <Textarea
+                    value={contentForm.vision}
+                    onChange={(e) => setContentForm({ ...contentForm, vision: e.target.value })}
+                    rows={2}
+                    placeholder="Visi sekolah..."
+                  />
+                </div>
+                <div>
+                  <Label>Misi (satu per baris)</Label>
+                  <Textarea
+                    value={contentForm.mission}
+                    onChange={(e) => setContentForm({ ...contentForm, mission: e.target.value })}
+                    rows={4}
+                    placeholder="Misi pertama&#10;Misi kedua&#10;Misi ketiga"
+                  />
+                </div>
               </div>
-              <div>
-                <Label>Misi (satu per baris)</Label>
-                <Textarea
-                  value={contentForm.mission}
-                  onChange={(e) => setContentForm({ ...contentForm, mission: e.target.value })}
-                  rows={4}
-                  placeholder="Misi pertama&#10;Misi kedua&#10;Misi ketiga"
-                />
-              </div>
-              <div className="flex justify-end">
+              <div className="flex justify-end pt-4">
                 <Button onClick={handleSaveContent}>
                   <Save className="w-4 h-4 mr-2" />
-                  Simpan
+                  Simpan Konten
                 </Button>
               </div>
             </CardContent>
@@ -176,39 +178,39 @@ const SchoolSettings: React.FC = () => {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Palette className="w-5 h-5" />
-                Branding
+                <Palette className="w-5 h-5 text-primary" />
+                Branding & Visual
               </CardTitle>
-              <CardDescription>Logo, warna, dan gambar website</CardDescription>
+              <CardDescription>Kelola Logo, Warna Tema, dan Gambar Galeri Website</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <div className="flex items-center gap-2 mb-2">
-                  <Label>URL Logo</Label>
+            <CardContent className="space-y-6">
+              <div className="space-y-4">
+                <div className="flex items-center gap-2">
+                  <Label className="text-base font-semibold">URL Logo Sekolah</Label>
                   <Dialog>
                     <DialogTrigger asChild>
-                      <Button variant="ghost" size="icon" className="h-5 w-5 rounded-full p-0">
-                        <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                      <Button variant="ghost" size="icon" className="h-6 w-6 rounded-full">
+                        <HelpCircle className="h-4 w-4 text-muted-foreground hover:text-primary transition-colors" />
                       </Button>
                     </DialogTrigger>
                     <DialogContent>
                       <DialogHeader>
                         <DialogTitle>Panduan Logo Sekolah</DialogTitle>
                         <DialogDescription>
-                          Logo sekolah akan muncul di navbar dan footer website.
+                          Petunjuk penggunaan logo untuk hasil terbaik.
                         </DialogDescription>
                       </DialogHeader>
                       <div className="space-y-4 py-4">
-                        <div className="flex gap-3">
-                          <Info className="h-5 w-5 text-blue-500 shrink-0" />
+                        <div className="flex gap-3 items-start">
+                          <Info className="h-5 w-5 text-blue-500 shrink-0 mt-0.5" />
                           <p className="text-sm">
-                            Gunakan URL gambar dengan latar belakang transparan (PNG) untuk hasil terbaik di berbagai warna tema.
+                            Gunakan URL gambar dengan latar belakang transparan (format .PNG atau .SVG) agar serasi dengan semua warna tema.
                           </p>
                         </div>
                         <ul className="text-sm space-y-2 list-disc pl-5 text-muted-foreground">
-                          <li>Format yang disarankan: PNG atau SVG.</li>
-                          <li>Rasio: 1:1 (persegi) atau horizontal.</li>
-                          <li>Pastikan URL dapat diakses secara publik.</li>
+                          <li>Rasio yang disarankan: 1:1 (Persegi)</li>
+                          <li>Ukuran file optimal: di bawah 500KB</li>
+                          <li>Pastikan tautan bersifat publik (dapat diakses siapapun)</li>
                         </ul>
                       </div>
                     </DialogContent>
@@ -217,66 +219,83 @@ const SchoolSettings: React.FC = () => {
                 <Input
                   value={brandingForm.logo}
                   onChange={(e) => setBrandingForm({ ...brandingForm, logo: e.target.value })}
-                  placeholder="https://example.com/logo.png"
+                  placeholder="https://link-gambar.com/logo-sekolah.png"
                 />
-                {brandingForm.logo && (
-                  <div className="mt-2 w-24 h-24 rounded-lg border-2 border-dashed flex flex-col items-center justify-center overflow-hidden bg-muted/30 p-2">
-                    <img 
-                      src={brandingForm.logo} 
-                      alt="Logo Preview" 
-                      className="max-w-full max-h-full object-contain"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).src = 'https://placehold.co/400x400?text=Format+Salah';
-                      }}
-                    />
-                    <span className="text-[10px] font-bold text-muted-foreground mt-1 uppercase text-center">Preview Logo</span>
-                  </div>
-                )}
+                <div className="mt-2 flex flex-col items-center justify-center p-4 border-2 border-dashed rounded-lg bg-muted/20 min-h-[140px]">
+                  {brandingForm.logo ? (
+                    <div className="relative group">
+                      <img 
+                        src={brandingForm.logo} 
+                        alt="Logo Preview" 
+                        className="max-w-[100px] max-h-[100px] object-contain transition-transform group-hover:scale-110"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src = 'https://placehold.co/100x100?text=Logo+Gagal';
+                        }}
+                      />
+                      <div className="mt-2 text-center">
+                        <span className="text-[10px] font-bold text-primary uppercase tracking-wider">Preview Logo Aktif</span>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="text-center space-y-1">
+                      <Palette className="h-8 w-8 text-muted-foreground/40 mx-auto" />
+                      <p className="text-xs text-muted-foreground italic">Masukkan URL untuk melihat preview logo</p>
+                    </div>
+                  )}
+                </div>
               </div>
-              
-              <div>
-                <Label>Warna Tema</Label>
-                <div className="flex gap-2">
+
+              <div className="space-y-3">
+                <Label className="text-base font-semibold">Warna Utama Tema</Label>
+                <div className="flex gap-3">
+                  <div className="relative">
+                    <Input
+                      type="color"
+                      value={brandingForm.theme_color}
+                      onChange={(e) => setBrandingForm({ ...brandingForm, theme_color: e.target.value })}
+                      className="w-14 h-11 p-1 cursor-pointer"
+                    />
+                  </div>
                   <Input
-                    type="color"
                     value={brandingForm.theme_color}
                     onChange={(e) => setBrandingForm({ ...brandingForm, theme_color: e.target.value })}
-                    className="w-16 h-10 p-1"
+                    className="flex-1 font-mono uppercase"
+                    placeholder="#2563EB"
                   />
-                  <Input
-                    value={brandingForm.theme_color}
-                    onChange={(e) => setBrandingForm({ ...brandingForm, theme_color: e.target.value })}
-                    className="flex-1"
+                  <div 
+                    className="w-11 h-11 rounded-md border shadow-inner" 
+                    style={ { backgroundColor: brandingForm.theme_color } }
                   />
                 </div>
               </div>
 
-              <div>
-                <div className="flex items-center gap-2 mb-2">
-                  <Label>URL Hero Images (satu per baris)</Label>
+              <div className="space-y-4 pt-4 border-t">
+                <div className="flex items-center gap-2">
+                  <Label className="text-base font-semibold">URL Banner Utama (Hero Images)</Label>
                   <Dialog>
                     <DialogTrigger asChild>
-                      <Button variant="ghost" size="icon" className="h-5 w-5 rounded-full p-0">
-                        <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                      <Button variant="ghost" size="icon" className="h-6 w-6 rounded-full">
+                        <HelpCircle className="h-4 w-4 text-muted-foreground hover:text-primary transition-colors" />
                       </Button>
                     </DialogTrigger>
                     <DialogContent>
                       <DialogHeader>
-                        <DialogTitle>Panduan Hero Images</DialogTitle>
+                        <DialogTitle>Panduan Gambar Banner (Hero)</DialogTitle>
                         <DialogDescription>
-                          Hero images adalah gambar besar yang muncul di bagian paling atas website sekolah.
+                          Gambar besar yang muncul di bagian atas halaman utama.
                         </DialogDescription>
                       </DialogHeader>
                       <div className="space-y-4 py-4">
-                        <div className="flex gap-3">
-                          <Info className="h-5 w-5 text-blue-500 shrink-0" />
-                          <p className="text-sm">
-                            Masukkan satu URL gambar per baris. Sistem akan otomatis memotong (crop) gambar agar sesuai dengan area banner yang responsif.
+                        <div className="flex gap-3 items-start">
+                          <Info className="h-5 w-5 text-blue-500 shrink-0 mt-0.5" />
+                          <p className="text-sm font-medium">
+                            Masukkan satu tautan (URL) per baris untuk membuat slideshow banner.
                           </p>
                         </div>
                         <ul className="text-sm space-y-2 list-disc pl-5 text-muted-foreground">
-                          <li>Rekomendasi rasio: 16:9 atau lebih lebar (panoramic).</li>
-                          <li>Minimal resolusi: 1920x600 pixel untuk hasil terbaik.</li>
+                          <li>Rasio optimal: 16:9 atau panoramic (1920x600 px)</li>
+                          <li>Gunakan gambar berkualitas HD (minimal 1080p)</li>
+                          <li>Sistem akan melakukan pemotongan (crop) otomatis secara proporsional</li>
                         </ul>
                       </div>
                     </DialogContent>
@@ -286,23 +305,24 @@ const SchoolSettings: React.FC = () => {
                   value={brandingForm.hero_images}
                   onChange={(e) => setBrandingForm({ ...brandingForm, hero_images: e.target.value })}
                   rows={4}
-                  placeholder="https://example.com/hero1.jpg&#10;https://example.com/hero2.jpg"
+                  placeholder="https://link.com/banner-1.jpg&#10;https://link.com/banner-2.jpg"
+                  className="font-mono text-xs"
                 />
                 {brandingForm.hero_images && (
-                  <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
                     {brandingForm.hero_images.split('\n').filter(url => url.trim()).map((url, idx) => (
-                      <div key={idx} className="relative group rounded-lg overflow-hidden border bg-muted">
-                        <div className="aspect-[16/5] w-full">
+                      <div key={idx} className="relative group rounded-lg overflow-hidden border shadow-sm bg-muted/30">
+                        <div className="aspect-[16/6] w-full">
                           <img 
                             src={url.trim()} 
-                            alt={`Preview ${idx + 1}`} 
-                            className="w-full h-full object-cover transition-transform group-hover:scale-105" 
+                            alt={`Banner ${idx + 1}`} 
+                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
                             onError={(e) => {
-                              (e.target as HTMLImageElement).src = 'https://placehold.co/800x250?text=URL+Tidak+Valid';
+                              (e.target as HTMLImageElement).src = 'https://placehold.co/800x300?text=Banner+Gagal+Dimuat';
                             }}
                           />
                         </div>
-                        <div className="absolute top-1 left-1 bg-black/50 text-white text-[10px] px-1.5 py-0.5 rounded font-bold uppercase">
+                        <div className="absolute top-2 left-2 bg-black/60 backdrop-blur-sm text-white text-[9px] px-2 py-1 rounded-md font-bold uppercase tracking-widest">
                           Banner {idx + 1}
                         </div>
                       </div>
@@ -311,32 +331,33 @@ const SchoolSettings: React.FC = () => {
                 )}
               </div>
 
-              <div>
-                <div className="flex items-center gap-2 mb-2">
-                  <Label>URL Gambar Profil Sekolah (Tentang Kami)</Label>
+              <div className="space-y-4 pt-4 border-t">
+                <div className="flex items-center gap-2">
+                  <Label className="text-base font-semibold">URL Gambar Profil Sekolah (Tentang Kami)</Label>
                   <Dialog>
                     <DialogTrigger asChild>
-                      <Button variant="ghost" size="icon" className="h-5 w-5 rounded-full p-0">
-                        <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                      <Button variant="ghost" size="icon" className="h-6 w-6 rounded-full">
+                        <HelpCircle className="h-4 w-4 text-muted-foreground hover:text-primary transition-colors" />
                       </Button>
                     </DialogTrigger>
                     <DialogContent>
                       <DialogHeader>
                         <DialogTitle>Panduan Gambar Profil</DialogTitle>
                         <DialogDescription>
-                          Gambar ini akan muncul di halaman "Tentang Kami" atau profil sekolah.
+                          Gambar yang mewakili identitas sekolah Anda.
                         </DialogDescription>
                       </DialogHeader>
                       <div className="space-y-4 py-4">
-                        <div className="flex gap-3">
-                          <Info className="h-5 w-5 text-blue-500 shrink-0" />
+                        <div className="flex gap-3 items-start">
+                          <Info className="h-5 w-5 text-blue-500 shrink-0 mt-0.5" />
                           <p className="text-sm">
-                            Pilih gambar yang merepresentasikan identitas sekolah, seperti gedung utama atau aktivitas siswa.
+                            Gambar ini akan muncul di bagian deskripsi "Tentang Kami". Pilih foto terbaik gedung sekolah atau aktivitas utama.
                           </p>
                         </div>
                         <ul className="text-sm space-y-2 list-disc pl-5 text-muted-foreground">
-                          <li>Rasio ideal: 3:2 atau 4:3.</li>
-                          <li>Resolusi minimal: 1200x800 pixel.</li>
+                          <li>Rasio disarankan: 3:2 atau 4:3 (Lanskap)</li>
+                          <li>Gunakan gambar yang terang dan fokus pada subjek utama</li>
+                          <li>Resolusi rekomendasi: minimal 1200x800 pixel</li>
                         </ul>
                       </div>
                     </DialogContent>
@@ -345,29 +366,36 @@ const SchoolSettings: React.FC = () => {
                 <Input
                   value={brandingForm.profile_image}
                   onChange={(e) => setBrandingForm({ ...brandingForm, profile_image: e.target.value })}
-                  placeholder="https://example.com/profile.jpg"
+                  placeholder="https://link-gambar.com/gedung-sekolah.jpg"
                 />
-                {brandingForm.profile_image && (
-                  <div className="mt-2 relative w-full max-w-md aspect-[3/2] rounded-lg border overflow-hidden bg-muted group">
-                    <img 
-                      src={brandingForm.profile_image} 
-                      alt="Profile Preview" 
-                      className="w-full h-full object-cover transition-transform group-hover:scale-105"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).src = 'https://placehold.co/600x400?text=URL+Tidak+Valid';
-                      }}
-                    />
-                    <div className="absolute top-2 left-2 bg-black/50 text-white text-[10px] px-2 py-1 rounded font-bold uppercase">
-                      Preview Profil
+                <div className="mt-2 flex justify-center p-3 border rounded-lg bg-muted/10 min-h-[220px]">
+                  {brandingForm.profile_image ? (
+                    <div className="relative w-full max-w-md aspect-[3/2] rounded-md overflow-hidden shadow-md group">
+                      <img 
+                        src={brandingForm.profile_image} 
+                        alt="Profile Preview" 
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src = 'https://placehold.co/600x400?text=Gambar+Profil+Gagal+Dimuat';
+                        }}
+                      />
+                      <div className="absolute bottom-3 left-3 bg-black/60 backdrop-blur-sm text-white text-[10px] px-3 py-1.5 rounded-full font-black uppercase tracking-widest">
+                        Pratinjau Profil
+                      </div>
                     </div>
-                  </div>
-                )}
+                  ) : (
+                    <div className="flex flex-col items-center justify-center text-center space-y-2 opacity-40">
+                      <ImageIcon className="h-10 w-10" />
+                      <p className="text-xs italic">Pratinjau gambar profil sekolah akan muncul di sini</p>
+                    </div>
+                  )}
+                </div>
               </div>
 
-              <div className="flex justify-end">
-                <Button onClick={handleSaveBranding}>
-                  <Save className="w-4 h-4 mr-2" />
-                  Simpan Branding
+              <div className="flex justify-end pt-6 border-t">
+                <Button size="lg" onClick={handleSaveBranding} className="font-bold shadow-lg hover:shadow-xl transition-all active:scale-95">
+                  <Save className="w-5 h-5 mr-2" />
+                  Simpan Semua Pengaturan Visual
                 </Button>
               </div>
             </CardContent>
