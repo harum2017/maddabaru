@@ -60,19 +60,19 @@ const SuperAdminLayout: React.FC = () => {
   // Redirect jika belum login atau bukan super admin
   if (isSchoolDomain || !isAuthenticated || user?.role !== 'SUPER_ADMIN') {
     if (!isAuthenticated || user?.role !== 'SUPER_ADMIN') {
-      return <Navigate to="/login" replace />;
+      return <Navigate to="/domain-pusat/login" replace />;
     }
     return null;
   }
 
   const navigation = [
-    { name: 'Dashboard', href: '/superadmin', icon: LayoutDashboard },
-    { name: 'Kelola Sekolah', href: '/superadmin/schools', icon: Building2 },
-    { name: 'Pendaftaran Sekolah', href: '/superadmin/registrations', icon: FileText },
-    { name: 'Kelola Akun', href: '/superadmin/accounts', icon: Shield },
-    { name: 'Kelola Domain', href: '/superadmin/domains', icon: Globe },
-    { name: 'Statistik', href: '/superadmin/statistics', icon: BarChart3 },
-    { name: 'Pengaturan', href: '/superadmin/settings', icon: Settings },
+    { name: 'Dashboard', href: '/domain-pusat/admin', icon: LayoutDashboard },
+    { name: 'Kelola Sekolah', href: '/domain-pusat/admin/schools', icon: Building2 },
+    { name: 'Pendaftaran Sekolah', href: '/domain-pusat/admin/registrations', icon: FileText },
+    { name: 'Kelola Akun', href: '/domain-pusat/admin/accounts', icon: Shield },
+    { name: 'Kelola Domain', href: '/domain-pusat/admin/domains', icon: Globe },
+    { name: 'Statistik', href: '/domain-pusat/admin/statistics', icon: BarChart3 },
+    { name: 'Pengaturan', href: '/domain-pusat/admin/settings', icon: Settings },
   ];
 
   const pendingRegistrations = getPendingSchoolRegistrations();
@@ -93,8 +93,8 @@ const SuperAdminLayout: React.FC = () => {
   ];
 
   const isActive = (href: string) => {
-    if (href === '/superadmin') {
-      return location.pathname === '/superadmin';
+    if (href === '/domain-pusat/admin') {
+      return location.pathname === '/domain-pusat/admin';
     }
     return location.pathname.startsWith(href);
   };
@@ -106,11 +106,11 @@ const SuperAdminLayout: React.FC = () => {
   };
 
   const handleProfileClick = () => {
-    navigate('/superadmin/settings');
+    navigate('/domain-pusat/admin/settings');
   };
 
   const handleSettingsClick = () => {
-    navigate('/superadmin/settings');
+    navigate('/domain-pusat/admin/settings');
   };
 
   const handleNotificationClick = (id: number) => {

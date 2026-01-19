@@ -53,11 +53,11 @@ const App = () => (
             <Routes>
               {/* Public Routes */}
               <Route path="/" element={<Index />} />
-              <Route path="/login" element={<SuperAdminLogin />} />
+              <Route path="/domain-pusat/login" element={<SuperAdminLogin />} />
               <Route path="/school-login" element={<SchoolLogin />} />
               
-              {/* Super Admin Routes */}
-              <Route path="/superadmin" element={<SuperAdminLayout />}>
+              {/* Super Admin Routes - sesuai prompt: /domain-pusat/admin */}
+              <Route path="/domain-pusat/admin" element={<SuperAdminLayout />}>
                 <Route index element={<SuperAdminDashboard />} />
                 <Route path="schools" element={<SchoolManagement />} />
                 <Route path="registrations" element={<SchoolRegistrationsPage />} />
