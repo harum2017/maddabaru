@@ -64,15 +64,37 @@ const SchoolHeader: React.FC = () => {
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <div className="flex items-center gap-3">
-              <div 
-                className="w-12 h-12 rounded-xl flex items-center justify-center text-xl font-bold"
-                style={{ 
-                  backgroundColor: `${currentSchool.theme_color}15`,
-                  color: currentSchool.theme_color 
-                }}
-              >
-                {currentSchool.name.charAt(0)}
-              </div>
+              {currentSchool.logo && !currentSchool.logo.includes('placeholder') ? (
+                <div className="w-12 h-12 rounded-xl overflow-hidden flex items-center justify-center border border-border">
+                  <img 
+                    src={currentSchool.logo} 
+                    alt={`Logo ${currentSchool.name}`} 
+                    className="w-full h-full object-contain p-1"
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none';
+                      const parent = e.currentTarget.parentElement;
+                      if (parent) {
+                        const fallback = document.createElement('div');
+                        fallback.className = "w-full h-full flex items-center justify-center font-bold";
+                        fallback.style.backgroundColor = `${currentSchool.theme_color}15`;
+                        fallback.style.color = currentSchool.theme_color;
+                        fallback.innerText = currentSchool.name.charAt(0);
+                        parent.appendChild(fallback);
+                      }
+                    }}
+                  />
+                </div>
+              ) : (
+                <div 
+                  className="w-12 h-12 rounded-xl flex items-center justify-center text-xl font-bold"
+                  style={{ 
+                    backgroundColor: `${currentSchool.theme_color}15`,
+                    color: currentSchool.theme_color 
+                  }}
+                >
+                  {currentSchool.name.charAt(0)}
+                </div>
+              )}
               <div className="hidden sm:block">
                 <p className="font-bold text-foreground leading-tight line-clamp-1 max-w-[200px] lg:max-w-[300px]">
                   {currentSchool.name}

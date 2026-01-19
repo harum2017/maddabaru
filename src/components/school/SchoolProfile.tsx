@@ -35,9 +35,12 @@ const SchoolProfile: React.FC = () => {
           <div className="relative">
             <div className="rounded-2xl overflow-hidden shadow-xl bg-muted aspect-[3/2] flex items-center justify-center">
               <img 
-                src={currentSchool.profile_image || "https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=600&h=400&fit=crop"}
+                src={currentSchool.profile_image && !currentSchool.profile_image.includes('placeholder') ? currentSchool.profile_image : "https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=600&h=400&fit=crop"}
                 alt={`Gedung ${currentSchool.name}`}
                 className="w-full h-full object-cover"
+                onError={(e) => {
+                  e.currentTarget.src = "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80&w=1200&h=800";
+                }}
               />
             </div>
             <div 
