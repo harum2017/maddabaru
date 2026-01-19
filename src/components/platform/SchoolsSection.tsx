@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { getActiveSchools } from '@/data/dummyData';
+import React, { useState, useEffect } from 'react';
+import { getDataService } from '@/services/repositories';
+import type { School } from '@/data/dummyData';
 import { useDomain } from '@/contexts/DomainContext';
 import { Button } from '@/components/ui/button';
 import { ExternalLink, MapPin, ArrowRight } from 'lucide-react';
@@ -15,10 +16,30 @@ import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 
 const SchoolsSection: React.FC = () => {
-  // Real schools only - filtering out demo or simulated entries
-  const schools = getActiveSchools().filter(s => s.is_active && !s.name.toLowerCase().includes('demo'));
+  const [schools, setSchools] = useState<School[]>([]);
+  const [loading, setLoading] = useState(true);
   const { setSimulatedSchoolId } = useDomain();
   const [isRegisterDialogOpen, setIsRegisterDialogOpen] = useState(false);
+
+  // Load schools using data service
+  useEffect(() => {
+    const loadSchools = async () => {
+      try {
+        const dataService = getDataService();
+        const allSchools = await dataService.school.getActiveSchools();
+        // Filter active and non-demo schools
+        const filtered = allSchools.filter(s => s.is_active && !s.name.toLowerCase().includes('demo'));
+        setSchools(filtered);
+      } catch (error) {
+        console.error('[SchoolsSection] Error loading schools:', error);
+        setSchools([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadSchools();
+  }, []);
 
   const handleVisitWebsite = (schoolId: number) => {
     setSimulatedSchoolId(schoolId);

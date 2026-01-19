@@ -1,15 +1,36 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDomain } from '@/contexts/DomainContext';
-import { getGalleryBySchool } from '@/data/dummyData';
+import { getDataService } from '@/services/repositories';
+import type { GalleryItem } from '@/data/dummyData';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 
 const SchoolGallery: React.FC = () => {
   const { currentSchool } = useDomain();
+  const [galleryItems, setGalleryItems] = useState<GalleryItem[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  if (!currentSchool) return null;
+  useEffect(() => {
+    const loadGallery = async () => {
+      if (!currentSchool) {
+        setLoading(false);
+        return;
+      }
+      try {
+        const dataService = getDataService();
+        const data = await dataService.gallery.getGalleryBySchool(currentSchool.id);
+        setGalleryItems(data);
+      } catch (error) {
+        console.error('[SchoolGallery] Error loading gallery:', error);
+        setGalleryItems([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadGallery();
+  }, [currentSchool]);
 
-  const galleryItems = getGalleryBySchool(currentSchool.id);
+  if (!currentSchool || loading) return null;
 
   return (
     <section id="gallery" className="section-padding">

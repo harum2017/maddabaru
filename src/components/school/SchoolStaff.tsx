@@ -1,14 +1,35 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDomain } from '@/contexts/DomainContext';
-import { getStaffBySchool } from '@/data/dummyData';
+import { getDataService } from '@/services/repositories';
+import type { Staff } from '@/data/dummyData';
 import { User } from 'lucide-react';
 
 const SchoolStaff: React.FC = () => {
   const { currentSchool } = useDomain();
+  const [staffList, setStaffList] = useState<Staff[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  if (!currentSchool) return null;
+  useEffect(() => {
+    const loadStaff = async () => {
+      if (!currentSchool) {
+        setLoading(false);
+        return;
+      }
+      try {
+        const dataService = getDataService();
+        const data = await dataService.staff.getStaffBySchool(currentSchool.id);
+        setStaffList(data);
+      } catch (error) {
+        console.error('[SchoolStaff] Error loading staff:', error);
+        setStaffList([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadStaff();
+  }, [currentSchool]);
 
-  const staffList = getStaffBySchool(currentSchool.id);
+  if (!currentSchool || loading) return null;
 
   return (
     <section id="staff" className="section-padding">

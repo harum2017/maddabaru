@@ -1,15 +1,36 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDomain } from '@/contexts/DomainContext';
-import { getPostsBySchool } from '@/data/dummyData';
+import { getDataService } from '@/services/repositories';
+import type { Post } from '@/data/dummyData';
 import { Button } from '@/components/ui/button';
 import { Calendar, ArrowRight } from 'lucide-react';
 
 const SchoolNews: React.FC = () => {
   const { currentSchool } = useDomain();
+  const [newsList, setNewsList] = useState<Post[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  if (!currentSchool) return null;
+  useEffect(() => {
+    const loadNews = async () => {
+      if (!currentSchool) {
+        setLoading(false);
+        return;
+      }
+      try {
+        const dataService = getDataService();
+        const data = await dataService.post.getPostsBySchool(currentSchool.id);
+        setNewsList(data);
+      } catch (error) {
+        console.error('[SchoolNews] Error loading news:', error);
+        setNewsList([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadNews();
+  }, [currentSchool]);
 
-  const newsList = getPostsBySchool(currentSchool.id);
+  if (!currentSchool || loading) return null;
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('id-ID', {

@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { School, getSchoolById, getSchoolByDomain } from '@/data/dummyData';
+import type { School } from '@/data/dummyData';
+import { getDataService } from '@/services/repositories';
 
 // Platform domain (saat production, ganti dengan domain sebenarnya)
 const PLATFORM_DOMAIN = import.meta.env.VITE_PLATFORM_DOMAIN || 'maddasoft.id';
@@ -96,19 +97,30 @@ export const DomainProvider: React.FC<DomainProviderProps> = ({ children }) => {
 
   const isSchoolDomain = !isPlatformDomain;
 
-  // Dapatkan data sekolah
+  // Dapatkan data sekolah menggunakan data service
   useEffect(() => {
-    if (isDevMode && simulatedSchoolId !== null) {
-      // Mode dev dengan simulasi
-      const school = getSchoolById(simulatedSchoolId);
-      setCurrentSchool(school || null);
-    } else if (!isDevMode && isSchoolDomain) {
-      // Mode production - cek domain sekolah
-      const school = getSchoolByDomain(currentDomain);
-      setCurrentSchool(school || null);
-    } else {
-      setCurrentSchool(null);
-    }
+    const loadSchool = async () => {
+      try {
+        const dataService = getDataService();
+        
+        if (isDevMode && simulatedSchoolId !== null) {
+          // Mode dev dengan simulasi
+          const school = await dataService.school.getSchoolById(simulatedSchoolId);
+          setCurrentSchool(school || null);
+        } else if (!isDevMode && isSchoolDomain) {
+          // Mode production - cek domain sekolah
+          const school = await dataService.school.getSchoolByDomain(currentDomain);
+          setCurrentSchool(school || null);
+        } else {
+          setCurrentSchool(null);
+        }
+      } catch (error) {
+        console.error('[DomainContext] Error loading school:', error);
+        setCurrentSchool(null);
+      }
+    };
+
+    loadSchool();
   }, [isDevMode, simulatedSchoolId, isSchoolDomain, currentDomain]);
 
   const value: DomainContextType = {
