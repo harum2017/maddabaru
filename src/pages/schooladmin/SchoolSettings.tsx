@@ -39,10 +39,10 @@ const SchoolSettings: React.FC = () => {
   });
 
   const [brandingForm, setBrandingForm] = useState({
-    logo: school?.logo || '',
+    logo: school?.logo || 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Twitter_Verified_Badge.svg/512px-Twitter_Verified_Badge.svg.png',
     theme_color: school?.theme_color || '#2563eb',
-    hero_images: school?.hero_images?.join('\n') || '',
-    profile_image: school?.profile_image || '',
+    hero_images: school?.hero_images?.join('\n') || 'https://images.unsplash.com/photo-1523050335392-938511794244?auto=format&fit=crop&q=80&w=1920&h=600\nhttps://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80&w=1920&h=600',
+    profile_image: school?.profile_image || 'https://images.unsplash.com/photo-1541339907198-e08756ebafe3?auto=format&fit=crop&q=80&w=1200&h=800',
   });
 
   const handleSaveGeneral = () => {
