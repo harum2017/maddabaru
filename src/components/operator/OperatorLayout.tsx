@@ -48,14 +48,19 @@ const OperatorLayout: React.FC = () => {
     }
     
     if (!isAuthenticated) {
-      navigate('/school-login');
+      navigate('/school-login', { replace: true });
+    } else if (user?.role === 'ADMIN_SEKOLAH') {
+      // ADMIN_SEKOLAH tidak boleh akses operator panel
+      toast.error('Akses ditolak. Admin sekolah tidak dapat mengakses panel operator.');
+      navigate('/admin', { replace: true });
     } else if (user?.role !== 'OPERATOR') {
+      // Role lain juga tidak diperbolehkan
       toast.error('Akses ditolak. Anda bukan Operator.');
-      navigate('/');
+      navigate('/', { replace: true });
     } else if (user?.schoolId !== currentSchool.id) {
       // Validasi schoolId harus cocok dengan domain sekolah saat ini
       toast.error('Akses ditolak. Anda tidak terdaftar di sekolah ini.');
-      navigate('/school-login');
+      navigate('/school-login', { replace: true });
     }
   }, [isAuthenticated, user, navigate, currentSchool]);
 

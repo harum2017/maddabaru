@@ -58,10 +58,19 @@ const SuperAdminLayout: React.FC = () => {
   }, [isSchoolDomain, navigate]);
 
   // Redirect jika belum login atau bukan super admin
-  if (isSchoolDomain || !isAuthenticated || user?.role !== 'SUPER_ADMIN') {
-    if (!isAuthenticated || user?.role !== 'SUPER_ADMIN') {
-      return <Navigate to="/domain-pusat/login" replace />;
+  useEffect(() => {
+    if (!isSchoolDomain) {
+      if (!isAuthenticated) {
+        navigate('/domain-pusat/login', { replace: true });
+      } else if (user?.role !== 'SUPER_ADMIN') {
+        toast.error('Akses ditolak. Anda bukan Super Admin.');
+        navigate('/', { replace: true });
+      }
     }
+  }, [isAuthenticated, user, isSchoolDomain, navigate]);
+
+  // Guard render
+  if (isSchoolDomain || !isAuthenticated || user?.role !== 'SUPER_ADMIN') {
     return null;
   }
 

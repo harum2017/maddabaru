@@ -53,14 +53,19 @@ const SchoolAdminLayout: React.FC = () => {
     }
     
     if (!isAuthenticated) {
-      navigate('/school-login');
+      navigate('/school-login', { replace: true });
+    } else if (user?.role === 'OPERATOR') {
+      // OPERATOR tidak boleh akses admin sekolah
+      toast.error('Akses ditolak. Operator tidak dapat mengakses panel admin sekolah.');
+      navigate('/operator', { replace: true });
     } else if (user?.role !== 'ADMIN_SEKOLAH') {
+      // Role lain juga tidak diperbolehkan
       toast.error('Akses ditolak. Anda bukan Admin Sekolah.');
-      navigate('/');
+      navigate('/', { replace: true });
     } else if (user?.schoolId !== currentSchool.id) {
       // Validasi schoolId harus cocok dengan domain sekolah saat ini
       toast.error('Akses ditolak. Anda tidak terdaftar di sekolah ini.');
-      navigate('/school-login');
+      navigate('/school-login', { replace: true });
     }
   }, [isAuthenticated, user, navigate, currentSchool]);
 
