@@ -50,15 +50,9 @@ const CTASection: React.FC = () => {
             <div className="flex flex-wrap justify-center gap-4 pt-4">
               <button 
                 onClick={() => setIsRegisterDialogOpen(true)}
-                className="inline-flex items-center justify-center min-h-10 px-8 rounded-xl bg-secondary text-primary font-black shadow-xl hover:scale-105 active:scale-95 transition-all"
+                className="inline-flex items-center justify-center min-h-10 px-10 rounded-xl bg-secondary text-primary font-black shadow-xl hover:scale-105 active:scale-95 transition-all uppercase tracking-tight"
               >
-                Mulai Sekarang
-              </button>
-              <button 
-                onClick={handlePhoneClick}
-                className="inline-flex items-center justify-center min-h-10 px-8 rounded-xl border-2 border-white/20 bg-transparent text-white font-black hover:bg-white/10 active:scale-95 transition-all"
-              >
-                Konsultasi Gratis
+                Daftar Sekarang
               </button>
             </div>
           </div>

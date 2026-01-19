@@ -16,12 +16,12 @@ const PlatformLanding: React.FC = () => {
         <div className="absolute top-[25%] right-[-10%] w-[40%] h-[60%] bg-accent/15 rounded-full blur-[120px]" />
         <div className="absolute bottom-[-15%] left-[15%] w-[60%] h-[50%] bg-blue-500/15 rounded-full blur-[160px]" />
         
-        {/* Artistic Canvas Texture */}
+        {/* Artistic Canvas Texture & Water Pattern */}
         <div 
-          className="absolute inset-0 opacity-[0.05]" 
+          className="absolute inset-0 opacity-[0.08]" 
           style={{ 
-            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
-            backgroundSize: '200px 200px'
+            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"), url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 50 Q 25 25, 50 50 T 100 50' fill='none' stroke='currentColor' stroke-width='0.5' opacity='0.3'/%3E%3C/svg%3E")`,
+            backgroundSize: '200px 200px, 150px 100px'
           }} 
         />
 

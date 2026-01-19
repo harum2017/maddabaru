@@ -31,16 +31,16 @@ const AboutSection: React.FC = () => {
         <div className="grid lg:grid-cols-2 gap-12 items-center mb-16">
           <div className="relative group">
             <div className="absolute -inset-4 bg-gradient-to-tr from-primary/20 to-accent/20 rounded-[2rem] blur-2xl opacity-50 group-hover:opacity-75 transition-opacity" />
-            <div className="relative bg-card rounded-2xl border-2 border-border/80 overflow-hidden shadow-2xl">
+            <div className="relative bg-card rounded-2xl border-2 border-border/80 overflow-hidden shadow-2xl h-[300px]">
               <img 
-                src="https://images.unsplash.com/photo-1523050338692-7b835a07973f?w=800&h=600&fit=crop" 
+                src="https://images.unsplash.com/photo-1523050338692-7b835a07973f?w=1200&h=800&fit=crop" 
                 alt="School Environment" 
-                className="w-full h-full object-cover aspect-video transform group-hover:scale-105 transition-transform duration-700"
+                className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-              <div className="absolute bottom-6 left-6 right-6">
-                <p className="text-white font-black tracking-tight text-lg">Digitalisasi Pendidikan Masa Depan</p>
-                <p className="text-white/80 text-sm font-medium uppercase tracking-widest">MaddaSoft Platform</p>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+              <div className="absolute bottom-6 left-6 right-6 z-10">
+                <p className="text-white font-black tracking-tight text-xl leading-none mb-1">Digitalisasi Pendidikan Masa Depan</p>
+                <p className="text-primary font-bold text-xs uppercase tracking-[0.2em]">MaddaSoft Platform</p>
               </div>
             </div>
           </div>
