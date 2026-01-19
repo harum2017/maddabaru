@@ -25,6 +25,40 @@ const SchoolSettings: React.FC = () => {
   const schoolId = user?.schoolId || simulatedSchoolId || 1;
   const school = currentSchool || schools.find(s => s.id === schoolId);
 
+  // Helper to get valid dummy URLs based on school level
+  const getDummyUrls = (id: number) => {
+    const level = schools.find(s => s.id === id)?.level || 'SMA';
+    switch (level) {
+      case 'SD':
+        return {
+          logo: 'https://images.unsplash.com/photo-1594608661623-aa0bd3a69d98?auto=format&fit=crop&q=80&w=200&h=200',
+          profile: 'https://images.unsplash.com/photo-1503945438517-f65904a5adc0?auto=format&fit=crop&q=80&w=1200&h=800'
+        };
+      case 'SMP':
+        return {
+          logo: 'https://images.unsplash.com/photo-1546410531-bb4caa1b424d?auto=format&fit=crop&q=80&w=200&h=200',
+          profile: 'https://images.unsplash.com/photo-1523050335392-938511794244?auto=format&fit=crop&q=80&w=1200&h=800'
+        };
+      case 'SMA':
+        return {
+          logo: 'https://images.unsplash.com/photo-1525921429624-479b6a26d84d?auto=format&fit=crop&q=80&w=200&h=200',
+          profile: 'https://images.unsplash.com/photo-1541339907198-e08756ebafe3?auto=format&fit=crop&q=80&w=1200&h=800'
+        };
+      case 'SMK':
+        return {
+          logo: 'https://images.unsplash.com/photo-1581092921461-7d15cb013665?auto=format&fit=crop&q=80&w=200&h=200',
+          profile: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&q=80&w=1200&h=800'
+        };
+      default:
+        return {
+          logo: 'https://images.unsplash.com/photo-1525921429624-479b6a26d84d?auto=format&fit=crop&q=80&w=200&h=200',
+          profile: 'https://images.unsplash.com/photo-1541339907198-e08756ebafe3?auto=format&fit=crop&q=80&w=1200&h=800'
+        };
+    }
+  };
+
+  const dummy = getDummyUrls(schoolId);
+
   const [generalForm, setGeneralForm] = useState({
     name: school?.name || '',
     email: school?.email || '',
@@ -39,10 +73,10 @@ const SchoolSettings: React.FC = () => {
   });
 
   const [brandingForm, setBrandingForm] = useState({
-    logo: school?.logo || 'https://raw.githubusercontent.com/lucide-react/lucide/main/icons/graduation-cap.svg',
+    logo: school?.logo && !school.logo.includes('placeholder') ? school.logo : dummy.logo,
     theme_color: school?.theme_color || '#2563eb',
     hero_images: school?.hero_images?.join('\n') || 'https://images.unsplash.com/photo-1523050335392-938511794244?auto=format&fit=crop&q=80&w=1920&h=600\nhttps://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80&w=1920&h=600',
-    profile_image: school?.profile_image || 'https://images.unsplash.com/photo-1541339907198-e08756ebafe3?auto=format&fit=crop&q=80&w=1200&h=800',
+    profile_image: school?.profile_image && !school.profile_image.includes('placeholder') ? school.profile_image : dummy.profile,
   });
 
   const handleSaveGeneral = () => {
@@ -238,7 +272,7 @@ const SchoolSettings: React.FC = () => {
                     </div>
                   ) : (
                     <div className="text-center space-y-1">
-                      <Palette className="h-8 w-8 text-muted-foreground/40 mx-auto" />
+                      <ImageIcon className="h-8 w-8 text-muted-foreground/40 mx-auto" />
                       <p className="text-xs text-muted-foreground italic">Masukkan URL untuk melihat preview logo</p>
                     </div>
                   )}
