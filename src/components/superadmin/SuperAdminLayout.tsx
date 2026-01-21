@@ -41,7 +41,7 @@ import {
 import { getPendingSchoolRegistrations } from '@/data/dummyData';
 import SuperAdminSidebar from './SuperAdminSidebar';
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { ThemeToggle } from '@/components/ThemeToggle';
+import { ThemeToggle } from '../ThemeToggle';
 
 const SuperAdminLayout: React.FC = () => {
   const { user, isAuthenticated, logout } = useAuth();
