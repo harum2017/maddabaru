@@ -18,11 +18,22 @@ import {
   IDataService,
 } from './types';
 
+import type { 
+  School, 
+  Staff, 
+  Student, 
+  Post, 
+  GalleryItem, 
+  SchoolRegistration, 
+  SchoolLevel, 
+  GradeLevel 
+} from '@/data/dummyData';
+
 /**
  * PROD School Repository - akan implement Supabase later
  */
 class ProdSchoolRepository implements ISchoolRepository {
-  async getSchoolById(id: number) {
+  async getSchoolById(id: number): Promise<School | undefined> {
     // TODO: Call Supabase API
     // const { data, error } = await supabase
     //   .from('schools')
@@ -32,17 +43,17 @@ class ProdSchoolRepository implements ISchoolRepository {
     throw new Error('PROD mode not configured yet. Please use DEV mode.');
   }
 
-  async getSchoolByDomain(domain: string) {
+  async getSchoolByDomain(domain: string): Promise<School | undefined> {
     // TODO: Call Supabase API
     throw new Error('PROD mode not configured yet. Please use DEV mode.');
   }
 
-  async getAllSchools() {
+  async getAllSchools(): Promise<School[]> {
     // TODO: Call Supabase API
     throw new Error('PROD mode not configured yet. Please use DEV mode.');
   }
 
-  async getActiveSchools() {
+  async getActiveSchools(): Promise<School[]> {
     // TODO: Call Supabase API
     throw new Error('PROD mode not configured yet. Please use DEV mode.');
   }
@@ -52,15 +63,15 @@ class ProdSchoolRepository implements ISchoolRepository {
  * PROD Staff Repository - akan implement Supabase later
  */
 class ProdStaffRepository implements IStaffRepository {
-  async getStaffBySchool(schoolId: number) {
+  async getStaffBySchool(schoolId: number): Promise<Staff[]> {
     throw new Error('PROD mode not configured yet. Please use DEV mode.');
   }
 
-  async getAllStaffBySchool(schoolId: number) {
+  async getAllStaffBySchool(schoolId: number): Promise<Staff[]> {
     throw new Error('PROD mode not configured yet. Please use DEV mode.');
   }
 
-  async getStaffById(id: number) {
+  async getStaffById(id: number): Promise<Staff | undefined> {
     throw new Error('PROD mode not configured yet. Please use DEV mode.');
   }
 }
@@ -69,15 +80,15 @@ class ProdStaffRepository implements IStaffRepository {
  * PROD Student Repository - akan implement Supabase later
  */
 class ProdStudentRepository implements IStudentRepository {
-  async getStudentsBySchool(schoolId: number) {
+  async getStudentsBySchool(schoolId: number): Promise<Student[]> {
     throw new Error('PROD mode not configured yet. Please use DEV mode.');
   }
 
-  async getStudentById(id: number) {
+  async getStudentById(id: number): Promise<Student | undefined> {
     throw new Error('PROD mode not configured yet. Please use DEV mode.');
   }
 
-  async getStudentsByClass(schoolId: number, classId: string) {
+  async getStudentsByClass(schoolId: number, classId: string): Promise<Student[]> {
     throw new Error('PROD mode not configured yet. Please use DEV mode.');
   }
 }
@@ -86,15 +97,15 @@ class ProdStudentRepository implements IStudentRepository {
  * PROD Post Repository - akan implement Supabase later
  */
 class ProdPostRepository implements IPostRepository {
-  async getPostsBySchool(schoolId: number) {
+  async getPostsBySchool(schoolId: number): Promise<Post[]> {
     throw new Error('PROD mode not configured yet. Please use DEV mode.');
   }
 
-  async getPostById(id: number) {
+  async getPostById(id: number): Promise<Post | undefined> {
     throw new Error('PROD mode not configured yet. Please use DEV mode.');
   }
 
-  async getPublishedPostsBySchool(schoolId: number) {
+  async getPublishedPostsBySchool(schoolId: number): Promise<Post[]> {
     throw new Error('PROD mode not configured yet. Please use DEV mode.');
   }
 }
@@ -103,15 +114,15 @@ class ProdPostRepository implements IPostRepository {
  * PROD Gallery Repository - akan implement Supabase later
  */
 class ProdGalleryRepository implements IGalleryRepository {
-  async getGalleryBySchool(schoolId: number) {
+  async getGalleryBySchool(schoolId: number): Promise<GalleryItem[]> {
     throw new Error('PROD mode not configured yet. Please use DEV mode.');
   }
 
-  async getGalleryById(id: number) {
+  async getGalleryById(id: number): Promise<GalleryItem | undefined> {
     throw new Error('PROD mode not configured yet. Please use DEV mode.');
   }
 
-  async getGalleryByCategory(schoolId: number, category: string) {
+  async getGalleryByCategory(schoolId: number, category: string): Promise<GalleryItem[]> {
     throw new Error('PROD mode not configured yet. Please use DEV mode.');
   }
 }
@@ -120,19 +131,19 @@ class ProdGalleryRepository implements IGalleryRepository {
  * PROD Class Repository - akan implement Supabase later
  */
 class ProdClassRepository implements IClassRepository {
-  async getDefaultGradeLevels(level) {
+  async getDefaultGradeLevels(level: SchoolLevel): Promise<GradeLevel[]> {
     throw new Error('PROD mode not configured yet. Please use DEV mode.');
   }
 
-  async getClassesByLevel(level) {
+  async getClassesByLevel(level: SchoolLevel): Promise<string[]> {
     throw new Error('PROD mode not configured yet. Please use DEV mode.');
   }
 
-  async getGradeLevelsByLevel(level) {
+  async getGradeLevelsByLevel(level: SchoolLevel): Promise<string[]> {
     throw new Error('PROD mode not configured yet. Please use DEV mode.');
   }
 
-  async getSubjectsByLevel(level) {
+  async getSubjectsByLevel(level: SchoolLevel): Promise<string[]> {
     throw new Error('PROD mode not configured yet. Please use DEV mode.');
   }
 }
@@ -141,15 +152,15 @@ class ProdClassRepository implements IClassRepository {
  * PROD Registration Repository - akan implement Supabase later
  */
 class ProdRegistrationRepository implements IRegistrationRepository {
-  async getRegistrations() {
+  async getRegistrations(): Promise<SchoolRegistration[]> {
     throw new Error('PROD mode not configured yet. Please use DEV mode.');
   }
 
-  async getPendingRegistrations() {
+  async getPendingRegistrations(): Promise<SchoolRegistration[]> {
     throw new Error('PROD mode not configured yet. Please use DEV mode.');
   }
 
-  async getRegistrationById(id: number) {
+  async getRegistrationById(id: number): Promise<SchoolRegistration | undefined> {
     throw new Error('PROD mode not configured yet. Please use DEV mode.');
   }
 }

@@ -1,35 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { useDomain } from '@/contexts/DomainContext';
-import { getDataService } from '@/services/repositories';
-import type { Staff } from '@/data/dummyData';
+import { useStaff } from '@/contexts/StaffContext';
 import { User } from 'lucide-react';
 
 const SchoolStaff: React.FC = () => {
   const { currentSchool } = useDomain();
-  const [staffList, setStaffList] = useState<Staff[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { getStaffBySchool } = useStaff();
+  const [staffList, setStaffList] = useState<ReturnType<typeof getStaffBySchool>>([]);
 
   useEffect(() => {
-    const loadStaff = async () => {
-      if (!currentSchool) {
-        setLoading(false);
-        return;
-      }
-      try {
-        const dataService = getDataService();
-        const data = await dataService.staff.getStaffBySchool(currentSchool.id);
-        setStaffList(data);
-      } catch (error) {
-        console.error('[SchoolStaff] Error loading staff:', error);
-        setStaffList([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-    loadStaff();
-  }, [currentSchool]);
+    if (currentSchool) {
+      const staff = getStaffBySchool(currentSchool.id);
+      setStaffList(staff);
+    }
+  }, [currentSchool, getStaffBySchool]);
 
-  if (!currentSchool || loading) return null;
+  if (!currentSchool || staffList.length === 0) return null;
 
   return (
     <section id="staff" className="section-padding">
@@ -42,21 +28,29 @@ const SchoolStaff: React.FC = () => {
         </div>
         
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {staffList.map((member, index) => (
+          {staffList.map((member) => (
             <div 
               key={member.id}
               className="bg-card rounded-xl border border-border overflow-hidden card-hover group"
             >
               <div 
-                className="h-48 flex items-center justify-center"
+                className="h-48 flex items-center justify-center overflow-hidden"
                 style={{ backgroundColor: `${currentSchool.theme_color}10` }}
               >
-                <div 
-                  className="w-24 h-24 rounded-full flex items-center justify-center"
-                  style={{ backgroundColor: `${currentSchool.theme_color}20` }}
-                >
-                  <User className="w-12 h-12" style={{ color: currentSchool.theme_color }} />
-                </div>
+                {member.photo ? (
+                  <img 
+                    src={member.photo} 
+                    alt={member.name}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div 
+                    className="w-24 h-24 rounded-full flex items-center justify-center"
+                    style={{ backgroundColor: `${currentSchool.theme_color}20` }}
+                  >
+                    <User className="w-12 h-12" style={{ color: currentSchool.theme_color }} />
+                  </div>
+                )}
               </div>
               <div className="p-4 text-center">
                 <h4 className="font-semibold mb-1 line-clamp-1">{member.name}</h4>
