@@ -83,6 +83,11 @@ const SchoolAdminLayout: React.FC = () => {
     return null;
   }
 
+  const style = {
+    "--sidebar-width": "16rem",
+    "--sidebar-width-icon": "4rem",
+  };
+
   return (
     <div className="min-h-screen bg-muted/30">
       {/* Mobile Sidebar Overlay */}

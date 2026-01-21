@@ -162,7 +162,7 @@ const SchoolLogin: React.FC = () => {
 
                   <Button 
                     type="submit" 
-                    className="w-full" 
+                    className="w-full h-11 font-bold" 
                     disabled={isLoading}
                     style={{ backgroundColor: currentSchool.theme_color }}
                   >
@@ -176,6 +176,16 @@ const SchoolLogin: React.FC = () => {
                     )}
                   </Button>
                 </form>
+
+                <div className="mt-4 pt-4 border-t border-border text-center">
+                  <button 
+                    type="button" 
+                    className="text-muted-foreground hover:text-primary text-xs font-bold uppercase tracking-wider transition-colors"
+                    onClick={() => toast.info(`Silakan hubungi Admin ${currentSchool.name} untuk reset password.`)}
+                  >
+                    Lupa Password?
+                  </button>
+                </div>
 
                 {/* Dev Mode Hint for Admin */}
                 {isDevMode && adminUser && (
@@ -228,7 +238,7 @@ const SchoolLogin: React.FC = () => {
 
                   <Button 
                     type="submit" 
-                    className="w-full" 
+                    className="w-full h-11 font-bold" 
                     disabled={isLoading}
                     style={{ backgroundColor: currentSchool.theme_color }}
                   >
@@ -242,6 +252,16 @@ const SchoolLogin: React.FC = () => {
                     )}
                   </Button>
                 </form>
+
+                <div className="mt-4 pt-4 border-t border-border text-center">
+                  <button 
+                    type="button" 
+                    className="text-muted-foreground hover:text-primary text-xs font-bold uppercase tracking-wider transition-colors"
+                    onClick={() => toast.info(`Silakan hubungi Admin ${currentSchool.name} untuk reset password.`)}
+                  >
+                    Lupa Password?
+                  </button>
+                </div>
 
                 {/* Dev Mode Hint for Operator */}
                 {isDevMode && operatorUser && (

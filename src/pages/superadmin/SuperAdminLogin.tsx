@@ -111,17 +111,27 @@ const SuperAdminLogin: React.FC = () => {
                 />
               </div>
 
-              <Button type="submit" className="w-full" disabled={isLoading}>
+              <Button type="submit" className="w-full font-bold h-11" disabled={isLoading}>
                 {isLoading ? (
                   <>
                     <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                     Memproses...
                   </>
                 ) : (
-                  'Masuk'
+                  'Masuk ke Dashboard'
                 )}
               </Button>
             </form>
+            
+            <div className="mt-6 pt-6 border-t border-muted text-center">
+              <button 
+                type="button" 
+                className="text-muted-foreground hover:text-primary text-xs font-bold uppercase tracking-wider transition-colors"
+                onClick={() => toast.info("Silakan hubungi tim teknis MaddaSoft untuk reset password.")}
+              >
+                Lupa Password?
+              </button>
+            </div>
 
             {/* Dev Hint */}
             <div className="mt-6 p-3 bg-muted rounded-lg">

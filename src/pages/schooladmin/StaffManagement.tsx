@@ -131,6 +131,32 @@ const StaffManagement: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
+    // Validasi Form yang Ketat
+    if (!formData.name || formData.name.length < 3) {
+      toast.error('Nama Lengkap minimal 3 karakter');
+      return;
+    }
+
+    if (formData.nip && !/^\d+$/.test(formData.nip)) {
+      toast.error('NIP/NIY hanya boleh berisi angka');
+      return;
+    }
+
+    if (formData.nik && (!/^\d{16}$/.test(formData.nik))) {
+      toast.error('NIK harus 16 digit angka');
+      return;
+    }
+
+    if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      toast.error('Format Email Personal tidak valid');
+      return;
+    }
+
+    if (!formData.phone || !/^\d{10,15}$/.test(formData.phone)) {
+      toast.error('Nomor Telepon harus 10-15 digit angka');
+      return;
+    }
+
     if (editingStaff) {
       setStaffList(prev => prev.map(s => s.id === editingStaff.id ? { ...s, ...formData } as Staff : s));
       toast.success('Data pegawai berhasil diperbarui');

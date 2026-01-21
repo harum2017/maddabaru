@@ -146,6 +146,27 @@ const StudentManagement: React.FC = () => {
       return;
     }
 
+    // Validasi Ketat
+    if (formData.name.length < 3) {
+      toast.error('Nama Lengkap minimal 3 karakter');
+      return;
+    }
+
+    if (!/^\d+$/.test(formData.nis)) {
+      toast.error('NIS hanya boleh berisi angka');
+      return;
+    }
+
+    if (formData.nisn && !/^\d{10}$/.test(formData.nisn)) {
+      toast.error('NISN harus 10 digit angka');
+      return;
+    }
+
+    if (!/^\d{10,15}$/.test(formData.parent_phone)) {
+      toast.error('Nomor Telepon Orang Tua harus 10-15 digit angka');
+      return;
+    }
+
     if (editingStudent) {
       setStudents(prev => prev.map(s => 
         s.id === editingStudent.id ? { ...s, ...formData } : s
