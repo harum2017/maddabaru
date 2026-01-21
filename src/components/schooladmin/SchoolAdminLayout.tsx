@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useDomain } from '@/contexts/DomainContext';
+import { getDataService } from '@/services/repositories';
+import type { Staff } from '@/data/dummyData';
 import { 
   LayoutDashboard, Users, GraduationCap, FileText, 
   Image, Settings, LogOut, Menu, X, Bell, 
@@ -43,6 +45,27 @@ const SchoolAdminLayout: React.FC = () => {
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [helpOpen, setHelpOpen] = useState(false);
+  const [staffData, setStaffData] = useState<Staff | null>(null);
+
+  // Load staff data untuk ambil foto profil
+  useEffect(() => {
+    const loadStaffData = async () => {
+      if (user?.schoolId) {
+        try {
+          const dataService = getDataService();
+          const staffList = await dataService.staff.getStaffBySchool(user.schoolId);
+          // Cari staff yang nama-nya match dengan user name
+          const matchedStaff = staffList.find(s => s.name.toLowerCase() === user.name.toLowerCase());
+          if (matchedStaff) {
+            setStaffData(matchedStaff);
+          }
+        } catch (error) {
+          console.error('Error loading staff data:', error);
+        }
+      }
+    };
+    loadStaffData();
+  }, [user?.schoolId, user?.name]);
 
   // Redirect jika belum login, bukan admin sekolah, atau tidak di domain sekolah
   React.useEffect(() => {
@@ -214,6 +237,9 @@ const SchoolAdminLayout: React.FC = () => {
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="gap-2">
                   <Avatar className="w-8 h-8">
+                    {staffData?.photo && (
+                      <img src={staffData.photo} alt={user?.name} className="w-full h-full object-cover rounded-full" />
+                    )}
                     <AvatarFallback className="bg-primary text-primary-foreground text-sm">
                       {user?.name?.charAt(0) || 'A'}
                     </AvatarFallback>

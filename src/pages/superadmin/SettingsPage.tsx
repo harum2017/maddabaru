@@ -13,12 +13,33 @@ import {
   Globe,
   Palette,
   Shield,
-  Save
+  Save,
+  Eye,
+  EyeOff
 } from 'lucide-react';
 import { toast } from 'sonner';
 
 const SettingsPage: React.FC = () => {
   const { user } = useAuth();
+  const [profileImage, setProfileImage] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
+  const [twoFAEnabled, setTwoFAEnabled] = useState(false);
+
+  // Profile Form State
+  const [profileForm, setProfileForm] = useState({
+    name: user?.name || '',
+    email: user?.email || '',
+    phone: '',
+  });
+
+  // Security Form State
+  const [securityForm, setSecurityForm] = useState({
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: '',
+  });
+
+  // Notifications State
   const [notifications, setNotifications] = useState({
     email: true,
     newSchool: true,
@@ -26,8 +47,133 @@ const SettingsPage: React.FC = () => {
     weeklyReport: false,
   });
 
-  const handleSave = () => {
-    toast.success('Pengaturan berhasil disimpan');
+  // Platform Settings State
+  const [platformSettings, setPlatformSettings] = useState({
+    name: 'MaddaSoft',
+    domain: 'maddasoft.id',
+    supportEmail: 'support@maddasoft.id',
+  });
+
+  // Branding State
+  const [branding, setBranding] = useState({
+    primaryColor: '#2563eb',
+    logoImage: null as string | null,
+  });
+
+  // Handle photo upload
+  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 2 * 1024 * 1024) {
+        toast.error('Ukuran file tidak boleh lebih dari 2MB');
+        return;
+      }
+      if (!['image/jpeg', 'image/png'].includes(file.type)) {
+        toast.error('Format file harus JPG atau PNG');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const result = event.target?.result as string;
+        setProfileImage(result);
+        toast.success('Foto profil berhasil diubah');
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  // Handle logo upload
+  const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 2 * 1024 * 1024) {
+        toast.error('Ukuran file tidak boleh lebih dari 2MB');
+        return;
+      }
+      if (!['image/jpeg', 'image/png', 'image/svg+xml'].includes(file.type)) {
+        toast.error('Format file harus JPG, PNG, atau SVG');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const result = event.target?.result as string;
+        setBranding({ ...branding, logoImage: result });
+        toast.success('Logo berhasil diubah');
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  // Handle profile save
+  const handleProfileSave = () => {
+    if (!profileForm.name.trim()) {
+      toast.error('Nama tidak boleh kosong');
+      return;
+    }
+    if (!profileForm.email.trim()) {
+      toast.error('Email tidak boleh kosong');
+      return;
+    }
+    toast.success('Profil berhasil disimpan');
+  };
+
+  // Handle password change
+  const handlePasswordChange = () => {
+    if (!securityForm.currentPassword.trim()) {
+      toast.error('Password saat ini harus diisi');
+      return;
+    }
+    if (!securityForm.newPassword.trim()) {
+      toast.error('Password baru harus diisi');
+      return;
+    }
+    if (securityForm.newPassword.length < 6) {
+      toast.error('Password minimal 6 karakter');
+      return;
+    }
+    if (securityForm.newPassword !== securityForm.confirmPassword) {
+      toast.error('Password tidak cocok');
+      return;
+    }
+    toast.success('Password berhasil diubah');
+    setSecurityForm({ currentPassword: '', newPassword: '', confirmPassword: '' });
+  };
+
+  // Handle 2FA toggle
+  const handleToggle2FA = () => {
+    if (!twoFAEnabled) {
+      toast.success('2FA akan diaktifkan. Cek email Anda untuk instruksi.');
+    } else {
+      toast.success('2FA berhasil dinonaktifkan');
+    }
+    setTwoFAEnabled(!twoFAEnabled);
+  };
+
+  // Handle notification save
+  const handleNotificationSave = () => {
+    toast.success('Preferensi notifikasi berhasil disimpan');
+  };
+
+  // Handle platform settings save
+  const handlePlatformSave = () => {
+    if (!platformSettings.name.trim()) {
+      toast.error('Nama platform tidak boleh kosong');
+      return;
+    }
+    if (!platformSettings.domain.trim()) {
+      toast.error('Domain tidak boleh kosong');
+      return;
+    }
+    if (!platformSettings.supportEmail.trim()) {
+      toast.error('Email support tidak boleh kosong');
+      return;
+    }
+    toast.success('Pengaturan platform berhasil disimpan');
+  };
+
+  // Handle branding save
+  const handleBrandingSave = () => {
+    toast.success('Pengaturan branding berhasil disimpan');
   };
 
   return (
@@ -69,11 +215,26 @@ const SettingsPage: React.FC = () => {
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="flex items-center gap-6">
-                <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center">
-                  <User className="w-10 h-10 text-primary" />
+                <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center overflow-hidden">
+                  {profileImage ? (
+                    <img src={profileImage} alt="Profile" className="w-full h-full object-cover" />
+                  ) : (
+                    <User className="w-10 h-10 text-primary" />
+                  )}
                 </div>
                 <div>
-                  <Button variant="outline" size="sm">Ubah Foto</Button>
+                  <label htmlFor="photo-upload">
+                    <Button variant="outline" size="sm" asChild>
+                      <span>Ubah Foto</span>
+                    </Button>
+                  </label>
+                  <input
+                    id="photo-upload"
+                    type="file"
+                    accept="image/jpeg,image/png"
+                    onChange={handlePhotoUpload}
+                    className="hidden"
+                  />
                   <p className="text-xs text-muted-foreground mt-1">JPG, PNG max 2MB</p>
                 </div>
               </div>
@@ -81,15 +242,29 @@ const SettingsPage: React.FC = () => {
               <div className="grid sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="name">Nama Lengkap</Label>
-                  <Input id="name" defaultValue={user?.name} />
+                  <Input 
+                    id="name" 
+                    value={profileForm.name}
+                    onChange={(e) => setProfileForm({ ...profileForm, name: e.target.value })}
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="email">Email</Label>
-                  <Input id="email" type="email" defaultValue={user?.email} />
+                  <Input 
+                    id="email" 
+                    type="email" 
+                    value={profileForm.email}
+                    onChange={(e) => setProfileForm({ ...profileForm, email: e.target.value })}
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="phone">Nomor Telepon</Label>
-                  <Input id="phone" placeholder="+62 812 3456 7890" />
+                  <Input 
+                    id="phone" 
+                    placeholder="+62 812 3456 7890"
+                    value={profileForm.phone}
+                    onChange={(e) => setProfileForm({ ...profileForm, phone: e.target.value })}
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="role">Role</Label>
@@ -97,7 +272,7 @@ const SettingsPage: React.FC = () => {
                 </div>
               </div>
 
-              <Button onClick={handleSave} className="gap-2">
+              <Button onClick={handleProfileSave} className="gap-2">
                 <Save className="w-4 h-4" />
                 Simpan Perubahan
               </Button>
@@ -118,17 +293,41 @@ const SettingsPage: React.FC = () => {
               <CardContent className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="current-password">Password Saat Ini</Label>
-                  <Input id="current-password" type="password" />
+                  <div className="relative">
+                    <Input 
+                      id="current-password" 
+                      type={showPassword ? "text" : "password"}
+                      value={securityForm.currentPassword}
+                      onChange={(e) => setSecurityForm({ ...securityForm, currentPassword: e.target.value })}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-2.5 text-muted-foreground"
+                    >
+                      {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    </button>
+                  </div>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="new-password">Password Baru</Label>
-                  <Input id="new-password" type="password" />
+                  <Input 
+                    id="new-password" 
+                    type="password"
+                    value={securityForm.newPassword}
+                    onChange={(e) => setSecurityForm({ ...securityForm, newPassword: e.target.value })}
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="confirm-password">Konfirmasi Password</Label>
-                  <Input id="confirm-password" type="password" />
+                  <Input 
+                    id="confirm-password" 
+                    type="password"
+                    value={securityForm.confirmPassword}
+                    onChange={(e) => setSecurityForm({ ...securityForm, confirmPassword: e.target.value })}
+                  />
                 </div>
-                <Button>Ubah Password</Button>
+                <Button onClick={handlePasswordChange}>Ubah Password</Button>
               </CardContent>
             </Card>
 
@@ -145,12 +344,17 @@ const SettingsPage: React.FC = () => {
               <CardContent>
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="font-medium">Status: Tidak Aktif</p>
+                    <p className="font-medium">Status: {twoFAEnabled ? 'Aktif ✓' : 'Tidak Aktif'}</p>
                     <p className="text-sm text-muted-foreground">
-                      Aktifkan 2FA untuk keamanan lebih baik
+                      {twoFAEnabled ? '2FA sedang aktif untuk akun Anda' : 'Aktifkan 2FA untuk keamanan lebih baik'}
                     </p>
                   </div>
-                  <Button variant="outline">Aktifkan 2FA</Button>
+                  <Button 
+                    variant={twoFAEnabled ? "destructive" : "outline"}
+                    onClick={handleToggle2FA}
+                  >
+                    {twoFAEnabled ? 'Nonaktifkan 2FA' : 'Aktifkan 2FA'}
+                  </Button>
                 </div>
               </CardContent>
             </Card>
@@ -219,7 +423,7 @@ const SettingsPage: React.FC = () => {
                 />
               </div>
 
-              <Button onClick={handleSave} className="gap-2">
+              <Button onClick={handleNotificationSave} className="gap-2">
                 <Save className="w-4 h-4" />
                 Simpan Preferensi
               </Button>
@@ -243,16 +447,33 @@ const SettingsPage: React.FC = () => {
               <CardContent className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="platform-name">Nama Platform</Label>
-                  <Input id="platform-name" defaultValue="MaddaSoft" />
+                  <Input 
+                    id="platform-name" 
+                    value={platformSettings.name}
+                    onChange={(e) => setPlatformSettings({ ...platformSettings, name: e.target.value })}
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="platform-domain">Domain Utama</Label>
-                  <Input id="platform-domain" defaultValue="maddasoft.id" />
+                  <Input 
+                    id="platform-domain" 
+                    value={platformSettings.domain}
+                    onChange={(e) => setPlatformSettings({ ...platformSettings, domain: e.target.value })}
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="support-email">Email Support</Label>
-                  <Input id="support-email" type="email" defaultValue="support@maddasoft.id" />
+                  <Input 
+                    id="support-email" 
+                    type="email" 
+                    value={platformSettings.supportEmail}
+                    onChange={(e) => setPlatformSettings({ ...platformSettings, supportEmail: e.target.value })}
+                  />
                 </div>
+                <Button onClick={handlePlatformSave} className="gap-2">
+                  <Save className="w-4 h-4" />
+                  Simpan Perubahan
+                </Button>
               </CardContent>
             </Card>
 
@@ -270,20 +491,44 @@ const SettingsPage: React.FC = () => {
                 <div className="space-y-2">
                   <Label>Warna Utama</Label>
                   <div className="flex gap-2">
-                    <Input type="color" className="w-16 h-10 p-1" defaultValue="#2563eb" />
-                    <Input defaultValue="#2563eb" className="flex-1" />
+                    <input 
+                      type="color" 
+                      className="w-16 h-10 p-1 rounded border border-input cursor-pointer"
+                      value={branding.primaryColor}
+                      onChange={(e) => setBranding({ ...branding, primaryColor: e.target.value })}
+                    />
+                    <Input 
+                      value={branding.primaryColor}
+                      onChange={(e) => setBranding({ ...branding, primaryColor: e.target.value })}
+                      className="flex-1"
+                    />
                   </div>
                 </div>
                 <div className="space-y-2">
                   <Label>Logo Platform</Label>
                   <div className="flex items-center gap-4">
-                    <div className="w-16 h-16 rounded-xl hero-gradient flex items-center justify-center">
-                      <span className="text-2xl">🎓</span>
+                    <div className="w-16 h-16 rounded-xl hero-gradient flex items-center justify-center overflow-hidden">
+                      {branding.logoImage ? (
+                        <img src={branding.logoImage} alt="Logo" className="w-full h-full object-cover" />
+                      ) : (
+                        <span className="text-2xl">🎓</span>
+                      )}
                     </div>
-                    <Button variant="outline" size="sm">Upload Logo</Button>
+                    <label htmlFor="logo-upload">
+                      <Button variant="outline" size="sm" asChild>
+                        <span>Upload Logo</span>
+                      </Button>
+                    </label>
+                    <input
+                      id="logo-upload"
+                      type="file"
+                      accept="image/jpeg,image/png,image/svg+xml"
+                      onChange={handleLogoUpload}
+                      className="hidden"
+                    />
                   </div>
                 </div>
-                <Button onClick={handleSave} className="gap-2">
+                <Button onClick={handleBrandingSave} className="gap-2">
                   <Save className="w-4 h-4" />
                   Simpan Perubahan
                 </Button>

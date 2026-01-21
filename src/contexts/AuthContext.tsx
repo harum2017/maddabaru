@@ -2,12 +2,46 @@ import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 export type UserRole = 'SUPER_ADMIN' | 'ADMIN_SEKOLAH' | 'OPERATOR';
 
+export type Permission = 
+  // School Management
+  | 'view_school'
+  | 'edit_school'
+  | 'delete_school'
+  
+  // User Management
+  | 'create_user'
+  | 'view_users'
+  | 'edit_user'
+  | 'delete_user'
+  
+  // Content Management
+  | 'create_post'
+  | 'view_posts'
+  | 'edit_post'
+  | 'edit_own_post'
+  | 'delete_post'
+  | 'delete_own_post'
+  
+  // Gallery Management
+  | 'create_gallery'
+  | 'view_gallery'
+  | 'edit_gallery'
+  | 'edit_own_gallery'
+  | 'delete_gallery'
+  | 'delete_own_gallery'
+  
+  // Settings
+  | 'manage_settings'
+  | 'manage_branding'
+  | 'manage_permissions';
+
 interface AuthUser {
   id: number;
   email: string;
   name: string;
   role: UserRole;
   schoolId?: number;
+  permissions: Permission[];
 }
 
 interface LoginResult {
@@ -34,55 +68,163 @@ export const useAuth = () => {
 
 // Dummy users untuk development
 const DUMMY_USERS: { email: string; password: string; user: AuthUser }[] = [
-  // Super Admin
+  // Super Admin - Full access ke semua
   {
     email: 'superadmin@maddasoft.id',
     password: 'admin123',
-    user: { id: 1, email: 'superadmin@maddasoft.id', name: 'Super Administrator', role: 'SUPER_ADMIN' }
+    user: { 
+      id: 1, 
+      email: 'superadmin@maddasoft.id', 
+      name: 'Super Administrator', 
+      role: 'SUPER_ADMIN',
+      permissions: [
+        'view_school', 'edit_school', 'delete_school',
+        'create_user', 'view_users', 'edit_user', 'delete_user',
+        'create_post', 'view_posts', 'edit_post', 'delete_post',
+        'create_gallery', 'view_gallery', 'edit_gallery', 'delete_gallery',
+        'manage_settings', 'manage_branding', 'manage_permissions'
+      ]
+    }
   },
+  
   // Sekolah 1 - SMA Negeri 1 Nusantara
   {
     email: 'admin@sman1nusantara.sch.id',
     password: 'admin123',
-    user: { id: 2, email: 'admin@sman1nusantara.sch.id', name: 'Dra. Siti Aminah, M.Pd.', role: 'ADMIN_SEKOLAH', schoolId: 1 }
+    user: { 
+      id: 2, 
+      email: 'admin@sman1nusantara.sch.id', 
+      name: 'Dra. Siti Aminah, M.Pd.', 
+      role: 'ADMIN_SEKOLAH', 
+      schoolId: 1,
+      permissions: [
+        'view_school', 'edit_school',
+        'create_user', 'view_users', 'edit_user', 'delete_user',
+        'create_post', 'view_posts', 'edit_post', 'delete_post',
+        'create_gallery', 'view_gallery', 'edit_gallery', 'delete_gallery',
+        'manage_settings', 'manage_branding'
+      ]
+    }
   },
   {
     email: 'operator@sman1nusantara.sch.id',
     password: 'admin123',
-    user: { id: 3, email: 'operator@sman1nusantara.sch.id', name: 'Rudi Hermawan', role: 'OPERATOR', schoolId: 1 }
+    user: { 
+      id: 3, 
+      email: 'operator@sman1nusantara.sch.id', 
+      name: 'Rudi Hermawan', 
+      role: 'OPERATOR', 
+      schoolId: 1,
+      permissions: [
+        'view_posts', 'create_post', 'edit_own_post', 'delete_own_post',
+        'view_gallery', 'create_gallery', 'edit_own_gallery', 'delete_own_gallery'
+      ]
+    }
   },
+  
   // Sekolah 2 - SMK Teknologi Merdeka
   {
     email: 'admin@smkteknologimerdeka.sch.id',
     password: 'admin123',
-    user: { id: 4, email: 'admin@smkteknologimerdeka.sch.id', name: 'Ir. Bambang Hermawan, M.T.', role: 'ADMIN_SEKOLAH', schoolId: 2 }
+    user: { 
+      id: 4, 
+      email: 'admin@smkteknologimerdeka.sch.id', 
+      name: 'Ir. Bambang Hermawan, M.T.', 
+      role: 'ADMIN_SEKOLAH', 
+      schoolId: 2,
+      permissions: [
+        'view_school', 'edit_school',
+        'create_user', 'view_users', 'edit_user', 'delete_user',
+        'create_post', 'view_posts', 'edit_post', 'delete_post',
+        'create_gallery', 'view_gallery', 'edit_gallery', 'delete_gallery',
+        'manage_settings', 'manage_branding'
+      ]
+    }
   },
   {
     email: 'operator@smkteknologimerdeka.sch.id',
     password: 'admin123',
-    user: { id: 5, email: 'operator@smkteknologimerdeka.sch.id', name: 'Dewi Kartika', role: 'OPERATOR', schoolId: 2 }
+    user: { 
+      id: 5, 
+      email: 'operator@smkteknologimerdeka.sch.id', 
+      name: 'Dewi Kartika', 
+      role: 'OPERATOR', 
+      schoolId: 2,
+      permissions: [
+        'view_posts', 'create_post', 'edit_own_post', 'delete_own_post',
+        'view_gallery', 'create_gallery', 'edit_own_gallery', 'delete_own_gallery'
+      ]
+    }
   },
+  
   // Sekolah 3 - SMP Harapan Bangsa
   {
     email: 'admin@smpharapanbangsa.sch.id',
     password: 'admin123',
-    user: { id: 6, email: 'admin@smpharapanbangsa.sch.id', name: 'Drs. Hendra Wijaya, M.M.', role: 'ADMIN_SEKOLAH', schoolId: 3 }
+    user: { 
+      id: 6, 
+      email: 'admin@smpharapanbangsa.sch.id', 
+      name: 'Drs. Hendra Wijaya, M.M.', 
+      role: 'ADMIN_SEKOLAH', 
+      schoolId: 3,
+      permissions: [
+        'view_school', 'edit_school',
+        'create_user', 'view_users', 'edit_user', 'delete_user',
+        'create_post', 'view_posts', 'edit_post', 'delete_post',
+        'create_gallery', 'view_gallery', 'edit_gallery', 'delete_gallery',
+        'manage_settings', 'manage_branding'
+      ]
+    }
   },
   {
     email: 'operator@smpharapanbangsa.sch.id',
     password: 'admin123',
-    user: { id: 7, email: 'operator@smpharapanbangsa.sch.id', name: 'Putri Rahayu', role: 'OPERATOR', schoolId: 3 }
+    user: { 
+      id: 7, 
+      email: 'operator@smpharapanbangsa.sch.id', 
+      name: 'Putri Rahayu', 
+      role: 'OPERATOR', 
+      schoolId: 3,
+      permissions: [
+        'view_posts', 'create_post', 'edit_own_post', 'delete_own_post',
+        'view_gallery', 'create_gallery', 'edit_own_gallery', 'delete_own_gallery'
+      ]
+    }
   },
+  
   // Sekolah 4 - SD Negeri Cendekia
   {
     email: 'admin@sdncendekia.sch.id',
     password: 'admin123',
-    user: { id: 8, email: 'admin@sdncendekia.sch.id', name: 'Dra. Kartini Dewi, M.Pd.', role: 'ADMIN_SEKOLAH', schoolId: 4 }
+    user: { 
+      id: 8, 
+      email: 'admin@sdncendekia.sch.id', 
+      name: 'Dra. Kartini Dewi, M.Pd.', 
+      role: 'ADMIN_SEKOLAH', 
+      schoolId: 4,
+      permissions: [
+        'view_school', 'edit_school',
+        'create_user', 'view_users', 'edit_user', 'delete_user',
+        'create_post', 'view_posts', 'edit_post', 'delete_post',
+        'create_gallery', 'view_gallery', 'edit_gallery', 'delete_gallery',
+        'manage_settings', 'manage_branding'
+      ]
+    }
   },
   {
     email: 'operator@sdncendekia.sch.id',
     password: 'admin123',
-    user: { id: 9, email: 'operator@sdncendekia.sch.id', name: 'Wati Lestari', role: 'OPERATOR', schoolId: 4 }
+    user: { 
+      id: 9, 
+      email: 'operator@sdncendekia.sch.id', 
+      name: 'Wati Lestari', 
+      role: 'OPERATOR', 
+      schoolId: 4,
+      permissions: [
+        'view_posts', 'create_post', 'edit_own_post', 'delete_own_post',
+        'view_gallery', 'create_gallery', 'edit_own_gallery', 'delete_own_gallery'
+      ]
+    }
   },
 ];
 

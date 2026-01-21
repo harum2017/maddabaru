@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { DomainProvider } from "@/contexts/DomainContext";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { PermissionProvider } from "@/contexts/PermissionContext";
 import { StaffProvider } from "@/contexts/StaffContext";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
@@ -47,54 +48,56 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <AuthProvider>
-        <DomainProvider>
-          <StaffProvider>
-            <Toaster />
-            <Sonner />
-            <BrowserRouter>
-              <Routes>
-                {/* Public Routes */}
-                <Route path="/" element={<Index />} />
-                <Route path="/domain-pusat/login" element={<SuperAdminLogin />} />
-                <Route path="/school-login" element={<SchoolLogin />} />
-                
-                {/* Super Admin Routes - sesuai prompt: /domain-pusat/admin */}
-                <Route path="/domain-pusat/admin" element={<SuperAdminLayout />}>
-                  <Route index element={<SuperAdminDashboard />} />
-                  <Route path="schools" element={<SchoolManagement />} />
-                  <Route path="registrations" element={<SchoolRegistrationsPage />} />
-                  <Route path="accounts" element={<SchoolAccountsManagement />} />
-                  <Route path="domains" element={<DomainManagement />} />
-                  <Route path="statistics" element={<StatisticsPage />} />
-                  <Route path="settings" element={<SettingsPage />} />
-                </Route>
+        <PermissionProvider>
+          <DomainProvider>
+            <StaffProvider>
+              <Toaster />
+              <Sonner />
+              <BrowserRouter>
+                <Routes>
+                  {/* Public Routes */}
+                  <Route path="/" element={<Index />} />
+                  <Route path="/domain-pusat/login" element={<SuperAdminLogin />} />
+                  <Route path="/school-login" element={<SchoolLogin />} />
+                  
+                  {/* Super Admin Routes - sesuai prompt: /domain-pusat/admin */}
+                  <Route path="/domain-pusat/admin" element={<SuperAdminLayout />}>
+                    <Route index element={<SuperAdminDashboard />} />
+                    <Route path="schools" element={<SchoolManagement />} />
+                    <Route path="registrations" element={<SchoolRegistrationsPage />} />
+                    <Route path="accounts" element={<SchoolAccountsManagement />} />
+                    <Route path="domains" element={<DomainManagement />} />
+                    <Route path="statistics" element={<StatisticsPage />} />
+                    <Route path="settings" element={<SettingsPage />} />
+                  </Route>
 
-                {/* School Admin Routes */}
-                <Route path="/admin" element={<SchoolAdminLayout />}>
-                  <Route index element={<SchoolAdminDashboard />} />
-                  <Route path="staff" element={<StaffManagement />} />
-                  <Route path="students" element={<StudentManagement />} />
-                  <Route path="classes" element={<ClassManagement />} />
-                  <Route path="operators" element={<OperatorManagement />} />
-                  <Route path="content" element={<ContentManagement />} />
-                  <Route path="gallery" element={<GalleryManagement />} />
-                  <Route path="settings" element={<SchoolSettings />} />
-                </Route>
+                  {/* School Admin Routes */}
+                  <Route path="/admin" element={<SchoolAdminLayout />}>
+                    <Route index element={<SchoolAdminDashboard />} />
+                    <Route path="staff" element={<StaffManagement />} />
+                    <Route path="students" element={<StudentManagement />} />
+                    <Route path="classes" element={<ClassManagement />} />
+                    <Route path="operators" element={<OperatorManagement />} />
+                    <Route path="content" element={<ContentManagement />} />
+                    <Route path="gallery" element={<GalleryManagement />} />
+                    <Route path="settings" element={<SchoolSettings />} />
+                  </Route>
 
-                {/* Operator Routes */}
-                <Route path="/operator" element={<OperatorLayout />}>
-                  <Route index element={<OperatorDashboard />} />
-                  <Route path="news" element={<OperatorNews />} />
-                  <Route path="gallery" element={<OperatorGallery />} />
-                  <Route path="pages" element={<OperatorPages />} />
-                </Route>
-                
-                {/* Catch-all */}
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </BrowserRouter>
-          </StaffProvider>
-        </DomainProvider>
+                  {/* Operator Routes */}
+                  <Route path="/operator" element={<OperatorLayout />}>
+                    <Route index element={<OperatorDashboard />} />
+                    <Route path="news" element={<OperatorNews />} />
+                    <Route path="gallery" element={<OperatorGallery />} />
+                    <Route path="pages" element={<OperatorPages />} />
+                  </Route>
+                  
+                  {/* Catch-all */}
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </BrowserRouter>
+            </StaffProvider>
+          </DomainProvider>
+        </PermissionProvider>
       </AuthProvider>
     </TooltipProvider>
   </QueryClientProvider>
