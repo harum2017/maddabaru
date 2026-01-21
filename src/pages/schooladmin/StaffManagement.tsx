@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { 
   Plus, 
   Search, 
@@ -16,7 +16,9 @@ import {
   Briefcase,
   Users,
   CreditCard,
-  Heart
+  Heart,
+  Camera,
+  Upload
 } from 'lucide-react';
 import { 
   Table, 
@@ -68,6 +70,7 @@ const StaffManagement: React.FC = () => {
   const { user } = useAuth();
   const { simulatedSchoolId } = useDomain();
   const schoolId = user?.schoolId || simulatedSchoolId || 1;
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [staffList, setStaffList] = useState<Staff[]>(
     initialStaff.filter(s => s.school_id === schoolId)
@@ -89,7 +92,25 @@ const StaffManagement: React.FC = () => {
     email: '',
     address: '',
     is_public: true,
+    photo: '',
   });
+
+  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 2 * 1024 * 1024) {
+        toast.error('Ukuran file maksimal 2MB');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData(prev => ({ ...prev, photo: reader.result as string }));
+        toast.success('Foto profil berhasil diunggah');
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const filteredStaff = staffList.filter(s => 
     s.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -111,6 +132,7 @@ const StaffManagement: React.FC = () => {
       email: '',
       address: '',
       is_public: true,
+      photo: '',
     });
     setIsDialogOpen(true);
   };
@@ -230,8 +252,12 @@ const StaffManagement: React.FC = () => {
                     <TableRow key={staff.id}>
                       <TableCell>
                         <div className="flex items-center gap-3">
-                          <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center font-bold text-primary">
-                            {staff.name.charAt(0)}
+                          <div className="w-9 h-9 rounded-full overflow-hidden bg-primary/10 flex items-center justify-center border shrink-0">
+                            {staff.photo ? (
+                              <img src={staff.photo} alt={staff.name} className="w-full h-full object-cover" />
+                            ) : (
+                              <span className="font-bold text-primary">{staff.name.charAt(0)}</span>
+                            )}
                           </div>
                           <div>
                             <p className="font-medium text-sm">{staff.name}</p>
@@ -308,24 +334,55 @@ const StaffManagement: React.FC = () => {
 
             <Tabs defaultValue="personal" className="w-full">
               <div className="px-6 border-b">
-                <TabsList className="h-10 bg-transparent p-0 gap-6">
-                  <TabsTrigger value="personal" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-0 font-semibold">
+                <TabsList className="h-10 bg-transparent p-0 gap-6 overflow-x-auto overflow-y-hidden custom-scrollbar">
+                  <TabsTrigger value="personal" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-0 font-semibold whitespace-nowrap">
                     Data Diri
                   </TabsTrigger>
-                  <TabsTrigger value="employment" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-0 font-semibold">
+                  <TabsTrigger value="employment" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-0 font-semibold whitespace-nowrap">
                     Kepegawaian
                   </TabsTrigger>
-                  <TabsTrigger value="family" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-0 font-semibold">
+                  <TabsTrigger value="family" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-0 font-semibold whitespace-nowrap">
                     Keluarga
                   </TabsTrigger>
-                  <TabsTrigger value="insurance" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-0 font-semibold">
+                  <TabsTrigger value="insurance" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-0 font-semibold whitespace-nowrap">
                     Asuransi & Pajak
                   </TabsTrigger>
                 </TabsList>
               </div>
 
               <div className="p-6 max-h-[60vh] overflow-y-auto">
-                <TabsContent value="personal" className="mt-0 space-y-4">
+                <TabsContent value="personal" className="mt-0 space-y-6">
+                  {/* Photo Upload Section */}
+                  <div className="flex flex-col items-center gap-4 mb-6">
+                    <div className="relative group">
+                      <div className="w-32 h-32 rounded-full overflow-hidden bg-muted border-2 border-dashed border-primary/20 flex items-center justify-center">
+                        {formData.photo ? (
+                          <img src={formData.photo} alt="Preview" className="w-full h-full object-cover" />
+                        ) : (
+                          <User className="w-12 h-12 text-muted-foreground" />
+                        )}
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => fileInputRef.current?.click()}
+                        className="absolute bottom-0 right-0 w-10 h-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center shadow-lg hover:scale-110 transition-transform"
+                      >
+                        <Camera className="w-5 h-5" />
+                      </button>
+                      <input
+                        type="file"
+                        ref={fileInputRef}
+                        className="hidden"
+                        accept="image/*"
+                        onChange={handlePhotoUpload}
+                      />
+                    </div>
+                    <div className="text-center">
+                      <p className="text-sm font-medium">Foto Profil</p>
+                      <p className="text-xs text-muted-foreground">Format: JPG, PNG. Maks 2MB.</p>
+                    </div>
+                  </div>
+
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label>Nama Lengkap</Label>

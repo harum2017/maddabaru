@@ -425,13 +425,13 @@ export const schools: School[] = [
 // Dummy Staff
 export const staff: Staff[] = [
   // Staff Sekolah 1 - SMA Negeri 1 Nusantara
-  { id: 1, school_id: 1, name: "Dr. Ahmad Wijaya, M.Pd.", position: "Kepala Sekolah", class_or_subject: "-", nip: "196501151990031001", phone: "08123456789", address: "Kota Maju", is_public: true },
-  { id: 2, school_id: 1, name: "Dra. Siti Aminah, M.Pd.", position: "Wakil Kepala Sekolah", class_or_subject: "Kurikulum", nip: "197001011992032001", phone: "08123456790", address: "Kota Maju", is_public: true },
-  { id: 3, school_id: 1, name: "Siti Rahayu, S.Pd.", position: "Guru", class_or_subject: "Matematika", nip: "197203201995032002", phone: "08234567890", address: "Kota Maju", is_public: true },
-  { id: 4, school_id: 1, name: "Budi Santoso, S.Pd.", position: "Guru", class_or_subject: "Fisika", nip: "198005101999031003", phone: "08345678901", address: "Kota Maju", is_public: true },
-  { id: 5, school_id: 1, name: "Dewi Lestari, S.Pd.", position: "Guru", class_or_subject: "Bahasa Inggris", nip: "198510152008042004", phone: "08456789012", address: "Kota Maju", is_public: true },
-  { id: 6, school_id: 1, name: "Agung Prasetyo, S.Pd.", position: "Guru", class_or_subject: "Bahasa Indonesia", nip: "198705202010011005", phone: "08567890123", address: "Kota Maju", is_public: true },
-  { id: 7, school_id: 1, name: "Rini Wulandari, S.Pd.", position: "Guru", class_or_subject: "Kimia", nip: "198908252012042006", phone: "08678901234", address: "Kota Maju", is_public: true },
+  { id: 1, school_id: 1, name: "Dr. Ahmad Wijaya, M.Pd.", position: "Kepala Sekolah", class_or_subject: "-", nip: "196501151990031001", phone: "08123456789", address: "Kota Maju", is_public: true, photo: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=400&fit=crop" },
+  { id: 2, school_id: 1, name: "Dra. Siti Aminah, M.Pd.", position: "Wakil Kepala Sekolah", class_or_subject: "Kurikulum", nip: "197001011992032001", phone: "08123456790", address: "Kota Maju", is_public: true, photo: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop" },
+  { id: 3, school_id: 1, name: "Siti Rahayu, S.Pd.", position: "Guru", class_or_subject: "Matematika", nip: "197203201995032002", phone: "08234567890", address: "Kota Maju", is_public: true, photo: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=400&fit=crop" },
+  { id: 4, school_id: 1, name: "Budi Santoso, S.Pd.", position: "Guru", class_or_subject: "Fisika", nip: "198005101999031003", phone: "08345678901", address: "Kota Maju", is_public: true, photo: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop" },
+  { id: 5, school_id: 1, name: "Dewi Lestari, S.Pd.", position: "Guru", class_or_subject: "Bahasa Inggris", nip: "198510152008042004", phone: "08456789012", address: "Kota Maju", is_public: true, photo: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop" },
+  { id: 6, school_id: 1, name: "Agung Prasetyo, S.Pd.", position: "Guru", class_or_subject: "Bahasa Indonesia", nip: "198705202010011005", phone: "08567890123", address: "Kota Maju", is_public: true, photo: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop" },
+  { id: 7, school_id: 1, name: "Rini Wulandari, S.Pd.", position: "Guru", class_or_subject: "Kimia", nip: "198908252012042006", phone: "08678901234", address: "Kota Maju", is_public: true, photo: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop" },
   { id: 8, school_id: 1, name: "Hendro Kusuma", position: "Tata Usaha", class_or_subject: "-", nip: "199001012010011007", phone: "08789012345", address: "Kota Maju", is_public: true },
   { id: 9, school_id: 1, name: "Rudi Hermawan", position: "Operator Website", class_or_subject: "-", nip: "199203152015011008", phone: "08890123456", address: "Kota Maju", is_public: false },
   
