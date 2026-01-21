@@ -25,11 +25,6 @@ export interface ISchoolRepository {
   getSchoolByDomain(domain: string): Promise<School | undefined>;
   getAllSchools(): Promise<School[]>;
   getActiveSchools(): Promise<School[]>;
-  
-  // Future: Create, Update, Delete operations (untuk admin panel)
-  // createSchool(data: Omit<School, 'id'>): Promise<School>;
-  // updateSchool(id: number, data: Partial<School>): Promise<School>;
-  // deleteSchool(id: number): Promise<void>;
 }
 
 /**

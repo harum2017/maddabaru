@@ -61,20 +61,21 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { staff as initialStaff, Staff } from '@/data/dummyData';
+import { Staff } from '@/data/dummyData';
 import { useAuth } from '@/contexts/AuthContext';
 import { useDomain } from '@/contexts/DomainContext';
+import { useStaff } from '@/contexts/StaffContext';
 import { toast } from 'sonner';
 
 const StaffManagement: React.FC = () => {
   const { user } = useAuth();
   const { simulatedSchoolId } = useDomain();
+  const { staffList: allStaff, updateStaff, addStaff, deleteStaff } = useStaff();
   const schoolId = user?.schoolId || simulatedSchoolId || 1;
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const [staffList, setStaffList] = useState<Staff[]>(
-    initialStaff.filter(s => s.school_id === schoolId)
-  );
+  // Filter staff by school
+  const staffList = allStaff.filter(s => s.school_id === schoolId);
   const [searchQuery, setSearchQuery] = useState('');
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingStaff, setEditingStaff] = useState<Staff | null>(null);
@@ -145,7 +146,7 @@ const StaffManagement: React.FC = () => {
 
   const handleDelete = (id: number) => {
     if (confirm('Apakah Anda yakin ingin menghapus data pegawai ini?')) {
-      setStaffList(prev => prev.filter(s => s.id !== id));
+      deleteStaff(id);
       toast.success('Data pegawai berhasil dihapus');
     }
   };
@@ -180,16 +181,16 @@ const StaffManagement: React.FC = () => {
     }
 
     if (editingStaff) {
-      setStaffList(prev => prev.map(s => s.id === editingStaff.id ? { ...s, ...formData } as Staff : s));
+      updateStaff(editingStaff.id, formData);
       toast.success('Data pegawai berhasil diperbarui');
     } else {
       const newStaff: Staff = {
         ...formData as Staff,
-        id: Math.max(...staffList.map(s => s.id), 0) + 1,
+        id: Math.max(...allStaff.map(s => s.id), 0) + 1,
         school_id: schoolId,
         is_public: true
       };
-      setStaffList(prev => [newStaff, ...prev]);
+      addStaff(newStaff);
       toast.success('Pegawai baru berhasil ditambahkan');
     }
     
@@ -386,23 +387,23 @@ const StaffManagement: React.FC = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label>Nama Lengkap</Label>
-                      <Input value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} required />
+                      <Input value={formData.name || ''} onChange={(e) => setFormData({...formData, name: e.target.value})} required />
                     </div>
                     <div className="space-y-2">
                       <Label>NIK</Label>
-                      <Input value={formData.nik} onChange={(e) => setFormData({...formData, nik: e.target.value})} required />
+                      <Input value={formData.nik || ''} onChange={(e) => setFormData({...formData, nik: e.target.value})} required />
                     </div>
                     <div className="space-y-2">
                       <Label>Tempat Lahir</Label>
-                      <Input value={formData.birth_place} onChange={(e) => setFormData({...formData, birth_place: e.target.value})} />
+                      <Input value={formData.birth_place || ''} onChange={(e) => setFormData({...formData, birth_place: e.target.value})} />
                     </div>
                     <div className="space-y-2">
                       <Label>Tanggal Lahir</Label>
-                      <Input type="date" value={formData.birth_date} onChange={(e) => setFormData({...formData, birth_date: e.target.value})} />
+                      <Input type="date" value={formData.birth_date || ''} onChange={(e) => setFormData({...formData, birth_date: e.target.value})} />
                     </div>
                     <div className="space-y-2">
                       <Label>Jenis Kelamin</Label>
-                      <Select value={formData.gender} onValueChange={(v: any) => setFormData({...formData, gender: v})}>
+                      <Select value={formData.gender || 'L'} onValueChange={(v: any) => setFormData({...formData, gender: v})}>
                         <SelectTrigger><SelectValue placeholder="Pilih Gender" /></SelectTrigger>
                         <SelectContent>
                           <SelectItem value="L">Laki-laki</SelectItem>
@@ -412,15 +413,15 @@ const StaffManagement: React.FC = () => {
                     </div>
                     <div className="space-y-2">
                       <Label>Email Personal</Label>
-                      <Input type="email" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} />
+                      <Input type="email" value={formData.email || ''} onChange={(e) => setFormData({...formData, email: e.target.value})} />
                     </div>
                     <div className="space-y-2">
                       <Label>No. Telepon/WA</Label>
-                      <Input value={formData.phone} onChange={(e) => setFormData({...formData, phone: e.target.value})} required />
+                      <Input value={formData.phone || ''} onChange={(e) => setFormData({...formData, phone: e.target.value})} required />
                     </div>
                     <div className="space-y-2">
                       <Label>Status Pernikahan</Label>
-                      <Select value={formData.marriage_status} onValueChange={(v: any) => setFormData({...formData, marriage_status: v})}>
+                      <Select value={formData.marriage_status || ''} onValueChange={(v: any) => setFormData({...formData, marriage_status: v})}>
                         <SelectTrigger><SelectValue placeholder="Pilih Status" /></SelectTrigger>
                         <SelectContent>
                           <SelectItem value="Menikah">Menikah</SelectItem>
@@ -433,7 +434,7 @@ const StaffManagement: React.FC = () => {
                   </div>
                   <div className="space-y-2">
                     <Label>Alamat Lengkap</Label>
-                    <Input value={formData.address} onChange={(e) => setFormData({...formData, address: e.target.value})} required />
+                    <Input value={formData.address || ''} onChange={(e) => setFormData({...formData, address: e.target.value})} required />
                   </div>
                 </TabsContent>
 
@@ -441,11 +442,11 @@ const StaffManagement: React.FC = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label>NIP / NIY / NUPTK</Label>
-                      <Input value={formData.nip} onChange={(e) => setFormData({...formData, nip: e.target.value})} />
+                      <Input value={formData.nip || ''} onChange={(e) => setFormData({...formData, nip: e.target.value})} />
                     </div>
                     <div className="space-y-2">
                       <Label>Status Kepegawaian</Label>
-                      <Select value={formData.employment_status} onValueChange={(v: any) => setFormData({...formData, employment_status: v})}>
+                      <Select value={formData.employment_status || 'Honorer'} onValueChange={(v: any) => setFormData({...formData, employment_status: v})}>
                         <SelectTrigger><SelectValue placeholder="Pilih Status" /></SelectTrigger>
                         <SelectContent>
                           <SelectItem value="PNS">PNS</SelectItem>
@@ -457,23 +458,23 @@ const StaffManagement: React.FC = () => {
                     </div>
                     <div className="space-y-2">
                       <Label>Jabatan</Label>
-                      <Input value={formData.position} onChange={(e) => setFormData({...formData, position: e.target.value})} required />
+                      <Input value={formData.position || ''} onChange={(e) => setFormData({...formData, position: e.target.value})} required />
                     </div>
                     <div className="space-y-2">
                       <Label>Tugas Utama</Label>
-                      <Input value={formData.class_or_subject} onChange={(e) => setFormData({...formData, class_or_subject: e.target.value})} required />
+                      <Input value={formData.class_or_subject || ''} onChange={(e) => setFormData({...formData, class_or_subject: e.target.value})} required />
                     </div>
                     <div className="space-y-2">
                       <Label>Pangkat/Golongan</Label>
-                      <Input value={formData.rank_grade} onChange={(e) => setFormData({...formData, rank_grade: e.target.value})} />
+                      <Input value={formData.rank_grade || ''} onChange={(e) => setFormData({...formData, rank_grade: e.target.value})} />
                     </div>
                     <div className="space-y-2">
                       <Label>TMT Kerja</Label>
-                      <Input type="date" value={formData.tmt_employment} onChange={(e) => setFormData({...formData, tmt_employment: e.target.value})} />
+                      <Input type="date" value={formData.tmt_employment || ''} onChange={(e) => setFormData({...formData, tmt_employment: e.target.value})} />
                     </div>
                     <div className="space-y-2">
                       <Label>Pendidikan Terakhir</Label>
-                      <Select value={formData.education_level} onValueChange={(v: any) => setFormData({...formData, education_level: v})}>
+                      <Select value={formData.education_level || ''} onValueChange={(v: any) => setFormData({...formData, education_level: v})}>
                         <SelectTrigger><SelectValue placeholder="Pilih Jenjang" /></SelectTrigger>
                         <SelectContent>
                           <SelectItem value="SMA">SMA</SelectItem>
@@ -486,7 +487,7 @@ const StaffManagement: React.FC = () => {
                     </div>
                     <div className="space-y-2">
                       <Label>Jurusan</Label>
-                      <Input value={formData.major} onChange={(e) => setFormData({...formData, major: e.target.value})} />
+                      <Input value={formData.major || ''} onChange={(e) => setFormData({...formData, major: e.target.value})} />
                     </div>
                   </div>
                 </TabsContent>
@@ -495,19 +496,19 @@ const StaffManagement: React.FC = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label>Nama Suami/Istri</Label>
-                      <Input value={formData.spouse_name} onChange={(e) => setFormData({...formData, spouse_name: e.target.value})} />
+                      <Input value={formData.spouse_name || ''} onChange={(e) => setFormData({...formData, spouse_name: e.target.value})} />
                     </div>
                     <div className="space-y-2">
                       <Label>Jumlah Anak</Label>
-                      <Input type="number" value={formData.children_count} onChange={(e) => setFormData({...formData, children_count: parseInt(e.target.value) || 0})} />
+                      <Input type="number" value={formData.children_count ?? ''} onChange={(e) => setFormData({...formData, children_count: parseInt(e.target.value) || 0})} />
                     </div>
                     <div className="space-y-2">
                       <Label>Nama Ayah Kandung</Label>
-                      <Input value={formData.father_name} onChange={(e) => setFormData({...formData, father_name: e.target.value})} />
+                      <Input value={formData.father_name || ''} onChange={(e) => setFormData({...formData, father_name: e.target.value})} />
                     </div>
                     <div className="space-y-2">
                       <Label>Nama Ibu Kandung</Label>
-                      <Input value={formData.mother_name} onChange={(e) => setFormData({...formData, mother_name: e.target.value})} />
+                      <Input value={formData.mother_name || ''} onChange={(e) => setFormData({...formData, mother_name: e.target.value})} />
                     </div>
                   </div>
                 </TabsContent>
@@ -516,19 +517,19 @@ const StaffManagement: React.FC = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label>No. NPWP</Label>
-                      <Input value={formData.npwp} onChange={(e) => setFormData({...formData, npwp: e.target.value})} />
+                      <Input value={formData.npwp || ''} onChange={(e) => setFormData({...formData, npwp: e.target.value})} />
                     </div>
                     <div className="space-y-2">
                       <Label>No. Kartu Taspen</Label>
-                      <Input value={formData.taspen} onChange={(e) => setFormData({...formData, taspen: e.target.value})} />
+                      <Input value={formData.taspen || ''} onChange={(e) => setFormData({...formData, taspen: e.target.value})} />
                     </div>
                     <div className="space-y-2">
                       <Label>BPJS Ketenagakerjaan</Label>
-                      <Input value={formData.bpjs_ketenagakerjaan} onChange={(e) => setFormData({...formData, bpjs_ketenagakerjaan: e.target.value})} />
+                      <Input value={formData.bpjs_ketenagakerjaan || ''} onChange={(e) => setFormData({...formData, bpjs_ketenagakerjaan: e.target.value})} />
                     </div>
                     <div className="space-y-2">
                       <Label>BPJS Kesehatan</Label>
-                      <Input value={formData.bpjs_kesehatan} onChange={(e) => setFormData({...formData, bpjs_kesehatan: e.target.value})} />
+                      <Input value={formData.bpjs_kesehatan || ''} onChange={(e) => setFormData({...formData, bpjs_kesehatan: e.target.value})} />
                     </div>
                   </div>
                 </TabsContent>
