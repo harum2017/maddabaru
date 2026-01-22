@@ -98,10 +98,13 @@ const SuperAdminLayout: React.FC = () => {
               <ThemeToggle />
             </div>
           </header>
-          <main className="flex-1 overflow-y-auto bg-muted/30 p-6 custom-scrollbar">
-            <div className="max-w-7xl mx-auto space-y-6">
+          <main className="flex-1 overflow-y-auto bg-muted/30 p-6 custom-scrollbar flex flex-col">
+            <div className="max-w-7xl mx-auto space-y-6 flex-1">
               <Outlet />
             </div>
+            <footer className="mt-12 pt-6 border-t text-center text-sm text-muted-foreground">
+              <p>Website Design By <a href="/" className="hover:underline font-bold">@ MaddaSoft 2026</a></p>
+            </footer>
           </main>
         </div>
       </div>

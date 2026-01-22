@@ -251,8 +251,13 @@ const OperatorLayout: React.FC = () => {
         </header>
 
         {/* Page Content */}
-        <main className="p-4 sm:p-6">
-          <Outlet />
+        <main className="p-4 sm:p-6 flex flex-col min-h-[calc(100vh-4rem)]">
+          <div className="flex-1">
+            <Outlet />
+          </div>
+          <footer className="mt-12 pt-6 border-t text-center text-sm text-muted-foreground">
+            <p>Website Design By <a href="/" className="hover:underline font-bold">@ MaddaSoft 2026</a></p>
+          </footer>
         </main>
       </div>
 
