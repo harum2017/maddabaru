@@ -86,7 +86,7 @@ const PlatformFooter: React.FC = () => {
         {/* Bottom */}
         <div className="border-t border-background/10 pt-8 flex flex-col md:flex-row justify-center items-center gap-4 text-center">
           <p className="text-background/70 text-sm">
-            Website Design By <a href="/" className="hover:underline font-bold">@ MaddaSoft 2026 Menuju Halaman Homepage Platform Utama</a>
+            Website Design By <a href="/" className="hover:underline font-bold">@ MaddaSoft 2026</a>
           </p>
         </div>
       </div>

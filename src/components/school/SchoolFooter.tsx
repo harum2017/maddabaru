@@ -66,7 +66,7 @@ const SchoolFooter: React.FC = () => {
         {/* Bottom */}
         <div className="border-t border-background/20 pt-6 flex flex-col md:flex-row justify-center items-center gap-4 text-sm text-center">
           <p className="opacity-60">
-            Website Design By <a href="/" className="hover:underline font-bold">@ MaddaSoft 2026 Menuju Halaman Homepage Platform Utama</a>
+            Website Design By <a href="/" className="hover:underline font-bold">@ MaddaSoft 2026</a>
           </p>
         </div>
       </div>
