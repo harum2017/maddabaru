@@ -84,13 +84,10 @@ const PlatformFooter: React.FC = () => {
         </div>
         
         {/* Bottom */}
-        <div className="border-t border-background/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+        <div className="border-t border-background/10 pt-8 flex flex-col md:flex-row justify-center items-center gap-4 text-center">
           <p className="text-background/70 text-sm">
-            © {currentYear} MaddaSoft. Hak cipta dilindungi undang-undang.
+            Website Design By <a href="/" className="hover:underline font-bold">@ MaddaSoft 2026 Menuju Halaman Homepage Platform Utama</a>
           </p>
-          <div className="flex items-center gap-6">
-            <span className="text-background/50 text-sm">Made with ❤️ in Indonesia</span>
-          </div>
         </div>
       </div>
     </footer>
