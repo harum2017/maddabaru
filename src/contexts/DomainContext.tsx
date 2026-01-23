@@ -2,8 +2,24 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 import type { School } from '@/data/dummyData';
 import { getDataService } from '@/services/repositories';
 
-// Platform domain (saat production, ganti dengan domain sebenarnya)
-const PLATFORM_DOMAIN = import.meta.env.VITE_PLATFORM_DOMAIN || 'maddasoft.id';
+// Platform domains - bisa multiple untuk fleksibilitas
+const PLATFORM_DOMAINS = [
+  import.meta.env.VITE_PLATFORM_DOMAIN,
+  'maddasoft.id',
+  'maddasoft.my.id',
+  'maddasoft.lovable.app',
+  'localhost',
+].filter(Boolean).map(d => d?.toLowerCase());
+
+// Helper untuk cek apakah domain adalah platform
+const isPlatformHost = (hostname: string): boolean => {
+  const normalizedHost = hostname.toLowerCase().replace(/^www\./, '');
+  return PLATFORM_DOMAINS.some(pd => 
+    normalizedHost === pd || 
+    normalizedHost.endsWith('.lovable.app') ||
+    normalizedHost === 'localhost'
+  );
+};
 
 interface DomainContextType {
   // Mode saat ini
@@ -46,22 +62,32 @@ export const DomainProvider: React.FC<DomainProviderProps> = ({ children }) => {
     return null;
   });
   const [currentSchool, setCurrentSchool] = useState<School | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Deteksi mode development
-  const isDevMode = import.meta.env.DEV || 
-    window.location.hostname.includes('lovable.app') || 
-    window.location.hostname === 'localhost';
+  // Deteksi mode development - lebih robust
+  const isDevMode = 
+    import.meta.env.DEV || 
+    import.meta.env.MODE === 'development' ||
+    (typeof window !== 'undefined' && (
+      window.location.hostname.includes('lovable.app') || 
+      window.location.hostname === 'localhost' ||
+      window.location.hostname === '127.0.0.1'
+    ));
 
-  // Ambil domain saat ini
-  const currentDomain = window.location.hostname.toLowerCase().replace(/^www\./, '');
+  // Ambil domain saat ini dengan safe check
+  const currentDomain = typeof window !== 'undefined' 
+    ? window.location.hostname.toLowerCase().replace(/^www\./, '')
+    : 'localhost';
 
   // Wrapper untuk setSimulatedSchoolId yang juga persist ke localStorage
   const setSimulatedSchoolId = (id: number | null) => {
     setSimulatedSchoolIdState(id);
-    if (id !== null) {
-      localStorage.setItem('dev_simulated_school_id', id.toString());
-    } else {
-      localStorage.removeItem('dev_simulated_school_id');
+    if (typeof window !== 'undefined') {
+      if (id !== null) {
+        localStorage.setItem('dev_simulated_school_id', id.toString());
+      } else {
+        localStorage.removeItem('dev_simulated_school_id');
+      }
     }
   };
 
@@ -73,11 +99,15 @@ export const DomainProvider: React.FC<DomainProviderProps> = ({ children }) => {
       const envId = envSchoolId ? parseInt(envSchoolId, 10) : null;
       
       // Prioritas 2: localStorage (persistent)
-      const savedSchoolId = localStorage.getItem('dev_simulated_school_id');
+      const savedSchoolId = typeof window !== 'undefined' 
+        ? localStorage.getItem('dev_simulated_school_id') 
+        : null;
       const savedId = savedSchoolId ? parseInt(savedSchoolId, 10) : null;
       
       // Prioritas 3: query parameter
-      const params = new URLSearchParams(window.location.search);
+      const params = typeof window !== 'undefined' 
+        ? new URLSearchParams(window.location.search) 
+        : new URLSearchParams();
       const querySchoolId = params.get('school_id');
       const queryId = querySchoolId ? parseInt(querySchoolId, 10) : null;
       
@@ -93,13 +123,14 @@ export const DomainProvider: React.FC<DomainProviderProps> = ({ children }) => {
   // Tentukan apakah ini domain platform atau sekolah
   const isPlatformDomain = isDevMode 
     ? simulatedSchoolId === null 
-    : currentDomain === PLATFORM_DOMAIN;
+    : isPlatformHost(currentDomain);
 
   const isSchoolDomain = !isPlatformDomain;
 
   // Dapatkan data sekolah menggunakan data service
   useEffect(() => {
     const loadSchool = async () => {
+      setIsLoading(true);
       try {
         const dataService = getDataService();
         
@@ -117,6 +148,8 @@ export const DomainProvider: React.FC<DomainProviderProps> = ({ children }) => {
       } catch (error) {
         console.error('[DomainContext] Error loading school:', error);
         setCurrentSchool(null);
+      } finally {
+        setIsLoading(false);
       }
     };
 
