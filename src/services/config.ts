@@ -17,13 +17,8 @@ export const getDataSourceType = (): DataSourceType => {
     return envSource;
   }
   
-  // Prioritas 2: Development mode
-  if (import.meta.env.DEV) {
-    return 'DEV';
-  }
-  
-  // Default: DEV (aman)
-  return 'DEV';
+  // Default: PROD (gunakan Supabase)
+  return 'PROD';
 };
 
 /**
