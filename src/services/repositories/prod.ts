@@ -2,6 +2,8 @@
  * PROD Data Repositories - menggunakan Supabase Database
  * 
  * Implementasi ini menggunakan Supabase client untuk akses database.
+ * NOTE: This module is dynamically imported only when PROD mode is active
+ * and Supabase credentials are verified in config.ts
  */
 
 import { supabase } from '@/integrations/supabase/client';
