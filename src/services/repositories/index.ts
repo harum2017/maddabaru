@@ -11,6 +11,14 @@ import { DATA_SOURCE, isDevMode, isProdMode } from '../config';
 
 let dataServiceInstance: IDataService | null = null;
 
+// Extra safety: even if VITE_DATA_SOURCE=PROD is forced, never load PROD repositories
+// unless backend credentials are actually present.
+const hasBackendCredentials = () => {
+  const url = import.meta.env.VITE_SUPABASE_URL;
+  const key = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+  return Boolean(url && key);
+};
+
 /**
  * Membuat data service sesuai dengan config
  * Uses dynamic import for prod to avoid loading Supabase when not needed
@@ -20,6 +28,10 @@ async function createDataServiceAsync(): Promise<IDataService> {
     console.log('[Data Service] Using DEV mode (Dummy Data)');
     return createDevDataService();
   } else if (isProdMode()) {
+    if (!hasBackendCredentials()) {
+      console.warn('[Data Service] PROD requested but credentials missing; falling back to DEV');
+      return createDevDataService();
+    }
     console.log('[Data Service] Using PROD mode (Real Database)');
     try {
       const { createProdDataService } = await import('./prod');
@@ -42,6 +54,10 @@ function createDataServiceSync(): IDataService {
     console.log('[Data Service] Using DEV mode (Dummy Data)');
     return createDevDataService();
   } else if (isProdMode()) {
+    if (!hasBackendCredentials()) {
+      console.warn('[Data Service] PROD requested but credentials missing; using DEV');
+      return createDevDataService();
+    }
     console.log('[Data Service] Using PROD mode - loading...');
     // Return DEV service immediately, then replace with PROD when ready
     const devService = createDevDataService();
