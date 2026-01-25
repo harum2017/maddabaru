@@ -1,4 +1,7 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import { User, Session } from '@supabase/supabase-js';
+import { isDevMode } from '@/services/config';
 
 export type UserRole = 'SUPER_ADMIN' | 'ADMIN_SEKOLAH' | 'OPERATOR';
 
@@ -36,7 +39,7 @@ export type Permission =
   | 'manage_permissions';
 
 interface AuthUser {
-  id: number;
+  id: number | string;
   email: string;
   name: string;
   role: UserRole;
@@ -52,6 +55,7 @@ interface LoginResult {
 interface AuthContextType {
   user: AuthUser | null;
   isAuthenticated: boolean;
+  isLoading: boolean;
   login: (email: string, password: string, role?: UserRole, schoolId?: number) => Promise<LoginResult>;
   logout: () => void;
 }
@@ -66,175 +70,184 @@ export const useAuth = () => {
   return context;
 };
 
-// Dummy users untuk development
-const DUMMY_USERS: { email: string; password: string; user: AuthUser }[] = [
-  // Super Admin - Full access ke semua
-  {
-    email: 'superadmin@maddasoft.id',
-    password: 'admin123',
-    user: { 
-      id: 1, 
-      email: 'superadmin@maddasoft.id', 
-      name: 'Super Administrator', 
-      role: 'SUPER_ADMIN',
-      permissions: [
-        'view_school', 'edit_school', 'delete_school',
-        'create_user', 'view_users', 'edit_user', 'delete_user',
-        'create_post', 'view_posts', 'edit_post', 'delete_post',
-        'create_gallery', 'view_gallery', 'edit_gallery', 'delete_gallery',
-        'manage_settings', 'manage_branding', 'manage_permissions'
-      ]
-    }
-  },
-  
-  // Sekolah 1 - SMA Negeri 1 Nusantara
-  {
-    email: 'admin@sman1nusantara.sch.id',
-    password: 'admin123',
-    user: { 
-      id: 2, 
-      email: 'admin@sman1nusantara.sch.id', 
-      name: 'Dra. Siti Aminah, M.Pd.', 
-      role: 'ADMIN_SEKOLAH', 
-      schoolId: 1,
-      permissions: [
-        'view_school', 'edit_school',
-        'create_user', 'view_users', 'edit_user', 'delete_user',
-        'create_post', 'view_posts', 'edit_post', 'delete_post',
-        'create_gallery', 'view_gallery', 'edit_gallery', 'delete_gallery',
-        'manage_settings', 'manage_branding'
-      ]
-    }
-  },
-  {
-    email: 'operator@sman1nusantara.sch.id',
-    password: 'admin123',
-    user: { 
-      id: 3, 
-      email: 'operator@sman1nusantara.sch.id', 
-      name: 'Rudi Hermawan', 
-      role: 'OPERATOR', 
-      schoolId: 1,
-      permissions: [
-        'view_posts', 'create_post', 'edit_own_post', 'delete_own_post',
-        'view_gallery', 'create_gallery', 'edit_own_gallery', 'delete_own_gallery'
-      ]
-    }
-  },
-  
-  // Sekolah 2 - SMK Teknologi Merdeka
-  {
-    email: 'admin@smkteknologimerdeka.sch.id',
-    password: 'admin123',
-    user: { 
-      id: 4, 
-      email: 'admin@smkteknologimerdeka.sch.id', 
-      name: 'Ir. Bambang Hermawan, M.T.', 
-      role: 'ADMIN_SEKOLAH', 
-      schoolId: 2,
-      permissions: [
-        'view_school', 'edit_school',
-        'create_user', 'view_users', 'edit_user', 'delete_user',
-        'create_post', 'view_posts', 'edit_post', 'delete_post',
-        'create_gallery', 'view_gallery', 'edit_gallery', 'delete_gallery',
-        'manage_settings', 'manage_branding'
-      ]
-    }
-  },
-  {
-    email: 'operator@smkteknologimerdeka.sch.id',
-    password: 'admin123',
-    user: { 
-      id: 5, 
-      email: 'operator@smkteknologimerdeka.sch.id', 
-      name: 'Dewi Kartika', 
-      role: 'OPERATOR', 
-      schoolId: 2,
-      permissions: [
-        'view_posts', 'create_post', 'edit_own_post', 'delete_own_post',
-        'view_gallery', 'create_gallery', 'edit_own_gallery', 'delete_own_gallery'
-      ]
-    }
-  },
-  
-  // Sekolah 3 - SMP Harapan Bangsa
-  {
-    email: 'admin@smpharapanbangsa.sch.id',
-    password: 'admin123',
-    user: { 
-      id: 6, 
-      email: 'admin@smpharapanbangsa.sch.id', 
-      name: 'Drs. Hendra Wijaya, M.M.', 
-      role: 'ADMIN_SEKOLAH', 
-      schoolId: 3,
-      permissions: [
-        'view_school', 'edit_school',
-        'create_user', 'view_users', 'edit_user', 'delete_user',
-        'create_post', 'view_posts', 'edit_post', 'delete_post',
-        'create_gallery', 'view_gallery', 'edit_gallery', 'delete_gallery',
-        'manage_settings', 'manage_branding'
-      ]
-    }
-  },
-  {
-    email: 'operator@smpharapanbangsa.sch.id',
-    password: 'admin123',
-    user: { 
-      id: 7, 
-      email: 'operator@smpharapanbangsa.sch.id', 
-      name: 'Putri Rahayu', 
-      role: 'OPERATOR', 
-      schoolId: 3,
-      permissions: [
-        'view_posts', 'create_post', 'edit_own_post', 'delete_own_post',
-        'view_gallery', 'create_gallery', 'edit_own_gallery', 'delete_own_gallery'
-      ]
-    }
-  },
-  
-  // Sekolah 4 - SD Negeri Cendekia
-  {
-    email: 'admin@sdncendekia.sch.id',
-    password: 'admin123',
-    user: { 
-      id: 8, 
-      email: 'admin@sdncendekia.sch.id', 
-      name: 'Dra. Kartini Dewi, M.Pd.', 
-      role: 'ADMIN_SEKOLAH', 
-      schoolId: 4,
-      permissions: [
-        'view_school', 'edit_school',
-        'create_user', 'view_users', 'edit_user', 'delete_user',
-        'create_post', 'view_posts', 'edit_post', 'delete_post',
-        'create_gallery', 'view_gallery', 'edit_gallery', 'delete_gallery',
-        'manage_settings', 'manage_branding'
-      ]
-    }
-  },
-  {
-    email: 'operator@sdncendekia.sch.id',
-    password: 'admin123',
-    user: { 
-      id: 9, 
-      email: 'operator@sdncendekia.sch.id', 
-      name: 'Wati Lestari', 
-      role: 'OPERATOR', 
-      schoolId: 4,
-      permissions: [
-        'view_posts', 'create_post', 'edit_own_post', 'delete_own_post',
-        'view_gallery', 'create_gallery', 'edit_own_gallery', 'delete_own_gallery'
-      ]
-    }
-  },
-];
+// Permission mappings for different roles
+const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
+  SUPER_ADMIN: [
+    'view_school', 'edit_school', 'delete_school',
+    'create_user', 'view_users', 'edit_user', 'delete_user',
+    'create_post', 'view_posts', 'edit_post', 'delete_post',
+    'create_gallery', 'view_gallery', 'edit_gallery', 'delete_gallery',
+    'manage_settings', 'manage_branding', 'manage_permissions'
+  ],
+  ADMIN_SEKOLAH: [
+    'view_school', 'edit_school',
+    'create_user', 'view_users', 'edit_user', 'delete_user',
+    'create_post', 'view_posts', 'edit_post', 'delete_post',
+    'create_gallery', 'view_gallery', 'edit_gallery', 'delete_gallery',
+    'manage_settings', 'manage_branding'
+  ],
+  OPERATOR: [
+    'view_posts', 'create_post', 'edit_own_post', 'delete_own_post',
+    'view_gallery', 'create_gallery', 'edit_own_gallery', 'delete_own_gallery'
+  ]
+};
 
-// Export untuk digunakan di komponen lain (dev mode hints)
+// Map Supabase role to app role
+const mapSupabaseRole = (role: string): UserRole => {
+  switch (role) {
+    case 'super_admin':
+      return 'SUPER_ADMIN';
+    case 'admin_sekolah':
+      return 'ADMIN_SEKOLAH';
+    case 'operator':
+      return 'OPERATOR';
+    default:
+      return 'OPERATOR';
+  }
+};
+
+// ============================================
+// DEV MODE ONLY - Dummy users for development
+// ============================================
+const getDummyUsers = () => {
+  // Only return dummy users in DEV mode
+  if (!isDevMode()) {
+    return [];
+  }
+  
+  return [
+    // Super Admin - Full access ke semua
+    {
+      email: 'superadmin@maddasoft.id',
+      password: 'admin123',
+      user: { 
+        id: 1, 
+        email: 'superadmin@maddasoft.id', 
+        name: 'Super Administrator', 
+        role: 'SUPER_ADMIN' as UserRole,
+        permissions: ROLE_PERMISSIONS.SUPER_ADMIN
+      }
+    },
+    
+    // Sekolah 1 - SMA Negeri 1 Nusantara
+    {
+      email: 'admin@sman1nusantara.sch.id',
+      password: 'admin123',
+      user: { 
+        id: 2, 
+        email: 'admin@sman1nusantara.sch.id', 
+        name: 'Dra. Siti Aminah, M.Pd.', 
+        role: 'ADMIN_SEKOLAH' as UserRole, 
+        schoolId: 1,
+        permissions: ROLE_PERMISSIONS.ADMIN_SEKOLAH
+      }
+    },
+    {
+      email: 'operator@sman1nusantara.sch.id',
+      password: 'admin123',
+      user: { 
+        id: 3, 
+        email: 'operator@sman1nusantara.sch.id', 
+        name: 'Rudi Hermawan', 
+        role: 'OPERATOR' as UserRole, 
+        schoolId: 1,
+        permissions: ROLE_PERMISSIONS.OPERATOR
+      }
+    },
+    
+    // Sekolah 2 - SMK Teknologi Merdeka
+    {
+      email: 'admin@smkteknologimerdeka.sch.id',
+      password: 'admin123',
+      user: { 
+        id: 4, 
+        email: 'admin@smkteknologimerdeka.sch.id', 
+        name: 'Ir. Bambang Hermawan, M.T.', 
+        role: 'ADMIN_SEKOLAH' as UserRole, 
+        schoolId: 2,
+        permissions: ROLE_PERMISSIONS.ADMIN_SEKOLAH
+      }
+    },
+    {
+      email: 'operator@smkteknologimerdeka.sch.id',
+      password: 'admin123',
+      user: { 
+        id: 5, 
+        email: 'operator@smkteknologimerdeka.sch.id', 
+        name: 'Dewi Kartika', 
+        role: 'OPERATOR' as UserRole, 
+        schoolId: 2,
+        permissions: ROLE_PERMISSIONS.OPERATOR
+      }
+    },
+    
+    // Sekolah 3 - SMP Harapan Bangsa
+    {
+      email: 'admin@smpharapanbangsa.sch.id',
+      password: 'admin123',
+      user: { 
+        id: 6, 
+        email: 'admin@smpharapanbangsa.sch.id', 
+        name: 'Drs. Hendra Wijaya, M.M.', 
+        role: 'ADMIN_SEKOLAH' as UserRole, 
+        schoolId: 3,
+        permissions: ROLE_PERMISSIONS.ADMIN_SEKOLAH
+      }
+    },
+    {
+      email: 'operator@smpharapanbangsa.sch.id',
+      password: 'admin123',
+      user: { 
+        id: 7, 
+        email: 'operator@smpharapanbangsa.sch.id', 
+        name: 'Putri Rahayu', 
+        role: 'OPERATOR' as UserRole, 
+        schoolId: 3,
+        permissions: ROLE_PERMISSIONS.OPERATOR
+      }
+    },
+    
+    // Sekolah 4 - SD Negeri Cendekia
+    {
+      email: 'admin@sdncendekia.sch.id',
+      password: 'admin123',
+      user: { 
+        id: 8, 
+        email: 'admin@sdncendekia.sch.id', 
+        name: 'Dra. Kartini Dewi, M.Pd.', 
+        role: 'ADMIN_SEKOLAH' as UserRole, 
+        schoolId: 4,
+        permissions: ROLE_PERMISSIONS.ADMIN_SEKOLAH
+      }
+    },
+    {
+      email: 'operator@sdncendekia.sch.id',
+      password: 'admin123',
+      user: { 
+        id: 9, 
+        email: 'operator@sdncendekia.sch.id', 
+        name: 'Wati Lestari', 
+        role: 'OPERATOR' as UserRole, 
+        schoolId: 4,
+        permissions: ROLE_PERMISSIONS.OPERATOR
+      }
+    },
+  ];
+};
+
+// Export for dev mode hints in login pages - ONLY returns data in DEV mode
 export const getDummyUsersBySchoolId = (schoolId: number) => {
-  return DUMMY_USERS.filter(u => u.user.schoolId === schoolId).map(u => ({
-    email: u.email,
-    role: u.user.role,
-    name: u.user.name
-  }));
+  if (!isDevMode()) {
+    return [];
+  }
+  
+  return getDummyUsers()
+    .filter(u => u.user.schoolId === schoolId)
+    .map(u => ({
+      email: u.email,
+      role: u.user.role,
+      name: u.user.name
+    }));
 };
 
 interface AuthProviderProps {
@@ -242,10 +255,102 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<AuthUser | null>(() => {
-    const saved = localStorage.getItem('auth_user');
-    return saved ? JSON.parse(saved) : null;
-  });
+  const [user, setUser] = useState<AuthUser | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Initialize auth state
+  useEffect(() => {
+    if (isDevMode()) {
+      // DEV mode: restore from localStorage
+      const saved = localStorage.getItem('auth_user');
+      if (saved) {
+        try {
+          setUser(JSON.parse(saved));
+        } catch (e) {
+          localStorage.removeItem('auth_user');
+        }
+      }
+      setIsLoading(false);
+    } else {
+      // PROD mode: use Supabase auth
+      // Set up auth state listener FIRST
+      const { data: { subscription } } = supabase.auth.onAuthStateChange(
+        (event, session) => {
+          if (session?.user) {
+            // Defer profile/role fetch to avoid deadlock
+            setTimeout(() => {
+              fetchUserProfile(session.user.id);
+            }, 0);
+          } else {
+            setUser(null);
+            setIsLoading(false);
+          }
+        }
+      );
+
+      // THEN check for existing session
+      supabase.auth.getSession().then(({ data: { session } }) => {
+        if (session?.user) {
+          fetchUserProfile(session.user.id);
+        } else {
+          setIsLoading(false);
+        }
+      });
+
+      return () => subscription.unsubscribe();
+    }
+  }, []);
+
+  // Fetch user profile and role from Supabase
+  const fetchUserProfile = async (userId: string) => {
+    try {
+      // Fetch profile
+      const { data: profile, error: profileError } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', userId)
+        .single();
+
+      if (profileError) {
+        console.error('Error fetching profile:', profileError);
+        setUser(null);
+        setIsLoading(false);
+        return;
+      }
+
+      // Fetch user role
+      const { data: roleData, error: roleError } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', userId)
+        .single();
+
+      if (roleError) {
+        console.error('Error fetching role:', roleError);
+        setUser(null);
+        setIsLoading(false);
+        return;
+      }
+
+      const appRole = mapSupabaseRole(roleData.role);
+      
+      const authUser: AuthUser = {
+        id: userId,
+        email: profile.email,
+        name: profile.name,
+        role: appRole,
+        schoolId: profile.school_id || undefined,
+        permissions: ROLE_PERMISSIONS[appRole]
+      };
+
+      setUser(authUser);
+      setIsLoading(false);
+    } catch (error) {
+      console.error('Error in fetchUserProfile:', error);
+      setUser(null);
+      setIsLoading(false);
+    }
+  };
 
   const login = async (
     email: string, 
@@ -253,50 +358,115 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     role?: UserRole,
     expectedSchoolId?: number
   ): Promise<LoginResult> => {
-    // Simulasi API call
-    await new Promise(resolve => setTimeout(resolve, 500));
-    
-    // Cari user berdasarkan email dan password
-    const found = DUMMY_USERS.find(
-      u => u.email.toLowerCase() === email.toLowerCase() && u.password === password
-    );
-    
-    if (!found) {
-      return { success: false, message: 'Email atau password salah' };
-    }
-
-    // Jika role ditentukan, validasi role harus cocok
-    if (role && found.user.role !== role) {
-      if (role === 'ADMIN_SEKOLAH') {
-        return { success: false, message: 'Akun ini bukan Admin Sekolah' };
-      } else if (role === 'OPERATOR') {
-        return { success: false, message: 'Akun ini bukan Operator' };
-      } else if (role === 'SUPER_ADMIN') {
-        return { success: false, message: 'Akun ini bukan Super Admin' };
+    if (isDevMode()) {
+      // DEV mode: use dummy users
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      const dummyUsers = getDummyUsers();
+      const found = dummyUsers.find(
+        u => u.email.toLowerCase() === email.toLowerCase() && u.password === password
+      );
+      
+      if (!found) {
+        return { success: false, message: 'Email atau password salah' };
       }
-      return { success: false, message: 'Role tidak sesuai' };
-    }
 
-    // Jika login dari domain sekolah, validasi schoolId harus cocok
-    if (expectedSchoolId && found.user.schoolId !== expectedSchoolId) {
-      return { 
-        success: false, 
-        message: 'Akun ini tidak terdaftar di sekolah ini' 
-      };
-    }
+      // Validate role if specified
+      if (role && found.user.role !== role) {
+        if (role === 'ADMIN_SEKOLAH') {
+          return { success: false, message: 'Akun ini bukan Admin Sekolah' };
+        } else if (role === 'OPERATOR') {
+          return { success: false, message: 'Akun ini bukan Operator' };
+        } else if (role === 'SUPER_ADMIN') {
+          return { success: false, message: 'Akun ini bukan Super Admin' };
+        }
+        return { success: false, message: 'Role tidak sesuai' };
+      }
 
-    setUser(found.user);
-    localStorage.setItem('auth_user', JSON.stringify(found.user));
-    return { success: true };
+      // Validate school if specified
+      if (expectedSchoolId && found.user.schoolId !== expectedSchoolId) {
+        return { 
+          success: false, 
+          message: 'Akun ini tidak terdaftar di sekolah ini' 
+        };
+      }
+
+      setUser(found.user);
+      localStorage.setItem('auth_user', JSON.stringify(found.user));
+      return { success: true };
+    } else {
+      // PROD mode: use Supabase auth
+      try {
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email,
+          password
+        });
+
+        if (error) {
+          return { success: false, message: error.message };
+        }
+
+        if (!data.user) {
+          return { success: false, message: 'Login gagal' };
+        }
+
+        // Fetch role and validate
+        const { data: roleData, error: roleError } = await supabase
+          .from('user_roles')
+          .select('role')
+          .eq('user_id', data.user.id)
+          .single();
+
+        if (roleError || !roleData) {
+          await supabase.auth.signOut();
+          return { success: false, message: 'Akun tidak memiliki role yang valid' };
+        }
+
+        const userRole = mapSupabaseRole(roleData.role);
+
+        // Validate role if specified
+        if (role && userRole !== role) {
+          await supabase.auth.signOut();
+          return { success: false, message: `Akun ini bukan ${role.replace('_', ' ')}` };
+        }
+
+        // Fetch profile to validate school
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('school_id')
+          .eq('id', data.user.id)
+          .single();
+
+        // Validate school if specified
+        if (expectedSchoolId && profile?.school_id !== expectedSchoolId) {
+          await supabase.auth.signOut();
+          return { 
+            success: false, 
+            message: 'Akun ini tidak terdaftar di sekolah ini' 
+          };
+        }
+
+        // Profile will be fetched by auth state listener
+        return { success: true };
+      } catch (error) {
+        console.error('Login error:', error);
+        return { success: false, message: 'Terjadi kesalahan saat login' };
+      }
+    }
   };
 
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem('auth_user');
+  const logout = async () => {
+    if (isDevMode()) {
+      setUser(null);
+      localStorage.removeItem('auth_user');
+    } else {
+      await supabase.auth.signOut();
+      setUser(null);
+    }
   };
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated: !!user, login, logout }}>
+    <AuthContext.Provider value={{ user, isAuthenticated: !!user, isLoading, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
