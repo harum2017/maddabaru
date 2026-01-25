@@ -1,7 +1,29 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { supabase } from '@/integrations/supabase/client';
-import { User, Session } from '@supabase/supabase-js';
+import type { User, Session } from '@supabase/supabase-js';
 import { isDevMode } from '@/services/config';
+
+// NOTE:
+// Never import `@/integrations/supabase/client` at module scope.
+// That file eagerly calls `createClient(...)` and will throw if Vite env vars
+// are missing in the current runtime.
+const hasBackendCredentials = () => {
+  const url = import.meta.env.VITE_SUPABASE_URL;
+  const key = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+  return Boolean(url && key);
+};
+
+let supabaseModulePromise: Promise<typeof import('@/integrations/supabase/client')> | null = null;
+const getSupabaseClient = async () => {
+  if (!hasBackendCredentials()) return null;
+  try {
+    supabaseModulePromise ??= import('@/integrations/supabase/client');
+    const mod = await supabaseModulePromise;
+    return mod.supabase;
+  } catch (e) {
+    console.error('[Auth] Failed to load backend client:', e);
+    return null;
+  }
+};
 
 export type UserRole = 'SUPER_ADMIN' | 'ADMIN_SEKOLAH' | 'OPERATOR';
 
@@ -272,38 +294,65 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       }
       setIsLoading(false);
     } else {
-      // PROD mode: use Supabase auth
-      // Set up auth state listener FIRST
-      const { data: { subscription } } = supabase.auth.onAuthStateChange(
-        (event, session) => {
-          if (session?.user) {
-            // Defer profile/role fetch to avoid deadlock
-            setTimeout(() => {
-              fetchUserProfile(session.user.id);
-            }, 0);
-          } else {
-            setUser(null);
-            setIsLoading(false);
-          }
-        }
-      );
+      // PROD mode: use backend auth (loaded lazily)
+      let isCancelled = false;
+      let unsubscribe: (() => void) | null = null;
 
-      // THEN check for existing session
-      supabase.auth.getSession().then(({ data: { session } }) => {
+      (async () => {
+        const supabase = await getSupabaseClient();
+        if (isCancelled) return;
+
+        // If credentials are missing, avoid crashing and just behave as logged out.
+        if (!supabase) {
+          setUser(null);
+          setIsLoading(false);
+          return;
+        }
+
+        // Set up auth state listener FIRST
+        const { data: { subscription } } = supabase.auth.onAuthStateChange(
+          (_event, session) => {
+            if (session?.user) {
+              // Defer profile/role fetch to avoid deadlock
+              setTimeout(() => {
+                fetchUserProfile(session.user.id);
+              }, 0);
+            } else {
+              setUser(null);
+              setIsLoading(false);
+            }
+          }
+        );
+        unsubscribe = () => subscription.unsubscribe();
+
+        // THEN check for existing session
+        const { data: { session } } = await supabase.auth.getSession();
+        if (isCancelled) return;
+
         if (session?.user) {
           fetchUserProfile(session.user.id);
         } else {
           setIsLoading(false);
         }
-      });
+      })();
 
-      return () => subscription.unsubscribe();
+      return () => {
+        isCancelled = true;
+        unsubscribe?.();
+      };
     }
   }, []);
 
   // Fetch user profile and role from Supabase
   const fetchUserProfile = async (userId: string) => {
     try {
+      const supabase = await getSupabaseClient();
+      if (!supabase) {
+        setUser(null);
+        setIsLoading(false);
+        return;
+      }
+
       // Fetch profile
       const { data: profile, error: profileError } = await supabase
         .from('profiles')
@@ -397,6 +446,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     } else {
       // PROD mode: use Supabase auth
       try {
+        const supabase = await getSupabaseClient();
+        if (!supabase) {
+          return { success: false, message: 'Backend belum terkonfigurasi' };
+        }
+
         const { data, error } = await supabase.auth.signInWithPassword({
           email,
           password
@@ -460,7 +514,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setUser(null);
       localStorage.removeItem('auth_user');
     } else {
-      await supabase.auth.signOut();
+      const supabase = await getSupabaseClient();
+      if (supabase) {
+        await supabase.auth.signOut();
+      }
       setUser(null);
     }
   };
