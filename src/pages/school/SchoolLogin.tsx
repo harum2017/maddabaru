@@ -187,8 +187,8 @@ const SchoolLogin: React.FC = () => {
                   </button>
                 </div>
 
-                {/* Dev Mode Hint for Admin */}
-                {isDevMode && adminUser && (
+                {/* Dev Mode Hint for Admin - Only shown in DEV mode and development build */}
+                {isDevMode && adminUser && import.meta.env.DEV && (
                   <div className="mt-4 p-3 bg-muted rounded-lg">
                     <p className="text-xs text-muted-foreground text-center mb-2">
                       🔧 Mode Development - Akun Admin
@@ -263,8 +263,8 @@ const SchoolLogin: React.FC = () => {
                   </button>
                 </div>
 
-                {/* Dev Mode Hint for Operator */}
-                {isDevMode && operatorUser && (
+                {/* Dev Mode Hint for Operator - Only shown in DEV mode and development build */}
+                {isDevMode && operatorUser && import.meta.env.DEV && (
                   <div className="mt-4 p-3 bg-muted rounded-lg">
                     <p className="text-xs text-muted-foreground text-center mb-2">
                       🔧 Mode Development - Akun Operator
@@ -278,7 +278,7 @@ const SchoolLogin: React.FC = () => {
                   </div>
                 )}
 
-                {!operatorUser && isDevMode && (
+                {!operatorUser && isDevMode && import.meta.env.DEV && (
                   <div className="mt-4 p-3 bg-amber-500/10 text-amber-700 rounded-lg">
                     <p className="text-xs text-center">
                       ⚠️ Belum ada operator untuk sekolah ini

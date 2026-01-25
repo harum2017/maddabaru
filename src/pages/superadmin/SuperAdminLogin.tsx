@@ -133,18 +133,20 @@ const SuperAdminLogin: React.FC = () => {
               </button>
             </div>
 
-            {/* Dev Hint */}
-            <div className="mt-6 p-3 bg-muted rounded-lg">
-              <p className="text-xs text-muted-foreground text-center mb-2">
-                🔧 Mode Development
-              </p>
-              <p className="text-xs text-center">
-                Email: <code className="bg-background px-1 rounded">superadmin@maddasoft.id</code>
-              </p>
-              <p className="text-xs text-center">
-                Password: <code className="bg-background px-1 rounded">admin123</code>
-              </p>
-            </div>
+            {/* Dev Hint - Only shown in DEV mode */}
+            {isPlatformDomain && import.meta.env.DEV && (
+              <div className="mt-6 p-3 bg-muted rounded-lg">
+                <p className="text-xs text-muted-foreground text-center mb-2">
+                  🔧 Mode Development
+                </p>
+                <p className="text-xs text-center">
+                  Email: <code className="bg-background px-1 rounded">superadmin@maddasoft.id</code>
+                </p>
+                <p className="text-xs text-center">
+                  Password: <code className="bg-background px-1 rounded">admin123</code>
+                </p>
+              </div>
+            )}
           </CardContent>
         </Card>
 
