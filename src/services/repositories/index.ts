@@ -7,21 +7,54 @@
 
 import { IDataService } from './types';
 import { createDevDataService } from './dev';
-import { createProdDataService } from './prod';
 import { DATA_SOURCE, isDevMode, isProdMode } from '../config';
 
 let dataServiceInstance: IDataService | null = null;
 
 /**
  * Membuat data service sesuai dengan config
+ * Uses dynamic import for prod to avoid loading Supabase when not needed
  */
-function createDataService(): IDataService {
+async function createDataServiceAsync(): Promise<IDataService> {
   if (isDevMode()) {
     console.log('[Data Service] Using DEV mode (Dummy Data)');
     return createDevDataService();
   } else if (isProdMode()) {
     console.log('[Data Service] Using PROD mode (Real Database)');
-    return createProdDataService();
+    try {
+      const { createProdDataService } = await import('./prod');
+      return createProdDataService();
+    } catch (error) {
+      console.error('[Data Service] Failed to load PROD service, falling back to DEV:', error);
+      return createDevDataService();
+    }
+  } else {
+    console.log('[Data Service] Falling back to DEV mode');
+    return createDevDataService();
+  }
+}
+
+/**
+ * Membuat data service sync - uses DEV as immediate fallback while PROD loads
+ */
+function createDataServiceSync(): IDataService {
+  if (isDevMode()) {
+    console.log('[Data Service] Using DEV mode (Dummy Data)');
+    return createDevDataService();
+  } else if (isProdMode()) {
+    console.log('[Data Service] Using PROD mode - loading...');
+    // Return DEV service immediately, then replace with PROD when ready
+    const devService = createDevDataService();
+    
+    // Async load PROD service
+    import('./prod').then(({ createProdDataService }) => {
+      console.log('[Data Service] PROD service loaded successfully');
+      dataServiceInstance = createProdDataService();
+    }).catch((error) => {
+      console.error('[Data Service] Failed to load PROD service:', error);
+    });
+    
+    return devService;
   } else {
     console.log('[Data Service] Falling back to DEV mode');
     return createDevDataService();
@@ -33,7 +66,17 @@ function createDataService(): IDataService {
  */
 export function getDataService(): IDataService {
   if (!dataServiceInstance) {
-    dataServiceInstance = createDataService();
+    dataServiceInstance = createDataServiceSync();
+  }
+  return dataServiceInstance;
+}
+
+/**
+ * Get data service async - ensures PROD is fully loaded
+ */
+export async function getDataServiceAsync(): Promise<IDataService> {
+  if (!dataServiceInstance || (isProdMode() && dataServiceInstance.constructor.name === 'DevDataService')) {
+    dataServiceInstance = await createDataServiceAsync();
   }
   return dataServiceInstance;
 }

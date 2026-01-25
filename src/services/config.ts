@@ -17,8 +17,18 @@ export const getDataSourceType = (): DataSourceType => {
     return envSource;
   }
   
-  // Default: PROD (gunakan Supabase)
-  return 'PROD';
+  // Prioritas 2: Check if Supabase is available
+  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+  const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+  
+  // If Supabase credentials are available, use PROD
+  if (supabaseUrl && supabaseKey) {
+    return 'PROD';
+  }
+  
+  // Fallback: DEV mode if Supabase not configured
+  console.warn('Supabase credentials not found, falling back to DEV mode');
+  return 'DEV';
 };
 
 /**
