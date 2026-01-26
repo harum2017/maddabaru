@@ -35,8 +35,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { schools as initialSchools, School } from '@/data/dummyData';
+import { schools as initialSchools, School, SchoolLevel } from '@/data/dummyData';
 import { useDomain } from '@/contexts/DomainContext';
+import SchoolLevelBadge from '@/components/superadmin/SchoolLevelBadge';
+import SchoolLevelSelect from '@/components/superadmin/SchoolLevelSelect';
 import {
   Plus,
   Search,
@@ -275,6 +277,11 @@ const SchoolManagement: React.FC = () => {
                   />
                 </div>
               </div>
+              <SchoolLevelSelect
+                value={formData.level}
+                onChange={(level) => setFormData({ ...formData, level })}
+                required
+              />
               <div className="flex items-center justify-between">
                 <Label htmlFor="is_active">Aktifkan Sekolah</Label>
                 <Switch
@@ -340,6 +347,7 @@ const SchoolManagement: React.FC = () => {
             <TableHeader>
               <TableRow>
                 <TableHead>Sekolah</TableHead>
+                <TableHead>Jenjang</TableHead>
                 <TableHead>Domain</TableHead>
                 <TableHead>Kontak</TableHead>
                 <TableHead>Status</TableHead>
@@ -349,7 +357,7 @@ const SchoolManagement: React.FC = () => {
             <TableBody>
               {filteredSchools.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
+                  <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
                     {searchTerm || statusFilter !== 'all' 
                       ? 'Tidak ada sekolah yang sesuai dengan filter'
                       : 'Belum ada sekolah terdaftar'}
@@ -376,6 +384,9 @@ const SchoolManagement: React.FC = () => {
                           </p>
                         </div>
                       </div>
+                    </TableCell>
+                    <TableCell>
+                      <SchoolLevelBadge level={school.level} showIcon />
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">
@@ -497,6 +508,11 @@ const SchoolManagement: React.FC = () => {
                 />
               </div>
             </div>
+            <SchoolLevelSelect
+              value={formData.level}
+              onChange={(level) => setFormData({ ...formData, level })}
+              required
+            />
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setEditingSchool(null)}>
