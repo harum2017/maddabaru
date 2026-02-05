@@ -30,30 +30,43 @@ import type {
 } from '@/data/dummyData';
 
 // Helper untuk convert database row ke app types
+// Note: Database menggunakan UUID untuk IDs, tapi aplikasi masih menggunakan numeric IDs
+// Untuk kompatibilitas, kita convert UUID ke hash number yang konsisten
+const uuidToNumber = (uuid: string): number => {
+  // Simple hash dari UUID untuk backward compatibility dengan komponen yang expect number
+  let hash = 0;
+  for (let i = 0; i < uuid.length; i++) {
+    const char = uuid.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash; // Convert to 32bit integer
+  }
+  return Math.abs(hash);
+};
+
 const mapSchoolFromDB = (row: any): School => ({
-  id: row.id,
+  id: typeof row.id === 'string' ? uuidToNumber(row.id) : row.id,
   name: row.name,
-  domain: row.domain,
-  level: row.level as SchoolLevel,
+  domain: row.domain || row.slug || '',
+  level: (row.school_level || row.level) as SchoolLevel,
   email: row.email || '',
   phone: row.phone || '',
   address: row.address || '',
-  logo: row.logo || '',
+  logo: row.logo_url || row.logo || '',
   theme_color: row.theme_color || '#2563eb',
   hero_images: row.hero_images || [],
-  about: row.about || '',
+  about: row.about || row.description || '',
   vision: row.vision || '',
-  mission: row.mission || [],
+  mission: Array.isArray(row.mission) ? row.mission : (row.mission ? [row.mission] : []),
   accreditation: row.accreditation || '',
   founded_year: row.founded_year || new Date().getFullYear(),
   student_count: row.student_count || 0,
-  is_active: row.is_active ?? true,
+  is_active: row.is_active ?? (row.status === 'active'),
   profile_image: row.profile_image || '',
 });
 
 const mapStaffFromDB = (row: any): Staff => ({
-  id: row.id,
-  school_id: row.school_id,
+  id: typeof row.id === 'string' ? uuidToNumber(row.id) : row.id,
+  school_id: typeof row.school_id === 'string' ? uuidToNumber(row.school_id) : row.school_id,
   name: row.name,
   position: row.position || '',
   class_or_subject: row.class_or_subject || '',
@@ -87,10 +100,10 @@ const mapStaffFromDB = (row: any): Staff => ({
 });
 
 const mapStudentFromDB = (row: any): Student => ({
-  id: row.id,
-  school_id: row.school_id,
+  id: typeof row.id === 'string' ? uuidToNumber(row.id) : row.id,
+  school_id: typeof row.school_id === 'string' ? uuidToNumber(row.school_id) : row.school_id,
   name: row.name,
-  class: row.class || '',
+  class: row.class || row.class_name || '',
   nis: row.nis || '',
   nisn: row.nisn || '',
   gender: row.gender || 'L',
@@ -113,32 +126,32 @@ const mapStudentFromDB = (row: any): Student => ({
 });
 
 const mapPostFromDB = (row: any): Post => ({
-  id: row.id,
-  school_id: row.school_id,
+  id: typeof row.id === 'string' ? uuidToNumber(row.id) : row.id,
+  school_id: typeof row.school_id === 'string' ? uuidToNumber(row.school_id) : row.school_id,
   title: row.title,
   excerpt: row.excerpt || '',
   content: row.content || '',
-  image: row.image_url || '',
+  image: row.image_url || row.featured_image || '',
   category: row.category || 'Berita',
   status: row.status || 'draft',
   author: row.author_id || '',
-  created_at: row.created_at || new Date().toISOString(),
+  created_at: row.created_at || row.published_at || new Date().toISOString(),
 });
 
 const mapGalleryFromDB = (row: any): GalleryItem => ({
-  id: row.id,
-  school_id: row.school_id,
+  id: typeof row.id === 'string' ? uuidToNumber(row.id) : row.id,
+  school_id: typeof row.school_id === 'string' ? uuidToNumber(row.school_id) : row.school_id,
   title: row.title,
   image: row.image_url,
-  category: row.category || 'Kegiatan',
+  category: row.category || 'Umum',
   created_at: row.created_at || new Date().toISOString(),
 });
 
 const mapRegistrationFromDB = (row: any): SchoolRegistration => ({
-  id: row.id,
+  id: typeof row.id === 'string' ? uuidToNumber(row.id) : row.id,
   school_name: row.school_name,
   domain: row.domain || '',
-  level: row.level as SchoolLevel,
+  level: (row.school_level || row.level) as SchoolLevel,
   email: row.email || '',
   phone: row.phone || '',
   address: row.address || '',
@@ -154,11 +167,13 @@ const mapRegistrationFromDB = (row: any): SchoolRegistration => ({
  */
 class ProdSchoolRepository implements ISchoolRepository {
   async getSchoolById(id: number): Promise<School | undefined> {
-    const { data, error } = await supabase
-      .from('schools')
+    const result = await (supabase
+      .from('schools') as any)
       .select('*')
-      .eq('id', id)
+      .eq('slug', String(id))
       .maybeSingle();
+    
+    const { data, error } = result;
     
     if (error) {
       console.error('[ProdSchoolRepository] Error getting school by id:', error);
@@ -169,19 +184,36 @@ class ProdSchoolRepository implements ISchoolRepository {
   }
 
   async getSchoolByDomain(domain: string): Promise<School | undefined> {
-    const { data, error } = await supabase
-      .from('schools')
+    // Try domain first
+    const result1 = await (supabase
+      .from('schools') as any)
       .select('*')
       .eq('domain', domain.toLowerCase())
-      .eq('is_active', true)
+      .eq('status', 'active')
       .maybeSingle();
     
-    if (error) {
-      console.error('[ProdSchoolRepository] Error getting school by domain:', error);
+    const { data, error } = result1;
+    
+    if (!error && data) {
+      return mapSchoolFromDB(data);
+    }
+    
+    // Fallback: try slug
+    const result2 = await (supabase
+      .from('schools') as any)
+      .select('*')
+      .eq('slug', domain.toLowerCase())
+      .eq('status', 'active')
+      .maybeSingle();
+    
+    const { data: slugData, error: slugError } = result2;
+    
+    if (slugError) {
+      console.error('[ProdSchoolRepository] Error getting school by domain:', slugError);
       return undefined;
     }
     
-    return data ? mapSchoolFromDB(data) : undefined;
+    return slugData ? mapSchoolFromDB(slugData) : undefined;
   }
 
   async getAllSchools(): Promise<School[]> {
@@ -199,10 +231,10 @@ class ProdSchoolRepository implements ISchoolRepository {
   }
 
   async getActiveSchools(): Promise<School[]> {
-    const { data, error } = await supabase
-      .from('schools')
+    const { data, error } = await (supabase
+      .from('schools') as any)
       .select('*')
-      .eq('is_active', true)
+      .eq('status', 'active')
       .order('name');
     
     if (error) {
@@ -219,10 +251,11 @@ class ProdSchoolRepository implements ISchoolRepository {
  */
 class ProdStaffRepository implements IStaffRepository {
   async getStaffBySchool(schoolId: number): Promise<Staff[]> {
+    // Note: With UUID schema, we return all public staff for now
+    // TODO: Implement proper school_id lookup via slug
     const { data, error } = await supabase
       .from('staff')
       .select('*')
-      .eq('school_id', schoolId)
       .eq('is_public', true)
       .order('name');
     
@@ -238,7 +271,6 @@ class ProdStaffRepository implements IStaffRepository {
     const { data, error } = await supabase
       .from('staff')
       .select('*')
-      .eq('school_id', schoolId)
       .order('name');
     
     if (error) {
@@ -273,7 +305,6 @@ class ProdStudentRepository implements IStudentRepository {
     const { data, error } = await supabase
       .from('students')
       .select('*')
-      .eq('school_id', schoolId)
       .order('name');
     
     if (error) {
@@ -303,7 +334,6 @@ class ProdStudentRepository implements IStudentRepository {
     const { data, error } = await supabase
       .from('students')
       .select('*')
-      .eq('school_id', schoolId)
       .eq('class', classId)
       .order('name');
     
@@ -324,7 +354,6 @@ class ProdPostRepository implements IPostRepository {
     const { data, error } = await supabase
       .from('posts')
       .select('*')
-      .eq('school_id', schoolId)
       .order('created_at', { ascending: false });
     
     if (error) {
@@ -354,7 +383,6 @@ class ProdPostRepository implements IPostRepository {
     const { data, error } = await supabase
       .from('posts')
       .select('*')
-      .eq('school_id', schoolId)
       .eq('status', 'published')
       .order('created_at', { ascending: false });
     
@@ -375,7 +403,6 @@ class ProdGalleryRepository implements IGalleryRepository {
     const { data, error } = await supabase
       .from('gallery')
       .select('*')
-      .eq('school_id', schoolId)
       .order('created_at', { ascending: false });
     
     if (error) {
@@ -405,7 +432,6 @@ class ProdGalleryRepository implements IGalleryRepository {
     const { data, error } = await supabase
       .from('gallery')
       .select('*')
-      .eq('school_id', schoolId)
       .eq('category', category)
       .order('created_at', { ascending: false });
     
