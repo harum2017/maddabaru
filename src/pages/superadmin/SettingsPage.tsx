@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -6,6 +6,8 @@ import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuth } from '@/contexts/AuthContext';
+import { supabase } from '@/integrations/supabase/client';
+import { isDevMode } from '@/services/config';
 import {
   User,
   Lock,
@@ -15,14 +17,20 @@ import {
   Shield,
   Save,
   Eye,
-  EyeOff
+  EyeOff,
+  Loader2,
+  AlertCircle
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 const SettingsPage: React.FC = () => {
   const { user } = useAuth();
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isProfileLoading, setIsProfileLoading] = useState(false);
+  const [passwordError, setPasswordError] = useState<string | null>(null);
   const [twoFAEnabled, setTwoFAEnabled] = useState(false);
 
   // Profile Form State
@@ -105,7 +113,7 @@ const SettingsPage: React.FC = () => {
   };
 
   // Handle profile save
-  const handleProfileSave = () => {
+  const handleProfileSave = async () => {
     if (!profileForm.name.trim()) {
       toast.error('Nama tidak boleh kosong');
       return;
@@ -114,29 +122,105 @@ const SettingsPage: React.FC = () => {
       toast.error('Email tidak boleh kosong');
       return;
     }
-    toast.success('Profil berhasil disimpan');
+
+    // In dev mode, just show success
+    if (isDevMode()) {
+      toast.success('Profil berhasil disimpan (mode dev)');
+      return;
+    }
+
+    setIsProfileLoading(true);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        toast.error('Sesi tidak valid. Silakan login ulang.');
+        return;
+      }
+
+      const { data, error } = await supabase.functions.invoke('update-profile', {
+        body: { 
+          name: profileForm.name.trim(),
+          avatarUrl: profileImage 
+        }
+      });
+
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+
+      toast.success(data?.message || 'Profil berhasil disimpan');
+    } catch (error: any) {
+      console.error('Profile save error:', error);
+      toast.error(error.message || 'Gagal menyimpan profil');
+    } finally {
+      setIsProfileLoading(false);
+    }
   };
 
   // Handle password change
-  const handlePasswordChange = () => {
+  const handlePasswordChange = async () => {
+    setPasswordError(null);
+
     if (!securityForm.currentPassword.trim()) {
-      toast.error('Password saat ini harus diisi');
+      setPasswordError('Password saat ini harus diisi');
       return;
     }
     if (!securityForm.newPassword.trim()) {
-      toast.error('Password baru harus diisi');
+      setPasswordError('Password baru harus diisi');
       return;
     }
-    if (securityForm.newPassword.length < 6) {
-      toast.error('Password minimal 6 karakter');
+    if (securityForm.newPassword.length < 8) {
+      setPasswordError('Password minimal 8 karakter');
       return;
     }
+    
+    // Check password strength
+    const hasUppercase = /[A-Z]/.test(securityForm.newPassword);
+    const hasLowercase = /[a-z]/.test(securityForm.newPassword);
+    const hasNumber = /[0-9]/.test(securityForm.newPassword);
+    
+    if (!hasUppercase || !hasLowercase || !hasNumber) {
+      setPasswordError('Password harus mengandung huruf besar, huruf kecil, dan angka');
+      return;
+    }
+    
     if (securityForm.newPassword !== securityForm.confirmPassword) {
-      toast.error('Password tidak cocok');
+      setPasswordError('Password tidak cocok');
       return;
     }
-    toast.success('Password berhasil diubah');
-    setSecurityForm({ currentPassword: '', newPassword: '', confirmPassword: '' });
+
+    // In dev mode, just show success
+    if (isDevMode()) {
+      toast.success('Password berhasil diubah (mode dev)');
+      setSecurityForm({ currentPassword: '', newPassword: '', confirmPassword: '' });
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        setPasswordError('Sesi tidak valid. Silakan login ulang.');
+        return;
+      }
+
+      const { data, error } = await supabase.functions.invoke('change-password', {
+        body: {
+          currentPassword: securityForm.currentPassword,
+          newPassword: securityForm.newPassword
+        }
+      });
+
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+
+      toast.success(data?.message || 'Password berhasil diubah');
+      setSecurityForm({ currentPassword: '', newPassword: '', confirmPassword: '' });
+    } catch (error: any) {
+      console.error('Password change error:', error);
+      setPasswordError(error.message || 'Gagal mengubah password');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   // Handle 2FA toggle
@@ -272,8 +356,12 @@ const SettingsPage: React.FC = () => {
                 </div>
               </div>
 
-              <Button onClick={handleProfileSave} className="gap-2">
-                <Save className="w-4 h-4" />
+              <Button onClick={handleProfileSave} className="gap-2" disabled={isProfileLoading}>
+                {isProfileLoading ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <Save className="w-4 h-4" />
+                )}
                 Simpan Perubahan
               </Button>
             </CardContent>
@@ -291,6 +379,23 @@ const SettingsPage: React.FC = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
+                {passwordError && (
+                  <Alert variant="destructive">
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertDescription>{passwordError}</AlertDescription>
+                  </Alert>
+                )}
+                
+                <div className="p-3 bg-muted rounded-lg text-sm">
+                  <p className="font-medium mb-1">Persyaratan Password:</p>
+                  <ul className="list-disc list-inside text-muted-foreground space-y-0.5">
+                    <li>Minimal 8 karakter</li>
+                    <li>Mengandung huruf besar (A-Z)</li>
+                    <li>Mengandung huruf kecil (a-z)</li>
+                    <li>Mengandung angka (0-9)</li>
+                  </ul>
+                </div>
+                
                 <div className="space-y-2">
                   <Label htmlFor="current-password">Password Saat Ini</Label>
                   <div className="relative">
@@ -298,7 +403,10 @@ const SettingsPage: React.FC = () => {
                       id="current-password" 
                       type={showPassword ? "text" : "password"}
                       value={securityForm.currentPassword}
-                      onChange={(e) => setSecurityForm({ ...securityForm, currentPassword: e.target.value })}
+                      onChange={(e) => {
+                        setPasswordError(null);
+                        setSecurityForm({ ...securityForm, currentPassword: e.target.value });
+                      }}
                     />
                     <button
                       type="button"
@@ -315,7 +423,10 @@ const SettingsPage: React.FC = () => {
                     id="new-password" 
                     type="password"
                     value={securityForm.newPassword}
-                    onChange={(e) => setSecurityForm({ ...securityForm, newPassword: e.target.value })}
+                    onChange={(e) => {
+                      setPasswordError(null);
+                      setSecurityForm({ ...securityForm, newPassword: e.target.value });
+                    }}
                   />
                 </div>
                 <div className="space-y-2">
@@ -324,10 +435,22 @@ const SettingsPage: React.FC = () => {
                     id="confirm-password" 
                     type="password"
                     value={securityForm.confirmPassword}
-                    onChange={(e) => setSecurityForm({ ...securityForm, confirmPassword: e.target.value })}
+                    onChange={(e) => {
+                      setPasswordError(null);
+                      setSecurityForm({ ...securityForm, confirmPassword: e.target.value });
+                    }}
                   />
                 </div>
-                <Button onClick={handlePasswordChange}>Ubah Password</Button>
+                <Button onClick={handlePasswordChange} disabled={isLoading}>
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Mengubah...
+                    </>
+                  ) : (
+                    'Ubah Password'
+                  )}
+                </Button>
               </CardContent>
             </Card>
 

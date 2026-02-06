@@ -1,1 +1,10 @@
 project_id = "xjeurbqtzfojamhfbxiu"
+
+[functions.create-super-admin]
+verify_jwt = false
+
+[functions.change-password]
+verify_jwt = false
+
+[functions.update-profile]
+verify_jwt = false
