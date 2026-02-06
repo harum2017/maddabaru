@@ -18,6 +18,79 @@ Deno.serve(async (req) => {
   }
 
   try {
+    // Create Supabase admin client (for privileged operations)
+    const supabaseAdmin = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
+      {
+        auth: {
+          autoRefreshToken: false,
+          persistSession: false
+        }
+      }
+    )
+
+    // Check if any super_admin exists
+    const { count: superAdminCount, error: countError } = await supabaseAdmin
+      .from('user_roles')
+      .select('*', { count: 'exact', head: true })
+      .eq('role', 'super_admin')
+
+    if (countError) {
+      console.error('Error checking super admin count:', countError)
+      return new Response(
+        JSON.stringify({ error: 'Failed to verify authorization' }),
+        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
+
+    const isFirstSuperAdmin = (superAdminCount ?? 0) === 0
+
+    // If super admins exist, require authorization from an existing super admin
+    if (!isFirstSuperAdmin) {
+      // Extract JWT from Authorization header
+      const authHeader = req.headers.get('Authorization')
+      if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        return new Response(
+          JSON.stringify({ error: 'Authorization required. Only existing super admins can create new super admins.' }),
+          { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        )
+      }
+
+      const token = authHeader.replace('Bearer ', '')
+      
+      // Verify the token and get user
+      const { data: { user: callerUser }, error: authError } = await supabaseAdmin.auth.getUser(token)
+      
+      if (authError || !callerUser) {
+        console.error('Auth verification error:', authError)
+        return new Response(
+          JSON.stringify({ error: 'Invalid or expired token' }),
+          { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        )
+      }
+
+      // Verify caller has super_admin role
+      const { data: callerRole, error: roleCheckError } = await supabaseAdmin
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', callerUser.id)
+        .eq('role', 'super_admin')
+        .single()
+
+      if (roleCheckError || !callerRole) {
+        console.error('Role check failed for user:', callerUser.id)
+        return new Response(
+          JSON.stringify({ error: 'Forbidden. Only super admins can create new super admins.' }),
+          { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        )
+      }
+
+      console.log('Authorized super admin creating new super admin:', callerUser.email)
+    } else {
+      console.log('Creating first super admin (no authorization required)')
+    }
+
     const { email, password, name } = await req.json()
 
     // Validate required fields
@@ -55,18 +128,6 @@ Deno.serve(async (req) => {
 
     // Sanitize name input
     const sanitizedName = name ? String(name).trim().substring(0, 255) : 'Super Admin';
-
-    // Create Supabase admin client
-    const supabaseAdmin = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
-      {
-        auth: {
-          autoRefreshToken: false,
-          persistSession: false
-        }
-      }
-    )
 
     // Create user in auth
     const { data: authData, error: authError } = await supabaseAdmin.auth.admin.createUser({
