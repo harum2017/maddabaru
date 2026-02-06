@@ -5,6 +5,12 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
+// Email validation regex
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+// Password requirements: minimum 12 characters
+const MIN_PASSWORD_LENGTH = 12;
+
 Deno.serve(async (req) => {
   // Handle CORS preflight
   if (req.method === 'OPTIONS') {
@@ -14,12 +20,41 @@ Deno.serve(async (req) => {
   try {
     const { email, password, name } = await req.json()
 
+    // Validate required fields
     if (!email || !password) {
       return new Response(
         JSON.stringify({ error: 'Email and password are required' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
     }
+
+    // Validate email format
+    const trimmedEmail = String(email).trim().toLowerCase();
+    if (!EMAIL_REGEX.test(trimmedEmail)) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid email format' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
+
+    // Validate email length
+    if (trimmedEmail.length > 255) {
+      return new Response(
+        JSON.stringify({ error: 'Email must be less than 255 characters' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
+
+    // Validate password strength
+    if (typeof password !== 'string' || password.length < MIN_PASSWORD_LENGTH) {
+      return new Response(
+        JSON.stringify({ error: `Password must be at least ${MIN_PASSWORD_LENGTH} characters` }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
+
+    // Sanitize name input
+    const sanitizedName = name ? String(name).trim().substring(0, 255) : 'Super Admin';
 
     // Create Supabase admin client
     const supabaseAdmin = createClient(
@@ -35,10 +70,10 @@ Deno.serve(async (req) => {
 
     // Create user in auth
     const { data: authData, error: authError } = await supabaseAdmin.auth.admin.createUser({
-      email,
+      email: trimmedEmail,
       password,
       email_confirm: true, // Auto-confirm email
-      user_metadata: { name: name || 'Super Admin' }
+      user_metadata: { name: sanitizedName }
     })
 
     if (authError) {
@@ -54,7 +89,7 @@ Deno.serve(async (req) => {
     // Update profile with name (trigger already creates profile)
     const { error: profileError } = await supabaseAdmin
       .from('profiles')
-      .update({ name: name || 'Super Admin' })
+      .update({ name: sanitizedName })
       .eq('id', userId)
 
     if (profileError) {
@@ -74,13 +109,15 @@ Deno.serve(async (req) => {
       )
     }
 
+    console.log('Super admin created successfully:', trimmedEmail)
+
     return new Response(
       JSON.stringify({ 
         success: true, 
         user: { 
           id: userId, 
           email: authData.user.email,
-          name: name || 'Super Admin'
+          name: sanitizedName
         } 
       }),
       { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
