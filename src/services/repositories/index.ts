@@ -7,17 +7,9 @@
 
 import { IDataService } from './types';
 import { createDevDataService } from './dev';
-import { DATA_SOURCE, isDevMode, isProdMode } from '../config';
+import { DATA_SOURCE, isDevMode, isProdMode, hasBackendCredentials } from '../config';
 
 let dataServiceInstance: IDataService | null = null;
-
-// Extra safety: even if VITE_DATA_SOURCE=PROD is forced, never load PROD repositories
-// unless backend credentials are actually present.
-const hasBackendCredentials = () => {
-  const url = import.meta.env.VITE_SUPABASE_URL;
-  const key = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-  return Boolean(url && key);
-};
 
 /**
  * Membuat data service sesuai dengan config
