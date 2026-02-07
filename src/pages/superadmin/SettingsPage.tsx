@@ -6,7 +6,6 @@ import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuth } from '@/contexts/AuthContext';
-import { supabase } from '@/integrations/supabase/client';
 import { isDevMode } from '@/services/config';
 import {
   User,
@@ -23,6 +22,12 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+
+// Lazy-load Supabase client to prevent initialization errors
+const getSupabase = async () => {
+  const { supabase } = await import('@/integrations/supabase/client');
+  return supabase;
+};
 
 const SettingsPage: React.FC = () => {
   const { user } = useAuth();
@@ -131,6 +136,7 @@ const SettingsPage: React.FC = () => {
 
     setIsProfileLoading(true);
     try {
+      const supabase = await getSupabase();
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
         toast.error('Sesi tidak valid. Silakan login ulang.');
@@ -197,6 +203,7 @@ const SettingsPage: React.FC = () => {
 
     setIsLoading(true);
     try {
+      const supabase = await getSupabase();
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
         setPasswordError('Sesi tidak valid. Silakan login ulang.');
