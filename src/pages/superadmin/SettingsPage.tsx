@@ -23,11 +23,7 @@ import {
 import { toast } from 'sonner';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 
-// Lazy-load Supabase client to prevent initialization errors
-const getSupabase = async () => {
-  const { supabase } = await import('@/integrations/supabase/client');
-  return supabase;
-};
+import { getSupabaseClient } from '@/lib/supabase';
 
 const SettingsPage: React.FC = () => {
   const { user } = useAuth();
@@ -136,7 +132,11 @@ const SettingsPage: React.FC = () => {
 
     setIsProfileLoading(true);
     try {
-      const supabase = await getSupabase();
+      const supabase = await getSupabaseClient();
+      if (!supabase) {
+        toast.error('Backend tidak tersedia');
+        return;
+      }
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
         toast.error('Sesi tidak valid. Silakan login ulang.');
@@ -203,7 +203,11 @@ const SettingsPage: React.FC = () => {
 
     setIsLoading(true);
     try {
-      const supabase = await getSupabase();
+      const supabase = await getSupabaseClient();
+      if (!supabase) {
+        setPasswordError('Backend tidak tersedia');
+        return;
+      }
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
         setPasswordError('Sesi tidak valid. Silakan login ulang.');

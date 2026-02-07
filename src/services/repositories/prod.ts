@@ -31,15 +31,15 @@ import type {
   GradeLevel 
 } from '@/data/dummyData';
 
-// Lazy-loaded Supabase client to prevent initialization errors
-let supabaseClient: Awaited<typeof import('@/integrations/supabase/client')>['supabase'] | null = null;
+// Use centralized safe Supabase client
+import { getSupabaseClient } from '@/lib/supabase';
 
 const getSupabase = async () => {
-  if (!supabaseClient) {
-    const { supabase } = await import('@/integrations/supabase/client');
-    supabaseClient = supabase;
+  const client = await getSupabaseClient();
+  if (!client) {
+    throw new Error('Supabase client not available');
   }
-  return supabaseClient;
+  return client;
 };
 
 // Helper untuk convert database row ke app types

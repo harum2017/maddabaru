@@ -1,29 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import type { User, Session } from '@supabase/supabase-js';
-import { isDevMode } from '@/services/config';
-
-// NOTE:
-// Never import `@/integrations/supabase/client` at module scope.
-// That file eagerly calls `createClient(...)` and will throw if Vite env vars
-// are missing in the current runtime.
-const hasBackendCredentials = () => {
-  const url = import.meta.env.VITE_SUPABASE_URL;
-  const key = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-  return Boolean(url && key);
-};
-
-let supabaseModulePromise: Promise<typeof import('@/integrations/supabase/client')> | null = null;
-const getSupabaseClient = async () => {
-  if (!hasBackendCredentials()) return null;
-  try {
-    supabaseModulePromise ??= import('@/integrations/supabase/client');
-    const mod = await supabaseModulePromise;
-    return mod.supabase;
-  } catch (e) {
-    console.error('[Auth] Failed to load backend client:', e);
-    return null;
-  }
-};
+import { isDevMode, hasBackendCredentials } from '@/services/config';
+import { getSupabaseClient } from '@/lib/supabase';
 
 export type UserRole = 'SUPER_ADMIN' | 'ADMIN_SEKOLAH' | 'OPERATOR';
 
