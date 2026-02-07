@@ -4,9 +4,11 @@
  * Implementasi ini menggunakan Supabase client untuk akses database.
  * NOTE: This module is dynamically imported only when PROD mode is active
  * and Supabase credentials are verified in config.ts
+ * 
+ * CRITICAL: We use lazy loading for the Supabase client to prevent
+ * "supabaseUrl is required" errors when env vars are not yet available.
  */
 
-import { supabase } from '@/integrations/supabase/client';
 import {
   ISchoolRepository,
   IStaffRepository,
@@ -28,6 +30,17 @@ import type {
   SchoolLevel, 
   GradeLevel 
 } from '@/data/dummyData';
+
+// Lazy-loaded Supabase client to prevent initialization errors
+let supabaseClient: Awaited<typeof import('@/integrations/supabase/client')>['supabase'] | null = null;
+
+const getSupabase = async () => {
+  if (!supabaseClient) {
+    const { supabase } = await import('@/integrations/supabase/client');
+    supabaseClient = supabase;
+  }
+  return supabaseClient;
+};
 
 // Helper untuk convert database row ke app types
 // Note: Database menggunakan UUID untuk IDs, tapi aplikasi masih menggunakan numeric IDs
@@ -167,6 +180,7 @@ const mapRegistrationFromDB = (row: any): SchoolRegistration => ({
  */
 class ProdSchoolRepository implements ISchoolRepository {
   async getSchoolById(id: number): Promise<School | undefined> {
+    const supabase = await getSupabase();
     const result = await (supabase
       .from('schools') as any)
       .select('*')
@@ -184,6 +198,7 @@ class ProdSchoolRepository implements ISchoolRepository {
   }
 
   async getSchoolByDomain(domain: string): Promise<School | undefined> {
+    const supabase = await getSupabase();
     // Try domain first
     const result1 = await (supabase
       .from('schools') as any)
@@ -217,6 +232,7 @@ class ProdSchoolRepository implements ISchoolRepository {
   }
 
   async getAllSchools(): Promise<School[]> {
+    const supabase = await getSupabase();
     const { data, error } = await supabase
       .from('schools')
       .select('*')
@@ -231,6 +247,7 @@ class ProdSchoolRepository implements ISchoolRepository {
   }
 
   async getActiveSchools(): Promise<School[]> {
+    const supabase = await getSupabase();
     const { data, error } = await (supabase
       .from('schools') as any)
       .select('*')
@@ -251,8 +268,7 @@ class ProdSchoolRepository implements ISchoolRepository {
  */
 class ProdStaffRepository implements IStaffRepository {
   async getStaffBySchool(schoolId: number): Promise<Staff[]> {
-    // Note: With UUID schema, we return all public staff for now
-    // TODO: Implement proper school_id lookup via slug
+    const supabase = await getSupabase();
     const { data, error } = await supabase
       .from('staff')
       .select('*')
@@ -268,6 +284,7 @@ class ProdStaffRepository implements IStaffRepository {
   }
 
   async getAllStaffBySchool(schoolId: number): Promise<Staff[]> {
+    const supabase = await getSupabase();
     const { data, error } = await supabase
       .from('staff')
       .select('*')
@@ -282,6 +299,7 @@ class ProdStaffRepository implements IStaffRepository {
   }
 
   async getStaffById(id: number): Promise<Staff | undefined> {
+    const supabase = await getSupabase();
     const { data, error } = await supabase
       .from('staff')
       .select('*')
@@ -302,6 +320,7 @@ class ProdStaffRepository implements IStaffRepository {
  */
 class ProdStudentRepository implements IStudentRepository {
   async getStudentsBySchool(schoolId: number): Promise<Student[]> {
+    const supabase = await getSupabase();
     const { data, error } = await supabase
       .from('students')
       .select('*')
@@ -316,6 +335,7 @@ class ProdStudentRepository implements IStudentRepository {
   }
 
   async getStudentById(id: number): Promise<Student | undefined> {
+    const supabase = await getSupabase();
     const { data, error } = await supabase
       .from('students')
       .select('*')
@@ -331,6 +351,7 @@ class ProdStudentRepository implements IStudentRepository {
   }
 
   async getStudentsByClass(schoolId: number, classId: string): Promise<Student[]> {
+    const supabase = await getSupabase();
     const { data, error } = await supabase
       .from('students')
       .select('*')
@@ -351,6 +372,7 @@ class ProdStudentRepository implements IStudentRepository {
  */
 class ProdPostRepository implements IPostRepository {
   async getPostsBySchool(schoolId: number): Promise<Post[]> {
+    const supabase = await getSupabase();
     const { data, error } = await supabase
       .from('posts')
       .select('*')
@@ -365,6 +387,7 @@ class ProdPostRepository implements IPostRepository {
   }
 
   async getPostById(id: number): Promise<Post | undefined> {
+    const supabase = await getSupabase();
     const { data, error } = await supabase
       .from('posts')
       .select('*')
@@ -380,6 +403,7 @@ class ProdPostRepository implements IPostRepository {
   }
 
   async getPublishedPostsBySchool(schoolId: number): Promise<Post[]> {
+    const supabase = await getSupabase();
     const { data, error } = await supabase
       .from('posts')
       .select('*')
@@ -400,6 +424,7 @@ class ProdPostRepository implements IPostRepository {
  */
 class ProdGalleryRepository implements IGalleryRepository {
   async getGalleryBySchool(schoolId: number): Promise<GalleryItem[]> {
+    const supabase = await getSupabase();
     const { data, error } = await supabase
       .from('gallery')
       .select('*')
@@ -414,6 +439,7 @@ class ProdGalleryRepository implements IGalleryRepository {
   }
 
   async getGalleryById(id: number): Promise<GalleryItem | undefined> {
+    const supabase = await getSupabase();
     const { data, error } = await supabase
       .from('gallery')
       .select('*')
@@ -429,6 +455,7 @@ class ProdGalleryRepository implements IGalleryRepository {
   }
 
   async getGalleryByCategory(schoolId: number, category: string): Promise<GalleryItem[]> {
+    const supabase = await getSupabase();
     const { data, error } = await supabase
       .from('gallery')
       .select('*')
@@ -535,6 +562,7 @@ class ProdClassRepository implements IClassRepository {
  */
 class ProdRegistrationRepository implements IRegistrationRepository {
   async getRegistrations(): Promise<SchoolRegistration[]> {
+    const supabase = await getSupabase();
     const { data, error } = await supabase
       .from('school_registrations')
       .select('*')
@@ -549,6 +577,7 @@ class ProdRegistrationRepository implements IRegistrationRepository {
   }
 
   async getPendingRegistrations(): Promise<SchoolRegistration[]> {
+    const supabase = await getSupabase();
     const { data, error } = await supabase
       .from('school_registrations')
       .select('*')
@@ -564,6 +593,7 @@ class ProdRegistrationRepository implements IRegistrationRepository {
   }
 
   async getRegistrationById(id: number): Promise<SchoolRegistration | undefined> {
+    const supabase = await getSupabase();
     const { data, error } = await supabase
       .from('school_registrations')
       .select('*')
