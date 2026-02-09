@@ -190,7 +190,7 @@ class ProdSchoolRepository implements ISchoolRepository {
     const { data, error } = result;
     
     if (error) {
-      console.error('[ProdSchoolRepository] Error getting school by id:', error);
+      if (import.meta.env.DEV) console.error('[ProdSchoolRepository] Error getting school by id:', error);
       return undefined;
     }
     
@@ -224,7 +224,7 @@ class ProdSchoolRepository implements ISchoolRepository {
     const { data: slugData, error: slugError } = result2;
     
     if (slugError) {
-      console.error('[ProdSchoolRepository] Error getting school by domain:', slugError);
+      if (import.meta.env.DEV) console.error('[ProdSchoolRepository] Error getting school by domain:', slugError);
       return undefined;
     }
     
@@ -239,7 +239,7 @@ class ProdSchoolRepository implements ISchoolRepository {
       .order('name');
     
     if (error) {
-      console.error('[ProdSchoolRepository] Error getting all schools:', error);
+      if (import.meta.env.DEV) console.error('[ProdSchoolRepository] Error getting all schools:', error);
       return [];
     }
     
@@ -255,7 +255,7 @@ class ProdSchoolRepository implements ISchoolRepository {
       .order('name');
     
     if (error) {
-      console.error('[ProdSchoolRepository] Error getting active schools:', error);
+      if (import.meta.env.DEV) console.error('[ProdSchoolRepository] Error getting active schools:', error);
       return [];
     }
     
@@ -276,7 +276,7 @@ class ProdStaffRepository implements IStaffRepository {
       .order('name');
     
     if (error) {
-      console.error('[ProdStaffRepository] Error getting staff by school:', error);
+      if (import.meta.env.DEV) console.error('[ProdStaffRepository] Error getting staff by school:', error);
       return [];
     }
     
@@ -291,7 +291,7 @@ class ProdStaffRepository implements IStaffRepository {
       .order('name');
     
     if (error) {
-      console.error('[ProdStaffRepository] Error getting all staff by school:', error);
+      if (import.meta.env.DEV) console.error('[ProdStaffRepository] Error getting all staff by school:', error);
       return [];
     }
     
@@ -307,7 +307,7 @@ class ProdStaffRepository implements IStaffRepository {
       .maybeSingle();
     
     if (error) {
-      console.error('[ProdStaffRepository] Error getting staff by id:', error);
+      if (import.meta.env.DEV) console.error('[ProdStaffRepository] Error getting staff by id:', error);
       return undefined;
     }
     
@@ -327,7 +327,7 @@ class ProdStudentRepository implements IStudentRepository {
       .order('name');
     
     if (error) {
-      console.error('[ProdStudentRepository] Error getting students by school:', error);
+      if (import.meta.env.DEV) console.error('[ProdStudentRepository] Error getting students by school:', error);
       return [];
     }
     
@@ -343,7 +343,7 @@ class ProdStudentRepository implements IStudentRepository {
       .maybeSingle();
     
     if (error) {
-      console.error('[ProdStudentRepository] Error getting student by id:', error);
+      if (import.meta.env.DEV) console.error('[ProdStudentRepository] Error getting student by id:', error);
       return undefined;
     }
     
@@ -359,7 +359,7 @@ class ProdStudentRepository implements IStudentRepository {
       .order('name');
     
     if (error) {
-      console.error('[ProdStudentRepository] Error getting students by class:', error);
+      if (import.meta.env.DEV) console.error('[ProdStudentRepository] Error getting students by class:', error);
       return [];
     }
     
@@ -379,7 +379,7 @@ class ProdPostRepository implements IPostRepository {
       .order('created_at', { ascending: false });
     
     if (error) {
-      console.error('[ProdPostRepository] Error getting posts by school:', error);
+      if (import.meta.env.DEV) console.error('[ProdPostRepository] Error getting posts by school:', error);
       return [];
     }
     
@@ -395,7 +395,7 @@ class ProdPostRepository implements IPostRepository {
       .maybeSingle();
     
     if (error) {
-      console.error('[ProdPostRepository] Error getting post by id:', error);
+      if (import.meta.env.DEV) console.error('[ProdPostRepository] Error getting post by id:', error);
       return undefined;
     }
     
@@ -411,7 +411,7 @@ class ProdPostRepository implements IPostRepository {
       .order('created_at', { ascending: false });
     
     if (error) {
-      console.error('[ProdPostRepository] Error getting published posts:', error);
+      if (import.meta.env.DEV) console.error('[ProdPostRepository] Error getting published posts:', error);
       return [];
     }
     
@@ -431,7 +431,7 @@ class ProdGalleryRepository implements IGalleryRepository {
       .order('created_at', { ascending: false });
     
     if (error) {
-      console.error('[ProdGalleryRepository] Error getting gallery by school:', error);
+      if (import.meta.env.DEV) console.error('[ProdGalleryRepository] Error getting gallery by school:', error);
       return [];
     }
     
@@ -447,7 +447,7 @@ class ProdGalleryRepository implements IGalleryRepository {
       .maybeSingle();
     
     if (error) {
-      console.error('[ProdGalleryRepository] Error getting gallery by id:', error);
+      if (import.meta.env.DEV) console.error('[ProdGalleryRepository] Error getting gallery by id:', error);
       return undefined;
     }
     
@@ -463,7 +463,7 @@ class ProdGalleryRepository implements IGalleryRepository {
       .order('created_at', { ascending: false });
     
     if (error) {
-      console.error('[ProdGalleryRepository] Error getting gallery by category:', error);
+      if (import.meta.env.DEV) console.error('[ProdGalleryRepository] Error getting gallery by category:', error);
       return [];
     }
     
@@ -569,7 +569,7 @@ class ProdRegistrationRepository implements IRegistrationRepository {
       .order('registration_date', { ascending: false });
     
     if (error) {
-      console.error('[ProdRegistrationRepository] Error getting registrations:', error);
+      if (import.meta.env.DEV) console.error('[ProdRegistrationRepository] Error getting registrations:', error);
       return [];
     }
     
@@ -585,7 +585,7 @@ class ProdRegistrationRepository implements IRegistrationRepository {
       .order('registration_date', { ascending: false });
     
     if (error) {
-      console.error('[ProdRegistrationRepository] Error getting pending registrations:', error);
+      if (import.meta.env.DEV) console.error('[ProdRegistrationRepository] Error getting pending registrations:', error);
       return [];
     }
     
@@ -601,7 +601,7 @@ class ProdRegistrationRepository implements IRegistrationRepository {
       .maybeSingle();
     
     if (error) {
-      console.error('[ProdRegistrationRepository] Error getting registration by id:', error);
+      if (import.meta.env.DEV) console.error('[ProdRegistrationRepository] Error getting registration by id:', error);
       return undefined;
     }
     
