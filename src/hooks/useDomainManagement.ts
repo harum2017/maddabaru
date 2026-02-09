@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { supabase } from '@/integrations/supabase/client';
+import { getSupabaseClient } from '@/lib/supabase';
 import { toast } from 'sonner';
 
 interface DomainStatus {
@@ -30,51 +30,52 @@ export function useDomainManagement() {
   const [loading, setLoading] = useState(false);
   const [checkingAll, setCheckingAll] = useState(false);
 
-  // Fetch all schools with their domains
   const fetchSchools = useCallback(async () => {
     setLoading(true);
     try {
+      const supabase = await getSupabaseClient();
+      if (!supabase) { toast.error('Backend belum tersedia'); return; }
+
       const { data, error } = await supabase
         .from('schools')
         .select('id, name, domain, is_active, level')
         .order('name');
 
       if (error) throw error;
-
       setSchools(data?.map(s => ({ ...s, level: s.level || 'SD' })) || []);
     } catch (error: any) {
-      console.error('[useDomainManagement] Fetch error:', error);
+      if (import.meta.env.DEV) console.error('[useDomainManagement] Fetch error:', error);
       toast.error('Gagal mengambil data sekolah');
     } finally {
       setLoading(false);
     }
   }, []);
 
-  // Check single domain status
   const checkDomainStatus = useCallback(async (schoolId: number, domain: string) => {
-    // Mark as checking
-    setSchools(prev => prev.map(s => 
+    setSchools(prev => prev.map(s =>
       s.id === schoolId ? { ...s, isChecking: true } : s
     ));
 
     try {
+      const supabase = await getSupabaseClient();
+      if (!supabase) throw new Error('Backend not available');
+
       const { data, error } = await supabase.functions.invoke('check-domain-status', {
         body: { domain }
       });
 
       if (error) throw error;
 
-      // Update school with status
-      setSchools(prev => prev.map(s => 
-        s.id === schoolId 
+      setSchools(prev => prev.map(s =>
+        s.id === schoolId
           ? { ...s, domainStatus: data, isChecking: false }
           : s
       ));
 
       return data as DomainStatus;
     } catch (error: any) {
-      console.error('[useDomainManagement] Check error:', error);
-      setSchools(prev => prev.map(s => 
+      if (import.meta.env.DEV) console.error('[useDomainManagement] Check error:', error);
+      setSchools(prev => prev.map(s =>
         s.id === schoolId ? { ...s, isChecking: false } : s
       ));
       toast.error(`Gagal memeriksa ${domain}`);
@@ -82,31 +83,27 @@ export function useDomainManagement() {
     }
   }, []);
 
-  // Check all domains
   const checkAllDomains = useCallback(async () => {
     setCheckingAll(true);
-    
     for (const school of schools) {
       await checkDomainStatus(school.id, school.domain);
-      // Small delay to avoid rate limiting
       await new Promise(r => setTimeout(r, 500));
     }
-    
     setCheckingAll(false);
     toast.success('Selesai memeriksa semua domain');
   }, [schools, checkDomainStatus]);
 
-  // Update school domain
   const updateDomain = useCallback(async (schoolId: number, newDomain: string) => {
     try {
-      // Validate domain format
+      const supabase = await getSupabaseClient();
+      if (!supabase) { toast.error('Backend belum tersedia'); return false; }
+
       const domainRegex = /^[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,}$/i;
       if (!domainRegex.test(newDomain)) {
         toast.error('Format domain tidak valid');
         return false;
       }
 
-      // Check if domain already exists
       const { data: existing } = await supabase
         .from('schools')
         .select('id')
@@ -126,9 +123,8 @@ export function useDomainManagement() {
 
       if (error) throw error;
 
-      // Update local state
-      setSchools(prev => prev.map(s => 
-        s.id === schoolId 
+      setSchools(prev => prev.map(s =>
+        s.id === schoolId
           ? { ...s, domain: newDomain.toLowerCase(), domainStatus: undefined }
           : s
       ));
@@ -136,34 +132,32 @@ export function useDomainManagement() {
       toast.success('Domain berhasil diperbarui');
       return true;
     } catch (error: any) {
-      console.error('[useDomainManagement] Update error:', error);
+      if (import.meta.env.DEV) console.error('[useDomainManagement] Update error:', error);
       toast.error('Gagal memperbarui domain');
       return false;
     }
   }, []);
 
-  // Generate subdomain under platform
   const generateSubdomain = useCallback((schoolName: string): string => {
-    // Convert name to slug
     const slug = schoolName
       .toLowerCase()
       .replace(/[^a-z0-9\s-]/g, '')
       .replace(/\s+/g, '-')
       .replace(/-+/g, '-')
       .substring(0, 30);
-    
     return `${slug}.${PLATFORM_DOMAIN}`;
   }, []);
 
-  // Assign subdomain to school
   const assignSubdomain = useCallback(async (schoolId: number, schoolName: string) => {
     const subdomain = generateSubdomain(schoolName);
     return updateDomain(schoolId, subdomain);
   }, [generateSubdomain, updateDomain]);
 
-  // Toggle school active status
   const toggleActive = useCallback(async (schoolId: number, isActive: boolean) => {
     try {
+      const supabase = await getSupabaseClient();
+      if (!supabase) { toast.error('Backend belum tersedia'); return false; }
+
       const { error } = await supabase
         .from('schools')
         .update({ is_active: isActive })
@@ -171,14 +165,14 @@ export function useDomainManagement() {
 
       if (error) throw error;
 
-      setSchools(prev => prev.map(s => 
+      setSchools(prev => prev.map(s =>
         s.id === schoolId ? { ...s, is_active: isActive } : s
       ));
 
       toast.success(isActive ? 'Domain diaktifkan' : 'Domain dinonaktifkan');
       return true;
     } catch (error: any) {
-      console.error('[useDomainManagement] Toggle error:', error);
+      if (import.meta.env.DEV) console.error('[useDomainManagement] Toggle error:', error);
       toast.error('Gagal mengubah status');
       return false;
     }
