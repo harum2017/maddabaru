@@ -65,6 +65,6 @@ export const isDevMode = () => DATA_SOURCE === 'DEV';
 export const isProdMode = () => DATA_SOURCE === 'PROD';
 
 // Debug log untuk troubleshooting
-if (typeof window !== 'undefined') {
+if (typeof window !== 'undefined' && import.meta.env.DEV) {
   console.log(`[Config] Data Source: ${DATA_SOURCE}, hasCredentials: ${hasBackendCredentials()}`);
 }

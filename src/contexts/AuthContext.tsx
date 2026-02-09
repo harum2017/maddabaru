@@ -339,7 +339,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         .single();
 
       if (profileError) {
-        console.error('Error fetching profile:', profileError);
+        if (import.meta.env.DEV) console.error('Error fetching profile:', profileError);
         setUser(null);
         setIsLoading(false);
         return;
@@ -353,7 +353,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         .single();
 
       if (roleError) {
-        console.error('Error fetching role:', roleError);
+        if (import.meta.env.DEV) console.error('Error fetching role:', roleError);
         setUser(null);
         setIsLoading(false);
         return;
@@ -373,7 +373,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setUser(authUser);
       setIsLoading(false);
     } catch (error) {
-      console.error('Error in fetchUserProfile:', error);
+      if (import.meta.env.DEV) console.error('Error in fetchUserProfile:', error);
       setUser(null);
       setIsLoading(false);
     }
@@ -481,7 +481,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         // Profile will be fetched by auth state listener
         return { success: true };
       } catch (error) {
-        console.error('Login error:', error);
+        if (import.meta.env.DEV) console.error('Login error:', error);
         return { success: false, message: 'Terjadi kesalahan saat login' };
       }
     }

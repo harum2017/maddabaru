@@ -43,7 +43,7 @@ export async function getSupabaseClient(): Promise<SupabaseClient | null> {
         console.log('[Supabase] Client initialized successfully');
         return clientInstance;
       } catch (error) {
-        console.error('[Supabase] Failed to initialize client:', error);
+        if (import.meta.env.DEV) console.error('[Supabase] Failed to initialize client:', error);
         return null;
       }
     })();
