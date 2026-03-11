@@ -284,12 +284,15 @@ class ProdStaffRepository implements IStaffRepository {
     
     return (data || []).map((row: any) => ({
       id: row.id,
-      schoolId: row.school_id,
+      school_id: row.school_id,
       name: row.name,
       position: row.position || '',
-      classOrSubject: row.class_or_subject || '',
-      photoUrl: row.photo_url || '',
-      isPublic: true,
+      class_or_subject: row.class_or_subject || '',
+      nip: '',
+      phone: '',
+      address: '',
+      is_public: true,
+      photo: row.photo_url || '',
     } as Staff));
   }
 
