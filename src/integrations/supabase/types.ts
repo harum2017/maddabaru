@@ -503,7 +503,41 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      staff_public: {
+        Row: {
+          class_or_subject: string | null
+          id: number | null
+          name: string | null
+          photo_url: string | null
+          position: string | null
+          school_id: number | null
+        }
+        Insert: {
+          class_or_subject?: string | null
+          id?: number | null
+          name?: string | null
+          photo_url?: string | null
+          position?: string | null
+          school_id?: number | null
+        }
+        Update: {
+          class_or_subject?: string | null
+          id?: number | null
+          name?: string | null
+          photo_url?: string | null
+          position?: string | null
+          school_id?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "staff_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       can_access_school: {
