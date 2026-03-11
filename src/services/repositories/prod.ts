@@ -269,10 +269,12 @@ class ProdSchoolRepository implements ISchoolRepository {
 class ProdStaffRepository implements IStaffRepository {
   async getStaffBySchool(schoolId: number): Promise<Staff[]> {
     const supabase = await getSupabase();
+    // Use the restricted staff_public view for unauthenticated/public access
+    // This view only exposes: id, school_id, name, position, class_or_subject, photo_url
     const { data, error } = await supabase
-      .from('staff')
+      .from('staff_public' as any)
       .select('*')
-      .eq('is_public', true)
+      .eq('school_id', schoolId)
       .order('name');
     
     if (error) {
@@ -280,7 +282,15 @@ class ProdStaffRepository implements IStaffRepository {
       return [];
     }
     
-    return (data || []).map(mapStaffFromDB);
+    return (data || []).map((row: any) => ({
+      id: row.id,
+      schoolId: row.school_id,
+      name: row.name,
+      position: row.position || '',
+      classOrSubject: row.class_or_subject || '',
+      photoUrl: row.photo_url || '',
+      isPublic: true,
+    } as Staff));
   }
 
   async getAllStaffBySchool(schoolId: number): Promise<Staff[]> {
